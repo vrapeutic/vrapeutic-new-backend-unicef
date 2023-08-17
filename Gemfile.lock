@@ -285,7 +285,7 @@ DEPENDENCIES
   jsonapi-serializer
   jwt
   listen
-  pg (= 1.2.3)
+  pg (~> 1.1)
   puma (= 6.3.0)
   rack-cors
   rails (~> 7.0.5)
