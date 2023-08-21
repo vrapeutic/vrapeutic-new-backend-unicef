@@ -21,7 +21,8 @@ class Api::V1::DoctorsController < Api::BaseApi
         email: params[:email],
         password: params[:password],
         degree: params[:degree],
-        university: params[:university]
+        university: params[:university],
+        specialty_ids: params[:specialty_ids]
       ).call
       render json: DoctorSerializer.new(@doctor).serializable_hash
     rescue => e
@@ -51,6 +52,6 @@ class Api::V1::DoctorsController < Api::BaseApi
 
     # Only allow a list of trusted parameters through.
     def doctor_params
-      params.require(:doctor).permit(:name, :email, :password, :degree, :university)
+      params.require(:doctor).permit(:name, :email, :password, :degree, :university, :specialty_ids)
     end
 end
