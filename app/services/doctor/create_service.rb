@@ -12,6 +12,7 @@ class Doctor::CreateService
         new_doctor = create_doctor
         if new_doctor.save
             create_doctor_specialties(new_doctor)
+            Otp::GenerateService.new(doctor: new_doctor).call
             return new_doctor
         end
         raise "can't create new doctor now"
