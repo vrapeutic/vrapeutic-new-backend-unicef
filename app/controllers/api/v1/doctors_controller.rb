@@ -15,12 +15,17 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   # POST /doctors
   def create
-    @doctor = Doctor.new(doctor_params)
-
-    if @doctor.save
-      render json: @doctor, status: :created, location: @doctor
-    else
-      render json: @doctor.errors, status: :unprocessable_entity
+    begin
+      @doctor = Doctor::CreateService.new(
+        name: params[:name],
+        email: params[:email],
+        password: params[:password],
+        degree: params[:degree],
+        university: params[:university]
+      ).call
+      render json: DoctorSerializer.new(@doctor).serializable_hash
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
     end
   end
 
