@@ -1,5 +1,5 @@
 class Api::V1::DoctorsController < Api::BaseApi
-  before_action :set_doctor, only: %i[ show update destroy ]
+  before_action :set_doctor, only: %i[ show update destroy validate_otp resend_otp ]
 
   # GET /doctors
   def index
@@ -30,6 +30,21 @@ class Api::V1::DoctorsController < Api::BaseApi
     end
   end
 
+  def validate_otp
+    result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp]).call
+    if result
+      @doctor.update_column(:is_email_verified, true)
+      return render json: DoctorSerializer.new(@doctor).serializable_hash
+    end
+    render json: {error: "otp is not valid or expired"}, status: :unprocessable_entity
+  end
+
+  def resend_otp
+    Otp::GenerateService.new(doctor: @doctor).call
+    # send email 
+    render json: "otp is sent again"
+  end
+
   # PATCH/PUT /doctors/1
   def update
     if @doctor.update(doctor_params)
@@ -52,6 +67,6 @@ class Api::V1::DoctorsController < Api::BaseApi
 
     # Only allow a list of trusted parameters through.
     def doctor_params
-      params.require(:doctor).permit(:name, :email, :password, :degree, :university, :specialty_ids)
+      params.require(:doctor).permit(:name, :email, :password, :degree, :university, :specialty_ids, :otp)
     end
 end

@@ -1,5 +1,7 @@
 module Api
     class Api::BaseApi < ApplicationController
+      rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+      rescue_from ActiveRecord::RecordNotUnique, with: :record_is_existed_before
   
       # implement token auth logic
       def auth_header
@@ -29,6 +31,16 @@ module Api
   
       def authorized
         render json: "unauthenticated driver", status: :unauthorized unless logged_in?
+      end
+
+      private
+
+      def record_not_found
+        render json: { error: "data not found" }, status: :not_found
+      end
+      
+      def record_is_existed_before
+        render json: {error: "data is aleady existed"}, status: :conflict
       end
   
     end
