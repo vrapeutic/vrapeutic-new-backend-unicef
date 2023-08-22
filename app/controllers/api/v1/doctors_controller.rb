@@ -40,6 +40,9 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   def resend_otp
+    if @doctor.is_email_verified
+      return render json: {error: "doctor is already vdrified"}, status: :unprocessable_entity 
+    end
     Otp::GenerateService.new(doctor: @doctor).call
     # send email 
     OtpMailer.send_otp(@doctor, @doctor.otp.code).deliver_now
