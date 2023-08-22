@@ -50,6 +50,6 @@ class PhotoUploader < CarrierWave::Uploader::Base
   def filename
     timestamp = Time.now.strftime('%Y%m%d%H%M%S')
     random_str = SecureRandom.hex(4)
-    "#{timestamp}_#{random_str}.#{file.extension}" if original_filename.present?
+    @name ||= "#{timestamp}_#{random_str}.#{file.extension}" if original_filename.present?
   end
 end
