@@ -1,11 +1,12 @@
 class Doctor::CreateService
-    def initialize(name:, email:, password:, degree:, university:, specialty_ids:)
+    def initialize(name:, email:, password:, degree:, university:, specialty_ids:, photo:)
         @name = name
         @email = email
         @password = password
         @degree = degree
         @university = university
         @specialty_ids = specialty_ids
+        @photo = photo
     end
 
     def call 
@@ -13,7 +14,7 @@ class Doctor::CreateService
         if new_doctor.save
             create_doctor_specialties(new_doctor)
             Otp::GenerateService.new(doctor: new_doctor).call
-            OtpMailer.send_otp(new_doctor, new_doctor.otp.code).deliver_now
+            # OtpMailer.send_otp(new_doctor, new_doctor.otp.code).deliver_now
             return new_doctor
         end
         raise "can't create new doctor now"
@@ -27,7 +28,8 @@ class Doctor::CreateService
             email: @email.downcase,
             password: @password,
             degree: @degree,
-            university: @university
+            university: @university,
+            photo: @photo
         )
     end
 

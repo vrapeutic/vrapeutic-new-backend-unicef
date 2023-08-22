@@ -34,3 +34,5 @@
 !.elasticbeanstalk/*.global.yml
 
 .env
+
+/public/uploads
