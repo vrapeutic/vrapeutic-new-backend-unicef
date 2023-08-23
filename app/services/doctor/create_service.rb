@@ -18,6 +18,7 @@ class Doctor::CreateService
             OtpMailer.send_otp(new_doctor, new_doctor.otp.code).deliver_now
             return new_doctor
         end
+        puts new_doctor.errors.as_json
         raise "can't create new doctor now"
     end
 
