@@ -67,8 +67,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
-  host = 'localhost:3000' #replace with your own url
-  config.action_mailer.default_url_options = { host: host }
+  config.action_mailer.default_url_options = { host: ENV['HOSTNAME'] }
 
   config.action_mailer.default_options = {
     from: ENV["ACTION_MAILER_EMAIL"]
@@ -81,8 +80,6 @@ Rails.application.configure do
     :user_name              => ENV["ACTION_MAILER_EMAIL"],
     :password               => ENV["ACTION_MAILER_PASSWORD"],
     :authentication         => :login,
-    :enable_starttls_auto   => false,
-    :ssl                    => true,
-    :tls                    => true,
+    :enable_starttls_auto   => true
   }
 end
