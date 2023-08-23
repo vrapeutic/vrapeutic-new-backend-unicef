@@ -7,10 +7,12 @@ class Doctor < ApplicationRecord
     validates :password, length: { minimum: 6 }
     validates :university, presence: true
     validates :degree, presence: true
+    validates :certificate, presence: true
 
     has_many :doctor_specialties, dependent: :destroy
     has_many :specialties, through: :doctor_specialties
     has_one :otp, dependent: :destroy
 
     mount_uploader :photo, PhotoUploader
+    mount_uploader :certificate, CertificateUploader
 end
