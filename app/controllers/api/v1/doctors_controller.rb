@@ -47,7 +47,7 @@ class Api::V1::DoctorsController < Api::BaseApi
     end
     Otp::GenerateService.new(doctor: @doctor).call
     # send email 
-    OtpMailer.send_otp(@doctor, @doctor.otp.code).deliver_now
+    OtpMailer.send_otp(@doctor, @doctor.otp.code).deliver_later
     render json: "otp is sent again"
   end
 

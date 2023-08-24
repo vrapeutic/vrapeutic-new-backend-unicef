@@ -15,7 +15,7 @@ class Doctor::CreateService
         if new_doctor.save
             create_doctor_specialties(new_doctor)
             Otp::GenerateService.new(doctor: new_doctor).call
-            OtpMailer.send_otp(new_doctor, new_doctor.otp.code).deliver_now
+            OtpMailer.send_otp(new_doctor, new_doctor.otp.code).deliver_later
             return new_doctor
         end
         puts new_doctor.errors.as_json
