@@ -15,4 +15,7 @@ class Doctor < ApplicationRecord
 
     mount_uploader :photo, PhotoUploader
     mount_uploader :certificate, CertificateUploader
+
+    has_many :doctor_centers, dependent: :destroy
+    has_many :centers, through: :doctor_centers
 end

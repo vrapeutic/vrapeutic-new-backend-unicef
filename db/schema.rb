@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_24_203408) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_24_205345) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_24_203408) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "doctor_centers", force: :cascade do |t|
+    t.bigint "doctor_id", null: false
+    t.bigint "center_id", null: false
+    t.integer "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["center_id"], name: "index_doctor_centers_on_center_id"
+    t.index ["doctor_id", "center_id"], name: "index_doctor_centers_on_doctor_id_and_center_id", unique: true
+    t.index ["doctor_id"], name: "index_doctor_centers_on_doctor_id"
   end
 
   create_table "doctor_specialties", force: :cascade do |t|
@@ -90,6 +101,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_24_203408) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "doctor_centers", "centers"
+  add_foreign_key "doctor_centers", "doctors"
   add_foreign_key "doctor_specialties", "doctors"
   add_foreign_key "doctor_specialties", "specialties"
   add_foreign_key "otps", "doctors"

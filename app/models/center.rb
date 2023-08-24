@@ -12,4 +12,7 @@ class Center < ApplicationRecord
 
     mount_uploader :logo, PhotoUploader
     mount_uploader :certificate, CertificateUploader
+
+    has_many :doctor_centers, dependent: :destroy
+    has_many :doctors, through: :doctor_centers
 end

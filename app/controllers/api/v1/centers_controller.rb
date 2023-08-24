@@ -25,7 +25,8 @@ class Api::V1::CentersController < Api::BaseApi
         logo:params[:logo], 
         certificate:params[:certificate], 
         registration_number:params[:registration_number], 
-        tax_id: params[:tax_id]
+        tax_id: params[:tax_id],
+        current_doctor: current_doctor
       ).call
       render json: CenterSerializer.new(new_center).serializable_hash
     rescue => e
