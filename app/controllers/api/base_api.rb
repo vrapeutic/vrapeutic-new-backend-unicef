@@ -17,11 +17,11 @@ module Api
           JsonWebToken.decode(token)
         end
       end
-      def current_driver
+      def current_doctor
         if decoded_token
-          driver_id = decoded_token['id']
-          @driver = Doctor.find_by(id: driver_id)
-          @driver.present? ? @driver : false
+          doctor_id = decoded_token['id']
+          @doctor = Doctor.find_by(id: doctor_id)
+          @doctor.present? ? @doctor : false
         end
       end
   
@@ -30,7 +30,7 @@ module Api
       end
   
       def authorized
-        render json: "unauthenticated driver", status: :unauthorized unless logged_in?
+        render json: "unauthenticated doctor", status: :unauthorized unless logged_in?
       end
 
       private

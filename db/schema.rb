@@ -10,9 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_24_141240) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_24_203408) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "centers", force: :cascade do |t|
+    t.string "name"
+    t.decimal "longitude", precision: 10, scale: 6
+    t.decimal "latitude", precision: 10, scale: 6
+    t.string "website"
+    t.string "logo"
+    t.string "certificate"
+    t.string "registration_number"
+    t.string "tax_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["latitude", "longitude"], name: "index_centers_on_latitude_and_longitude", unique: true
+    t.index ["registration_number"], name: "index_centers_on_registration_number", unique: true
+    t.index ["tax_id"], name: "index_centers_on_tax_id", unique: true
+    t.index ["website"], name: "index_centers_on_website", unique: true
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
