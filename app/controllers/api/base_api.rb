@@ -17,7 +17,7 @@ module Api
           JsonWebToken.decode(token)
         end
       end
-      def current_doctor
+      def current_driver
         if decoded_token
           driver_id = decoded_token['id']
           @driver = Doctor.find_by(id: driver_id)

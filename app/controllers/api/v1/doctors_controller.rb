@@ -36,7 +36,8 @@ class Api::V1::DoctorsController < Api::BaseApi
     result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp]).call
     if result
       @doctor.update_column(:is_email_verified, true)
-      return render json: DoctorSerializer.new(@doctor).serializable_hash
+      token_data = Doctor::GenerateJwtTokenService.new(doctor_id: @doctor.id).call
+      return render json: token_data
     end
     render json: {error: "otp is not valid or expired"}, status: :unprocessable_entity
   end
@@ -49,6 +50,15 @@ class Api::V1::DoctorsController < Api::BaseApi
     # send email 
     OtpMailer.send_otp(@doctor, @doctor.otp.code).deliver_later
     render json: "otp is sent again"
+  end
+
+  def sign_in
+    begin
+      login_data = Doctor::HandleLoginService.new(email: params[:email], password: params[:password]).call
+      render json: login_data
+    rescue => e
+      render json: e.message, status: :unauthorized
+    end
   end
 
   # PATCH/PUT /doctors/1
