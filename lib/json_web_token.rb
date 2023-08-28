@@ -1,6 +1,6 @@
 module JsonWebToken
     require 'jwt'
-    JWT_SECRET = ENV['ACTION_MAILER_PASSWORD']
+    JWT_SECRET = ENV['JWT_SECRET']
   
     def self.encode(payload, exp = 24.hours.from_now)
       payload[:exp] = exp.to_i
