@@ -21,6 +21,10 @@ module Api
         if decoded_token
           doctor_id = decoded_token['id']
           @doctor = Doctor.find_by(id: doctor_id)
+          puts "########## doctor is ####################"
+          puts @doctor.as_json
+          puts "########## doctor is ####################"
+
           @doctor.present? ? @doctor : false
         end
       end
@@ -30,7 +34,7 @@ module Api
       end
   
       def authorized
-        render json: "unauthenticated doctor", status: :unauthorized unless logged_in?
+        return render json: "unauthenticated doctor", status: :unauthorized unless logged_in?
       end
 
       private

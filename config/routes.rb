@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       post '/sign_in', to: 'doctors#sign_in'
       resources :specialties, only: %i[index]
       
-      resources :centers
+      resources :centers, only: %i[create]
 
       resources :doctors, only: %i[create] do
         member do
