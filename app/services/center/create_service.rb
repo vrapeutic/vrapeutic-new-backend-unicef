@@ -1,5 +1,5 @@
 class Center::CreateService
-    def initialize(name:, longitude:, latitude:, website:, logo:, certificate:, registration_number:, tax_id:, current_doctor:)
+    def initialize(name:, longitude:, latitude:, website:, logo:, certificate:, registration_number:, tax_id:, current_doctor:, specialty_ids:)
         @name = name
         @longitude = longitude
         @latitude = latitude
@@ -9,6 +9,7 @@ class Center::CreateService
         @registration_number = registration_number
         @tax_id = tax_id
         @current_doctor = current_doctor
+        @specialty_ids = specialty_ids
     end
 
 
@@ -16,6 +17,7 @@ class Center::CreateService
         ActiveRecord::Base.transaction do
             new_center = create_center
             DoctorCenter.create(center: new_center, doctor: @current_doctor, role: "admin")
+            new_center.specialties << Specialty.where(id: @specialty_ids)
             new_center
         end
         rescue => e

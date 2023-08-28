@@ -3,6 +3,8 @@ class Specialty < ApplicationRecord
 
     has_many :doctor_specialties, dependent: :destroy
     has_many :specialties, through: :doctor_specialties
+    has_many :center_specialties, dependent: :destroy
+    has_many :centers, through: :center_specialties
 
     # specialties names
     SPEECH_AND_LANGUAGE_THERAPY = 'Speech and Language Therapy'.freeze

@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_24_205345) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_28_162128) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "center_specialties", force: :cascade do |t|
+    t.bigint "center_id", null: false
+    t.bigint "specialty_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["center_id"], name: "index_center_specialties_on_center_id"
+    t.index ["specialty_id"], name: "index_center_specialties_on_specialty_id"
+  end
 
   create_table "centers", force: :cascade do |t|
     t.string "name"
@@ -101,6 +110,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_24_205345) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "center_specialties", "centers"
+  add_foreign_key "center_specialties", "specialties"
   add_foreign_key "doctor_centers", "centers"
   add_foreign_key "doctor_centers", "doctors"
   add_foreign_key "doctor_specialties", "doctors"

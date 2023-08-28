@@ -15,4 +15,6 @@ class Center < ApplicationRecord
 
     has_many :doctor_centers, dependent: :destroy
     has_many :doctors, through: :doctor_centers
+    has_many :center_specialties, dependent: :destroy
+    has_many :specialties, through: :center_specialties
 end
