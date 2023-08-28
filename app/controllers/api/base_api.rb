@@ -9,7 +9,13 @@ module Api
       end
   
       def token
-        auth_header.split(' ')[1]
+        result = auth_header.split(' ')[1]
+        puts "@@@@@@@@@@@@@@@@@@@@ token is @@@@@@@@@@@@@@@@@@@@@@"
+        puts result
+
+        puts "@@@@@@@@@@@@@@@@@@@@ token is @@@@@@@@@@@@@@@@@@@@@@"
+
+        result
       end
   
       def decoded_token
