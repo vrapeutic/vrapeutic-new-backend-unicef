@@ -46,11 +46,11 @@ module Api
       private
 
       def record_not_found
-        render json: { error: "data not found" }, status: :not_found
+        return render json: { error: "data not found" }, status: :not_found
       end
       
       def record_is_existed_before
-        render json: {error: "data is aleady existed"}, status: :conflict
+        return render json: {error: "data is aleady existed"}, status: :conflict
       end
   
     end
