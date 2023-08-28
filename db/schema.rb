@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_28_162128) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_28_170833) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "center_social_links", force: :cascade do |t|
+    t.bigint "center_id", null: false
+    t.string "link"
+    t.integer "link_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["center_id"], name: "index_center_social_links_on_center_id"
+    t.index ["link"], name: "index_center_social_links_on_link", unique: true
+  end
 
   create_table "center_specialties", force: :cascade do |t|
     t.bigint "center_id", null: false
@@ -110,6 +120,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_162128) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "center_social_links", "centers"
   add_foreign_key "center_specialties", "centers"
   add_foreign_key "center_specialties", "specialties"
   add_foreign_key "doctor_centers", "centers"

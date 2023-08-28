@@ -27,7 +27,8 @@ class Api::V1::CentersController < Api::BaseApi
         registration_number:params[:registration_number], 
         tax_id: params[:tax_id],
         current_doctor: current_doctor,
-        specialty_ids: params[:specialty_ids]
+        specialty_ids: params[:specialty_ids],
+        social_links: params[:social_links]
       ).call
       render json: CenterSerializer.new(new_center).serializable_hash
     rescue => e
@@ -57,6 +58,6 @@ class Api::V1::CentersController < Api::BaseApi
 
     # Only allow a list of trusted parameters through.
     def center_params
-      params.require(:center).permit(:name, :longitude, :latitude, :website, :logo, :certificate, :registration_number, :tax_id, :specialty_ids)
+      params.require(:center).permit(:name, :longitude, :latitude, :website, :logo, :certificate, :registration_number, :tax_id, :specialty_ids, :social_links)
     end
 end
