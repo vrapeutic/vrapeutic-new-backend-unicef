@@ -9,13 +9,7 @@ module Api
       end
   
       def token
-        result = auth_header.split(' ')[1]
-        puts "@@@@@@@@@@@@@@@@@@@@ token is @@@@@@@@@@@@@@@@@@@@@@"
-        puts result
-
-        puts "@@@@@@@@@@@@@@@@@@@@ token is @@@@@@@@@@@@@@@@@@@@@@"
-
-        result
+        auth_header.split(' ')[1]
       end
   
       def decoded_token
@@ -27,10 +21,6 @@ module Api
         if decoded_token
           doctor_id = decoded_token['id']
           @doctor = Doctor.find_by(id: doctor_id)
-          puts "########## doctor is ####################"
-          puts @doctor.as_json
-          puts "########## doctor is ####################"
-
           @doctor.present? ? @doctor : false
         end
       end
@@ -40,17 +30,17 @@ module Api
       end
   
       def authorized
-        return render json: "unauthenticated doctor", status: :unauthorized unless logged_in?
+        render json: "unauthenticated doctor", status: :unauthorized unless logged_in?
       end
 
       private
 
       def record_not_found
-        return render json: { error: "data not found" }, status: :not_found
+        render json: { error: "data not found" }, status: :not_found
       end
       
       def record_is_existed_before
-        return render json: {error: "data is aleady existed"}, status: :conflict
+        render json: {error: "data is aleady existed"}, status: :conflict
       end
   
     end
