@@ -8,6 +8,8 @@ class Center < ApplicationRecord
     validates :certificate, presence: true
     validates :registration_number, presence: true, uniqueness: true
     validates :tax_id, presence: true, uniqueness: true
+    validates :email, presence: true, uniqueness: true
+    validates :phone_number, presence: true, uniqueness: true
 
 
     mount_uploader :logo, PhotoUploader

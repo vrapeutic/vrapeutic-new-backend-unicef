@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_28_170833) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_28_201542) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,7 +44,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_170833) do
     t.string "tax_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
+    t.string "phone_number"
+    t.index ["email"], name: "index_centers_on_email", unique: true
     t.index ["latitude", "longitude"], name: "index_centers_on_latitude_and_longitude", unique: true
+    t.index ["phone_number"], name: "index_centers_on_phone_number", unique: true
     t.index ["registration_number"], name: "index_centers_on_registration_number", unique: true
     t.index ["tax_id"], name: "index_centers_on_tax_id", unique: true
     t.index ["website"], name: "index_centers_on_website", unique: true

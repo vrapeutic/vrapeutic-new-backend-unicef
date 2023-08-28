@@ -1,5 +1,5 @@
 class Center::CreateService
-    def initialize(name:, longitude:, latitude:, website:, logo:, certificate:, registration_number:, tax_id:, current_doctor:, specialty_ids:, social_links:)
+    def initialize(name:, longitude:, latitude:, website:, logo:, certificate:, registration_number:, tax_id:,email:, phone_number:,  current_doctor:, specialty_ids:, social_links:)
         @name = name
         @longitude = longitude
         @latitude = latitude
@@ -11,6 +11,8 @@ class Center::CreateService
         @current_doctor = current_doctor
         @specialty_ids = specialty_ids
         @social_links = social_links
+        @email = email.downcase
+        @phone_number = phone_number
     end
 
 
@@ -40,7 +42,9 @@ class Center::CreateService
             logo: @logo,
             certificate: @certificate,
             registration_number: @registration_number,
-            tax_id: @tax_id
+            tax_id: @tax_id,
+            email: @email,
+            phone_number: @phone_number
         )
     end
 
