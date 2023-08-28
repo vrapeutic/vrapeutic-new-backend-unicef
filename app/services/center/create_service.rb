@@ -13,22 +13,20 @@ class Center::CreateService
 
 
     def call 
-        @current_doctor.trasnaction do
+        ActiveRecord::Base.transaction do
             new_center = create_center
-            if new_center.save 
-                DoctorCenter.create(center: new_center, doctor: @current_doctor, role: 'admin')
-                return new_center
-            end
-            puts new_center.errors.as_json
-            raise "can't create center right now"
+            DoctorCenter.create(center: new_center, doctor: @current_doctor, role: "admin")
+            new_center
         end
+        rescue => e
+            raise "can't create new center now"
     end
 
 
     private 
 
     def create_center
-        Center.new(
+        Center.create(
             name: @name,
             longitude: @longitude,
             latitude: @latitude,
