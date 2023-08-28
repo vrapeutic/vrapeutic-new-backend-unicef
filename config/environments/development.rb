@@ -80,6 +80,8 @@ Rails.application.configure do
     :user_name              => ENV["ACTION_MAILER_EMAIL"],
     :password               => ENV["ACTION_MAILER_PASSWORD"],
     :authentication         => :login,
-    :enable_starttls_auto   => true
+    :enable_starttls_auto   => false,
+    :ssl                    => true,
+    :tls                    => true,
   }
 end
