@@ -77,4 +77,5 @@ gem 'carrierwave-i18n'
 gem 'image_processing', '~> 1.2'
 gem 'mini_magick'
 gem 'delayed_job_active_record'
+gem 'cancancan'
 

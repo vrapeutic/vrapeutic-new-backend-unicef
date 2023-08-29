@@ -2,6 +2,10 @@ module Api
     class Api::BaseApi < ApplicationController
       rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
       rescue_from ActiveRecord::RecordNotUnique, with: :record_is_existed_before
+
+      rescue_from CanCan::AccessDenied do |exception|
+        render json: exception.message, status: :forbidden
+      end
   
       # implement token auth logic
       def auth_header
@@ -20,7 +24,7 @@ module Api
       def current_doctor
         if decoded_token
           doctor_id = decoded_token['id']
-          @doctor = Doctor.find_by(id: doctor_id)
+          @doctor = Doctor.find_by(id: doctor_id, is_email_verified: true)
           @doctor.present? ? @doctor : false
         end
       end

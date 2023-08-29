@@ -2,6 +2,11 @@ class Api::V1::CentersController < Api::BaseApi
   before_action :set_center, only: %i[ show update destroy ]
   before_action :authorized
 
+  def current_ability
+    @current_ability ||= CenterAbility.new(current_doctor ,params)
+  end
+  authorize_resource
+
   # GET /centers
   def index
     @centers = Center.all
