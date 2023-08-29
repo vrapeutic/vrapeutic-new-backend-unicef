@@ -40,10 +40,16 @@ class Api::V1::CentersController < Api::BaseApi
 
   # PATCH/PUT /centers/1
   def update
-    if @center.update(center_params)
-      render json: @center
-    else
-      render json: @center.errors, status: :unprocessable_entity
+    begin
+      updated_center = Center::EditService.new(
+        current_center: @center, 
+        edit_params: edit_center_params.except(:social_links, :specialty_ids), 
+        specialty_ids: params[:specialty_ids], 
+        social_links: params[:social_links]
+      ).call
+      render json: CenterSerializer.new(updated_center).serializable_hash
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
     end
   end
 
@@ -61,5 +67,9 @@ class Api::V1::CentersController < Api::BaseApi
     # Only allow a list of trusted parameters through.
     def center_params
       params.require(:center).permit(:name, :longitude, :latitude, :website, :logo, :certificate, :registration_number, :tax_id, :specialty_ids, :social_links, :email, :phone_number)
+    end
+
+    def edit_center_params
+      params.permit(:id, :name, :longitude, :latitude, :website, :logo, :certificate, :registration_number, :tax_id, :email, :phone_number, :social_links, :specialty_ids => [])
     end
 end
