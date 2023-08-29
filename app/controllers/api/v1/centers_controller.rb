@@ -1,5 +1,5 @@
 class Api::V1::CentersController < Api::BaseApi
-  before_action :set_center, only: %i[ show update destroy ]
+  before_action :set_center, only: %i[ show update destroy invite_doctor ]
   before_action :authorized
 
   def current_ability
@@ -53,6 +53,16 @@ class Api::V1::CentersController < Api::BaseApi
         social_links: params[:social_links]
       ).call
       render json: CenterSerializer.new(updated_center).serializable_hash
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def invite_doctor
+    begin
+      @invitaion_token_data = Center::GenerateInvitationTokenService.new(email: params[:email], center_id: @center.id).call
+      InviteDoctorMailer.send_invitation_link(params[:email], @center, @invitaion_token_data).deliver_later
+      render json: 'invitation is sent'
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
