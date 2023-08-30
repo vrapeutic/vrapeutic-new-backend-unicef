@@ -16,7 +16,7 @@ class Center::EditService
         end
         rescue => e 
             puts e
-            raise "can't update this center"
+            raise e
     end
 
 
@@ -28,6 +28,7 @@ class Center::EditService
 
     def edit_center_speialties
         if @specialty_ids.present? && @specialty_ids.length 
+            Specialty::CheckIsExistedService.new(specialty_ids: @specialty_ids).call
             # destroy old specialties 
             @current_center.specialties.destroy_all
             # create new specialties 
