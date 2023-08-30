@@ -1,5 +1,5 @@
 class Doctor::CreateService
-    def initialize(name:, email:, password:, degree:, university:, specialty_ids:, photo:, certificate:)
+    def initialize(name:, email:, password:, degree:, university:, specialty_ids:, photo:, certificate:, is_invited: false)
         @name = name
         @email = email
         @password = password
@@ -8,6 +8,7 @@ class Doctor::CreateService
         @specialty_ids = specialty_ids
         @photo = photo
         @certificate = certificate
+        @is_invited = is_invited
     end
 
     def call 
@@ -15,7 +16,6 @@ class Doctor::CreateService
         Doctor.transaction do 
             create_doctor
             create_doctor_specialties
-            Otp::GenerateService.new(doctor: @new_doctor).call
             @new_doctor
         end
         rescue => e
@@ -33,7 +33,8 @@ class Doctor::CreateService
             degree: @degree,
             university: @university,
             photo: @photo,
-            certificate: @certificate
+            certificate: @certificate,
+            is_email_verified: @is_invited ? true : false
         )
     end
 

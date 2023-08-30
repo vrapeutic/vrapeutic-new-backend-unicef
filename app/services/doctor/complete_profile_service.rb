@@ -14,8 +14,7 @@ class Doctor::CompleteProfileService
     def call 
         Doctor.transaction do 
             decode_token
-            create_doctor
-            create_doctor_specialties
+            create_doctor_with_specialties
             create_doctor_center_role
             @new_doctor
         end
@@ -34,22 +33,18 @@ class Doctor::CompleteProfileService
         @center_id = decoded_data['center_id']
     end
 
-    def create_doctor
-        @new_doctor = Doctor.create!(
+    def create_doctor_with_specialties
+        @new_doctor = Doctor::CreateService.new(
             name: @name,
-            email: @email.downcase,
+            email: @email,
             password: @password,
             degree: @degree,
             university: @university,
+            specialty_ids: @specialty_ids,
             photo: @photo,
-            certificate: @certificate
-        )
-    end
-
-    def create_doctor_specialties
-        error_message = 'specialties not found, please provide at least one'
-        raise error_message if @specialty_ids.nil? || @specialty_ids.length == 0
-        @new_doctor.specialties << Specialty.where(id: @specialty_ids)
+            certificate: @certificate,
+            is_invited: true
+        ).call
     end
 
     def create_doctor_center_role

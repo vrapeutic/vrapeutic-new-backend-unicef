@@ -26,6 +26,7 @@ class Api::V1::DoctorsController < Api::BaseApi
         photo: params[:photo],
         certificate: params[:certificate]
       ).call
+      Otp::GenerateService.new(doctor: @doctor).call
       OtpMailer.send_otp(@doctor, @doctor.otp.code).deliver_later
       render json: DoctorSerializer.new(@doctor).serializable_hash
     rescue => e
