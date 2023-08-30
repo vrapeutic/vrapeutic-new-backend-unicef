@@ -18,6 +18,7 @@ class Center::CreateService
 
     def call 
         check_social_links_existed
+        check_specialties_existed
         ActiveRecord::Base.transaction do
             @new_center = create_center
             create_doctor_center
@@ -27,7 +28,7 @@ class Center::CreateService
         end
         rescue => e
             puts e
-            raise "can't create new center now"
+            raise e
     end
 
 
@@ -50,6 +51,10 @@ class Center::CreateService
 
     def create_doctor_center
         DoctorCenter.create!(center: @new_center, doctor: @current_doctor, role: "admin")
+    end
+
+    def check_specialties_existed 
+        Specialty::CheckIsExistedService.new(specialty_ids: @specialty_ids).call
     end
 
     def create_center_specialties
