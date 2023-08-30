@@ -11,21 +11,22 @@ class Doctor::CreateService
     end
 
     def call 
-        new_doctor = create_doctor
-        if new_doctor.save
-            create_doctor_specialties(new_doctor)
-            Otp::GenerateService.new(doctor: new_doctor).call
-            OtpMailer.send_otp(new_doctor, new_doctor.otp.code).deliver_later
-            return new_doctor
+        Doctor.transaction do 
+            check_specialties_existed
+            create_doctor
+            create_doctor_specialties
+            Otp::GenerateService.new(doctor: @new_doctor).call
+            @new_doctor
         end
-        puts new_doctor.errors.as_json
-        raise "can't create new doctor now"
+        rescue => e
+            puts e.as_json
+            raise e
     end
 
     private
 
     def create_doctor
-        Doctor.new(
+        @new_doctor = Doctor.create!(
             name: @name,
             email: @email.downcase,
             password: @password,
@@ -36,7 +37,11 @@ class Doctor::CreateService
         )
     end
 
-    def create_doctor_specialties(doctor)
-        doctor.specialties << Specialty.where(id: @specialty_ids)
+    def check_specialties_existed 
+        Specialty::CheckIsExistedService.new(specialty_ids: @specialty_ids).call
+    end
+
+    def create_doctor_specialties
+        @new_doctor.specialties << Specialty.where(id: @specialty_ids)
     end
 end

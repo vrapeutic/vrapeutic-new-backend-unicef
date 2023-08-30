@@ -26,6 +26,7 @@ class Api::V1::DoctorsController < Api::BaseApi
         photo: params[:photo],
         certificate: params[:certificate]
       ).call
+      OtpMailer.send_otp(@doctor, @doctor.otp.code).deliver_later
       render json: DoctorSerializer.new(@doctor).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
@@ -63,7 +64,7 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def complete_profile
     begin
-      result = Doctor::CompleteProfileService.new(
+      new_doctor = Doctor::CompleteProfileService.new(
         token: params[:token],
         name: params[:name],
         password: params[:password],
@@ -73,7 +74,7 @@ class Api::V1::DoctorsController < Api::BaseApi
         photo: params[:photo],
         certificate: params[:certificate]
       ).call 
-      render json: result
+      render json: DoctorSerializer.new(new_doctor).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
