@@ -1,5 +1,5 @@
 class Api::V1::CentersController < Api::BaseApi
-  before_action :set_center, only: %i[ show update destroy invite_doctor ]
+  before_action :set_center, only: %i[ show update destroy invite_doctor assign_doctor ]
   before_action :authorized
 
   def current_ability
@@ -63,6 +63,15 @@ class Api::V1::CentersController < Api::BaseApi
       @invitaion_token_data = Center::GenerateInvitationTokenService.new(email: params[:email], center_id: @center.id).call
       InviteDoctorMailer.send_invitation_link(params[:email], @center, @invitaion_token_data).deliver_later
       render json: 'invitation is sent'
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def assign_doctor
+    begin
+      Center::AssignDoctorService.new(doctor_id: params[:doctor_id], center_id: @center.id).call 
+      render json: "assigned successfully"
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end

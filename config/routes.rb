@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :centers, only: %i[create update] do
         member do
           post :invite_doctor
+          post :assign_doctor
         end
       end
 
