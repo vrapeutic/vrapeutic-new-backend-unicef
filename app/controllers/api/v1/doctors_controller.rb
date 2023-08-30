@@ -61,6 +61,24 @@ class Api::V1::DoctorsController < Api::BaseApi
     end
   end
 
+  def complete_profile
+    begin
+      result = Doctor::CompleteProfileService.new(
+        token: params[:token],
+        name: params[:name],
+        password: params[:password],
+        degree: params[:degree],
+        university: params[:university],
+        specialty_ids: params[:specialty_ids],
+        photo: params[:photo],
+        certificate: params[:certificate]
+      ).call 
+      render json: result
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # PATCH/PUT /doctors/1
   def update
     if @doctor.update(doctor_params)

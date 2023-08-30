@@ -18,6 +18,9 @@ Rails.application.routes.draw do
           post :validate_otp
           put :resend_otp
         end
+       collection do
+        post :complete_profile
+       end
       end
     end
   end
