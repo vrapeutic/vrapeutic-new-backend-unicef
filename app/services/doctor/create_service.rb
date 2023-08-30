@@ -11,8 +11,8 @@ class Doctor::CreateService
     end
 
     def call 
+        check_specialties_existed
         Doctor.transaction do 
-            check_specialties_existed
             create_doctor
             create_doctor_specialties
             Otp::GenerateService.new(doctor: @new_doctor).call
