@@ -39,10 +39,10 @@ class Doctor::CreateService
     end
 
     def check_specialties_existed 
-        Specialty::CheckIsExistedService.new(specialty_ids: @specialty_ids).call
+        @specialties = Specialty::CheckIsExistedService.new(specialty_ids: @specialty_ids).call
     end
 
     def create_doctor_specialties
-        @new_doctor.specialties << Specialty.where(id: @specialty_ids)
+        @new_doctor.specialties << @specialties
     end
 end

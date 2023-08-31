@@ -54,11 +54,11 @@ class Center::CreateService
     end
 
     def check_specialties_existed 
-        Specialty::CheckIsExistedService.new(specialty_ids: @specialty_ids).call
+        @specialties = Specialty::CheckIsExistedService.new(specialty_ids: @specialty_ids).call
     end
 
     def create_center_specialties
-        @new_center.specialties << Specialty.where(id: @specialty_ids)
+        @new_center.specialties << @specialties
     end
 
     def check_social_links_existed
