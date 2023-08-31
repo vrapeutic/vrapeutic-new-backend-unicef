@@ -11,6 +11,8 @@ class CenterAbility
         can :invite_doctor, Center if Authorization::Center::CanInviteDoctorService.new(current_doctor: doctor, center_id: params[:id]).call
       when 'assign_doctor'
         can :assign_doctor, Center if Authorization::Center::CanAssignDoctorService.new(current_doctor: doctor, center_id: params[:id], assignee_doctor_id: params[:doctor_id]).call
+      when 'edit_doctor'
+        can :edit_doctor, Center if Authorization::Center::CanEditDoctorService.new(current_doctor: doctor, center_id: params[:id], doctor_id: params[:doctor_id]).call
 
       else
         false

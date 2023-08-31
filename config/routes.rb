@@ -11,6 +11,7 @@ Rails.application.routes.draw do
         member do
           post :invite_doctor
           post :assign_doctor
+          put :edit_doctor
         end
       end
 
