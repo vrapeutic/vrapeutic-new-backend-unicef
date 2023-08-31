@@ -12,6 +12,7 @@ Rails.application.routes.draw do
           post :invite_doctor
           post :assign_doctor
           put :edit_doctor
+          put :make_doctor_admin
         end
       end
 

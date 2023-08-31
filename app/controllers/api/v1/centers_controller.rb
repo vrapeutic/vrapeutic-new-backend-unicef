@@ -93,6 +93,15 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def make_doctor_admin
+    begin
+      Center::MakeDoctorAdminService.new(doctor_id: params[:doctor_id], center_id: params[:id]).call 
+      render json: "assigned successfully"
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /centers/1
   def destroy
     @center.destroy
