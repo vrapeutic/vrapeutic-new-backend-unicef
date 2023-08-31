@@ -77,6 +77,22 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def edit_doctor
+    begin
+      new_doctor = Doctor::UpdateService.new(
+        doctor_id: params[:doctor_id], 
+        degree: params[:degree], 
+        certificate: params[:certificate], 
+        specialty_ids: params[:specialty_ids], 
+        photo: params[:photo], 
+        university: params[:university]
+      ).call 
+      render json: DoctorSerializer.new(new_doctor).serializable_hash
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /centers/1
   def destroy
     @center.destroy

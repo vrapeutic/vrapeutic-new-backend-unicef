@@ -4,7 +4,7 @@ class Doctor < ApplicationRecord
     validates :name, presence: true
     validates :photo, presence: true
     validates :email, presence: true, uniqueness: true
-    validates :password, length: { minimum: 6 }
+    validates :password, length: { minimum: 6 }, :if => :password
     validates :university, presence: true
     validates :degree, presence: true
     validates :certificate, presence: true
