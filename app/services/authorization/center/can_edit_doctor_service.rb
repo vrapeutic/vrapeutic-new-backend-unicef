@@ -7,16 +7,17 @@ class Authorization::Center::CanEditDoctorService
     end
 
     def call 
-        is_current_doctor_center_manager && is_edited_doctor_worker_in_center
+        is_current_doctor_admin && is_worker_doctor_in_center
     end
 
     private
 
-    def is_current_doctor_center_manager
-        Authorization::Center::CanUpdateService.new(current_doctor: @current_doctor, center_id: @center_id)
+    # check if current doctor is manager to this center and the worker doctor is working in this center
+    def is_current_doctor_admin
+        Center::IsDoctorAdminService.new(current_doctor_id: @current_doctor.id, center_id: @center_id).call
     end
 
-    def is_edited_doctor_worker_in_center
-        DoctorCenter.find_by(doctor_id: @doctor_id, center_id: @center_id, role: "worker").present? ? true : false
+    def is_worker_doctor_in_center
+        Center::IsDoctorWorkerService.new(current_doctor_id: @doctor_id, center_id: @center_id).call
     end
 end

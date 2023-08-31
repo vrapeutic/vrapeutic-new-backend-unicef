@@ -6,12 +6,12 @@ class Authorization::Center::CanUpdateService
     end
 
     def call 
-        is_current_doctor_center_manager
+        is_current_doctor_admin
     end
 
     private
 
-    def is_current_doctor_center_manager
-        DoctorCenter.find_by(doctor: @current_doctor, center_id: @center_id, role: 'admin').present? ? true : false
+    def is_current_doctor_admin
+        Center::IsDoctorAdminService.new(current_doctor_id: @current_doctor.id, center_id: @center_id).call
     end
 end

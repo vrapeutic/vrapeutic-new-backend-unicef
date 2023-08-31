@@ -6,12 +6,12 @@ class Authorization::Center::CanInviteDoctorService
     end
 
     def call 
-        can_invite_doctor
+        is_current_doctor_admin
     end
 
     private
 
-    def can_invite_doctor
-        Authorization::Center::CanUpdateService.new(current_doctor: @current_doctor, center_id: @center_id).call
+    def is_current_doctor_admin
+        Center::IsDoctorAdminService.new(current_doctor_id: @current_doctor.id, center_id: @center_id).call
     end
 end

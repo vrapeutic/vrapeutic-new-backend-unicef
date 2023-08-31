@@ -6,13 +6,13 @@ class Authorization::Center::CanAssignDoctorService
     end
 
     def call 
-        can_assign_doctor && is_manager_different_from_assignee
+        is_current_doctor_admin && is_manager_different_from_assignee
     end
 
     private
 
-    def can_assign_doctor
-        Authorization::Center::CanUpdateService.new(current_doctor: @current_doctor, center_id: @center_id).call
+    def is_current_doctor_admin
+        Center::IsDoctorAdminService.new(current_doctor_id: @current_doctor.id, center_id: @center_id).call
     end
 
     def is_manager_different_from_assignee
