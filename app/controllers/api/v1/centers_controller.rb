@@ -102,6 +102,21 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def add_child
+    begin
+      new_child = Center::AddChildService.new(
+        name: params[:name], 
+        email: params[:email], 
+        age: params[:age], 
+        center_id: params[:id], 
+        diagnosis_ids: params[:diagnosis_ids]
+      ).call 
+      render json: ChildSerializer.new(new_child).serializable_hash
+    rescue => e 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /centers/1
   def destroy
     @center.destroy

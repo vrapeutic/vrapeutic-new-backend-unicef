@@ -18,6 +18,7 @@ Rails.application.routes.draw do
           post :assign_doctor
           put :edit_doctor
           put :make_doctor_admin
+          post :add_child
         end
       end
 
