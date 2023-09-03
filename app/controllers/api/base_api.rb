@@ -46,6 +46,10 @@ module Api
       def record_is_existed_before
         render json: {error: "data is aleady existed"}, status: :conflict
       end
+
+      def validate_admin_otp 
+        
+      end
   
     end
   end

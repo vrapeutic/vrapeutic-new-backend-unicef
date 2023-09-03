@@ -11,6 +11,13 @@ Rails.application.routes.draw do
 
       resources :diagnoses, only: %i[index]
 
+      resources :admins, only: %i[] do
+        collection do
+          post :send_otp
+        end
+      end
+
+
       
       resources :centers, only: %i[create update] do
         member do
