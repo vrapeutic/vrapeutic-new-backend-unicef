@@ -9,8 +9,10 @@ class Center::AddChildService
     end
 
     def call 
+        check_diagnoses_existed
         Child.transaction do 
             create_child
+            create_chid_diagnoses
             @new_child
         end
         rescue => e 
@@ -26,5 +28,13 @@ class Center::AddChildService
         }
         options[:age] = @age unless @age.nil?
         @new_child = Child.create!(options)
+    end
+
+    def check_diagnoses_existed
+        @diagnoses_records = Diagnosis::CheckIsExistedService.new(diagnosis_ids: @diagnosis_ids).call
+    end
+
+    def create_chid_diagnoses
+        @new_child.diagnoses << @diagnoses_records
     end
 end

@@ -8,4 +8,7 @@ class Child < ApplicationRecord
         less_than_or_equal_to: 40,
         allow_nil: true
       }
+
+    has_many :child_diagnoses, dependent: :destroy
+    has_many :diagnoses, through: :child_diagnoses
 end
