@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       resources :admins, only: %i[] do
         collection do
           post :send_otp
+          post :validate_otp
         end
       end
 

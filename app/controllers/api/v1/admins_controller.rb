@@ -1,10 +1,15 @@
 class Api::V1::AdminsController < Api::BaseApi
   before_action :set_admin, only: %i[ show update destroy ]
+  before_action :validate_admin_otp, only: %i[ validate_otp]
 
   def send_otp 
     otp = Admin::GenerateOtpService.new.call
     AdminOtpMailer.send_otp(ENV['ADMIN_EMAIL'], otp).deliver_later
     render json: "otp is sent successfully"
+  end
+
+  def validate_otp 
+    render json: "admin is now authorized to do actions"
   end
 
   # GET /admins
