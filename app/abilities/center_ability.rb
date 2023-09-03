@@ -17,6 +17,8 @@ class CenterAbility
         can :make_doctor_admin, Center if Authorization::Center::CanMakeDoctorAdminService.new(current_doctor: doctor, center_id: params[:id], worker_doctor_id: params[:doctor_id]).call
         when 'add_child'
           can :add_child, Center if Authorization::Center::CanAddChildService.new(current_doctor: doctor, center_id: params[:id]).call
+        when 'edit_child'
+          can :edit_child, Center if Authorization::Center::CanEditChildService.new(current_doctor: doctor, center_id: params[:id], child_id: params[:child_id]).call
 
       else
         false

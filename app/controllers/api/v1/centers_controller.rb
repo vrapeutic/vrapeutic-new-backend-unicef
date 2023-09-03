@@ -117,6 +117,10 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def edit_child
+    render json: 'working'
+  end
+
   # DELETE /centers/1
   def destroy
     @center.destroy
