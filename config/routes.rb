@@ -4,8 +4,13 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
+
       post '/sign_in', to: 'doctors#sign_in'
+
       resources :specialties, only: %i[index]
+
+      resources :diagnoses, only: %i[index]
+
       
       resources :centers, only: %i[create update] do
         member do
