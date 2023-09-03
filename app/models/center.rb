@@ -20,4 +20,6 @@ class Center < ApplicationRecord
     has_many :center_specialties, dependent: :destroy
     has_many :specialties, through: :center_specialties
     has_many :center_social_links, dependent: :destroy
+    has_many :child_centers, dependent: :destroy
+    has_many :children, through: :child_centers
 end

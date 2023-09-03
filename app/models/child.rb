@@ -11,4 +11,6 @@ class Child < ApplicationRecord
 
     has_many :child_diagnoses, dependent: :destroy
     has_many :diagnoses, through: :child_diagnoses
+    has_many :child_centers, dependent: :destroy
+    has_many :centers, through: :child_centers
 end

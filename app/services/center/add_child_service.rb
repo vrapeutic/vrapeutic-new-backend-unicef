@@ -13,6 +13,7 @@ class Center::AddChildService
         Child.transaction do 
             create_child
             create_chid_diagnoses
+            create_child_center
             @new_child
         end
         rescue => e 
@@ -36,5 +37,9 @@ class Center::AddChildService
 
     def create_chid_diagnoses
         @new_child.diagnoses << @diagnoses_records
+    end
+
+    def create_child_center
+        ChildCenter.create!(child: @new_child, center_id: @center_id)
     end
 end
