@@ -118,7 +118,16 @@ class Api::V1::CentersController < Api::BaseApi
   end
 
   def edit_child
-    render json: 'working'
+    begin
+      child = Center::EditChildService.new(
+        child_id: params[:child_id], 
+        edit_params: edit_child_params.except(:diagnosis_ids), 
+        diagnosis_ids: params[:child][:diagnosis_ids]
+      ).call
+      render json: ChildSerializer.new(child).serializable_hash
+    rescue => e 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
   end
 
   # DELETE /centers/1
@@ -139,5 +148,9 @@ class Api::V1::CentersController < Api::BaseApi
 
     def edit_center_params
       params.permit(:id, :name, :longitude, :latitude, :website, :logo, :certificate, :registration_number, :tax_id, :email, :phone_number, :social_links, :specialty_ids => [])
+    end
+
+    def edit_child_params
+      params.require(:child).permit(:name, :age, :diagnosis_ids)
     end
 end
