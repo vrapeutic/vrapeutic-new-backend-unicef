@@ -34,6 +34,7 @@ Rails.application.routes.draw do
           put :make_doctor_admin
           post :add_child
           put :edit_child
+          post :add_modules
         end
       end
 

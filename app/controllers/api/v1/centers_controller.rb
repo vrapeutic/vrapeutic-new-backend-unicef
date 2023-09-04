@@ -1,5 +1,5 @@
 class Api::V1::CentersController < Api::BaseApi
-  before_action :set_center, only: %i[ show update destroy invite_doctor assign_doctor ]
+  before_action :set_center, only: %i[ show update destroy invite_doctor assign_doctor  ]
   before_action :authorized
 
   def current_ability
@@ -125,6 +125,15 @@ class Api::V1::CentersController < Api::BaseApi
         diagnosis_ids: params[:child][:diagnosis_ids]
       ).call
       render json: ChildSerializer.new(child).serializable_hash
+    rescue => e 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def add_modules
+    begin
+      Center::AddModulesService.new(software_module_ids: params[:software_module_ids], center_id: params[:id]).call 
+      render json: "modules added successfully"
     rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
     end
