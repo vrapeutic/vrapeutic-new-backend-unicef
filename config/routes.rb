@@ -11,6 +11,9 @@ Rails.application.routes.draw do
 
       resources :diagnoses, only: %i[index]
 
+      resources :targeted_skills, only: %i[index]
+
+
       resources :admins, only: %i[] do
         collection do
           post :send_otp
