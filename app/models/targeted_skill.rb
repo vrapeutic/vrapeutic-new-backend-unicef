@@ -9,4 +9,7 @@ class TargetedSkill < ApplicationRecord
     MEMORY_SKILLS = "Memory Skills".freeze
     COGNITIVE_SKILLS = "Cognitive Skills".freeze
     ACADEMIC_SKILLS = "Academic Skills".freeze
+
+    has_many :software_module_skills, dependent: :destroy
+    has_many :software_modules, through: :software_module_skills
 end

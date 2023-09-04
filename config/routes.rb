@@ -13,6 +13,9 @@ Rails.application.routes.draw do
 
       resources :targeted_skills, only: %i[index]
 
+      resources :software_modules, only: %i[index create]
+
+
 
       resources :admins, only: %i[] do
         collection do
