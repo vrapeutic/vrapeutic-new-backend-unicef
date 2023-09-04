@@ -22,4 +22,6 @@ class Center < ApplicationRecord
     has_many :center_social_links, dependent: :destroy
     has_many :child_centers, dependent: :destroy
     has_many :children, through: :child_centers
+    has_many :center_software_modules, dependent: :destroy
+    has_many :software_modules, through: :center_software_modules
 end
