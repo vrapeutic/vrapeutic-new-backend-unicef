@@ -7,7 +7,7 @@ class Api::V1::SoftwareModulesController < Api::BaseApi
   def index
     @software_modules = SoftwareModule.all
 
-    render json: @software_modules
+    render json: SoftwareModuleSerializer.new(@software_modules).serializable_hash
   end
 
   # GET /software_modules/1
@@ -19,7 +19,7 @@ class Api::V1::SoftwareModulesController < Api::BaseApi
   def create
     begin
       @new_software_module = SoftwareModule::CreateService.new(create_params: software_module_params.except(:targeted_skill_ids), targeted_skill_ids: params[:targeted_skill_ids]).call 
-      render json: @new_software_module
+      render json: SoftwareModuleSerializer.new(@new_software_module).serializable_hash
     rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
     end
