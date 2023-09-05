@@ -22,7 +22,7 @@ class Center::EditChildService
     private
 
     def find_child
-        @child = Child.find_by(id: @child_id)
+        @child = Child.find(@child_id)
     end
 
     def update_child

@@ -1,6 +1,6 @@
 class Api::V1::AdminsController < Api::BaseApi
   before_action :set_admin, only: %i[ show update destroy ]
-  before_action :validate_admin_otp, only: %i[ validate_otp]
+  before_action :validate_admin_otp, only: %i[ edit_child ]
 
   def send_otp 
     otp = Admin::GenerateOtpService.new.call
@@ -8,8 +8,17 @@ class Api::V1::AdminsController < Api::BaseApi
     render json: "otp is sent successfully"
   end
 
-  def validate_otp 
-    render json: "admin is now authorized to do actions"
+  def edit_child 
+    begin
+      child = Admin::EditChildService.new(
+        child_id: params[:child_id], 
+        edit_params: edit_child_params.except(:diagnosis_ids), 
+        diagnosis_ids: params[:child][:diagnosis_ids]
+      ).call
+      render json: ChildSerializer.new(child).serializable_hash
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
   end
 
   # GET /admins
@@ -58,5 +67,9 @@ class Api::V1::AdminsController < Api::BaseApi
     # Only allow a list of trusted parameters through.
     def admin_params
       params.require(:admin).permit(:otp, :expires_at)
+    end
+
+    def edit_child_params
+      params.require(:child).permit(:name, :age, :diagnosis_ids)
     end
 end

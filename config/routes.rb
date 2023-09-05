@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       resources :admins, only: %i[] do
         collection do
           post :send_otp
-          post :validate_otp
+          put :edit_child
         end
       end
 
@@ -30,10 +30,10 @@ Rails.application.routes.draw do
         member do
           post :invite_doctor
           post :assign_doctor
-          put :edit_doctor
+          # put :edit_doctor
           put :make_doctor_admin
           post :add_child
-          put :edit_child
+          # put :edit_child
           post :add_modules
         end
       end
