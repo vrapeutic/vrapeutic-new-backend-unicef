@@ -21,6 +21,13 @@ class CenterAbility
         can :edit_child, Center if Authorization::Center::CanEditChildService.new(current_doctor: doctor, center_id: params[:id], child_id: params[:child_id]).call
       when 'add_modules'
         can :add_modules, Center if Authorization::Center::CanAddModulesService.new(current_doctor: doctor, center_id: params[:id]).call
+      when 'assign_module_child'
+        can :assign_module_child, Center if Authorization::Center::CanAssignModuleToChildService.new(
+          current_doctor: doctor, 
+          center_id: params[:id], 
+          software_module_id: params[:software_module_id], 
+          child_id: params[:child_id]
+        ).call
 
       else
         false
