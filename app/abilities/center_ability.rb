@@ -28,6 +28,13 @@ class CenterAbility
           software_module_id: params[:software_module_id], 
           child_id: params[:child_id]
         ).call
+      when 'unassign_module_child'
+        can :unassign_module_child, Center if Authorization::Center::CanUnassignModuleFromChildService.new(
+          current_doctor: doctor, 
+          center_id: params[:id], 
+          software_module_id: params[:software_module_id], 
+          child_id: params[:child_id]
+        ).call
 
       else
         false
