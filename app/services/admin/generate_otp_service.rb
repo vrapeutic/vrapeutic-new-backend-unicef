@@ -1,6 +1,6 @@
 class Admin::GenerateOtpService
 
-    def initialize(expires_at: Time.now +  15.minutes)
+    def initialize(expires_at: Time.now +  60.minutes)
         @expires_at = expires_at
     end
 
