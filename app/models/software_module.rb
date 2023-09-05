@@ -9,4 +9,6 @@ class SoftwareModule < ApplicationRecord
     has_many :targeted_skills, through: :software_module_skills
     has_many :center_software_modules, dependent: :destroy
     has_many :centers, through: :center_software_modules
+    has_many :child_software_modules, dependent: :destroy
+    has_many :children, through: :child_software_modules
 end

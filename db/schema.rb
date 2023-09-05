@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_04_155232) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_05_182847) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,6 +90,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_155232) do
     t.index ["child_id", "diagnosis_id"], name: "index_child_diagnoses_on_child_id_and_diagnosis_id", unique: true
     t.index ["child_id"], name: "index_child_diagnoses_on_child_id"
     t.index ["diagnosis_id"], name: "index_child_diagnoses_on_diagnosis_id"
+  end
+
+  create_table "child_software_modules", force: :cascade do |t|
+    t.bigint "software_module_id", null: false
+    t.bigint "child_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id", "software_module_id"], name: "index_child_software_modules_on_child_id_and_software_module_id", unique: true
+    t.index ["child_id"], name: "index_child_software_modules_on_child_id"
+    t.index ["software_module_id"], name: "index_child_software_modules_on_software_module_id"
   end
 
   create_table "children", force: :cascade do |t|
@@ -212,6 +222,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_155232) do
   add_foreign_key "child_centers", "children"
   add_foreign_key "child_diagnoses", "children"
   add_foreign_key "child_diagnoses", "diagnoses"
+  add_foreign_key "child_software_modules", "children"
+  add_foreign_key "child_software_modules", "software_modules"
   add_foreign_key "doctor_centers", "centers"
   add_foreign_key "doctor_centers", "doctors"
   add_foreign_key "doctor_specialties", "doctors"
