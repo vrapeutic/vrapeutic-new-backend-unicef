@@ -36,6 +36,7 @@ Rails.application.routes.draw do
           post :add_child
           # put :edit_child
           post :add_modules
+          put :assign_module_child
         end
       end
 

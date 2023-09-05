@@ -139,6 +139,16 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def assign_module_child
+    begin
+      Center::AssignModuleToChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id]).call 
+      render json: "module is assignes to child"
+    rescue => e
+      puts e.type # this throw active record  RecordNotUnique error 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /centers/1
   def destroy
     @center.destroy
