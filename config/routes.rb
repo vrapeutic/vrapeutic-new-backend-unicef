@@ -21,6 +21,7 @@ Rails.application.routes.draw do
         collection do
           post :send_otp
           put :edit_child
+          put :edit_doctor
         end
       end
 

@@ -1,6 +1,11 @@
 class Api::V1::AdminsController < Api::BaseApi
   before_action :set_admin, only: %i[ show update destroy ]
-  before_action :validate_admin_otp, only: %i[ edit_child ]
+  before_action :validate_admin_otp, only: %i[ edit_child edit_doctor ]
+
+  def current_ability
+    @current_ability ||= AdminAbility.new(params)
+  end
+  authorize_resource only: %i[ edit_doctor ]
 
   def send_otp 
     otp = Admin::GenerateOtpService.new.call
@@ -16,6 +21,23 @@ class Api::V1::AdminsController < Api::BaseApi
         diagnosis_ids: params[:child][:diagnosis_ids]
       ).call
       render json: ChildSerializer.new(child).serializable_hash
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def edit_doctor 
+    begin
+      doctor = Admin::EditDoctorService.new(
+        doctor_id: params[:doctor_id], 
+        degree: params[:degree], 
+        certificate: params[:certificate], 
+        specialty_ids: params[:specialty_ids], 
+        photo: params[:photo], 
+        university: params[:university],
+        name: params[:name]
+      ).call 
+      render json: DoctorSerializer.new(doctor).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
