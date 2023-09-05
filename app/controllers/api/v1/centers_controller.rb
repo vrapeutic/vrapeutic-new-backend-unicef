@@ -142,9 +142,18 @@ class Api::V1::CentersController < Api::BaseApi
   def assign_module_child
     begin
       Center::AssignModuleToChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id]).call 
-      render json: "module is assignes to child"
+      render json: "module is assigned to child"
     rescue => e
       puts e.type # this throw active record  RecordNotUnique error 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def unassign_module_child
+    begin
+      Center::UnassignModuleFromChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id]).call 
+      render json: "module is un assigned to child"
+    rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
