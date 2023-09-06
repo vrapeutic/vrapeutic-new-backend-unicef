@@ -158,6 +158,16 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def assign_doctor_child
+    begin
+      Center::AssignDoctorToChildService.new(assignee_doctor_id: params[:doctor_id], child_id: params[:child_id], center_id: params[:id]).call
+      render json: "doctor is assigned to  child"
+    rescue => e
+      puts e.type # this throw active record  RecordNotUnique error 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /centers/1
   def destroy
     @center.destroy
