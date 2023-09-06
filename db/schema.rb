@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_06_160801) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_06_181731) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -181,6 +181,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_160801) do
     t.index ["email"], name: "index_doctors_on_email", unique: true
   end
 
+  create_table "headsets", force: :cascade do |t|
+    t.string "name"
+    t.string "brand"
+    t.string "model"
+    t.string "version"
+    t.string "key"
+    t.bigint "center_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["center_id"], name: "index_headsets_on_center_id"
+    t.index ["key"], name: "index_headsets_on_key", unique: true
+    t.index ["name", "center_id"], name: "index_headsets_on_name_and_center_id", unique: true
+  end
+
   create_table "otps", force: :cascade do |t|
     t.bigint "doctor_id", null: false
     t.string "code"
@@ -246,6 +260,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_160801) do
   add_foreign_key "doctor_centers", "doctors"
   add_foreign_key "doctor_specialties", "doctors"
   add_foreign_key "doctor_specialties", "specialties"
+  add_foreign_key "headsets", "centers"
   add_foreign_key "otps", "doctors"
   add_foreign_key "software_module_skills", "software_modules"
   add_foreign_key "software_module_skills", "targeted_skills"
