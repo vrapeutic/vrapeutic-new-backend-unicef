@@ -38,6 +38,7 @@ Rails.application.routes.draw do
           post :add_modules
           put :assign_module_child
           put :unassign_module_child
+          put :assign_doctor_child
         end
       end
 
