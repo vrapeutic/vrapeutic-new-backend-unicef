@@ -9,13 +9,14 @@ class Doctor < ApplicationRecord
     validates :degree, presence: true
     validates :certificate, presence: true
 
-    has_many :doctor_specialties, dependent: :destroy
-    has_many :specialties, through: :doctor_specialties
-    has_one :otp, dependent: :destroy
-
     mount_uploader :photo, PhotoUploader
     mount_uploader :certificate, CertificateUploader
 
+    has_many :doctor_specialties, dependent: :destroy
+    has_many :specialties, through: :doctor_specialties
+    has_one :otp, dependent: :destroy
     has_many :doctor_centers, dependent: :destroy
     has_many :centers, through: :doctor_centers
+    has_many :child_doctors, dependent: :destroy 
+    has_many :doctors, through: :child_doctors
 end
