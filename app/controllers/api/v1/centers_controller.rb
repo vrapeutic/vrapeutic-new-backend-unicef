@@ -186,6 +186,15 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def edit_headset
+    begin
+      headset = Center::EditHeadsetService.new(headset_params: headset_params, headset_id: params[:headset_id]).call 
+      render json: HeadsetSerializer.new(headset).serializable_hash
+    rescue => e 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /centers/1
   def destroy
     @center.destroy
