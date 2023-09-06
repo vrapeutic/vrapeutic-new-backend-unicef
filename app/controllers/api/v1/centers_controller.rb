@@ -177,6 +177,15 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def add_headset
+    begin
+      new_headset = Center::AddHeadsetService.new(headset_params: headset_params, center_id: params[:id]).call 
+      render json: HeadsetSerializer.new(new_headset).serializable_hash
+    rescue => e 
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /centers/1
   def destroy
     @center.destroy
@@ -199,5 +208,9 @@ class Api::V1::CentersController < Api::BaseApi
 
     def edit_child_params
       params.require(:child).permit(:name, :age, :diagnosis_ids)
+    end
+
+    def headset_params
+      params.require(:headset).permit(:name, :version, :model, :key, :brand)
     end
 end

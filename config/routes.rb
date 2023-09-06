@@ -40,6 +40,7 @@ Rails.application.routes.draw do
           put :unassign_module_child
           put :assign_doctor_child
           put :unassign_doctor_child
+          post :add_headset
         end
       end
 
