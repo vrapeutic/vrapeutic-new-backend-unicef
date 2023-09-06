@@ -23,6 +23,6 @@ class Authorization::Center::CanUnassignModuleFromChildService
     end
 
     def child_has_module? 
-        Child::HasModuleService.new(child_id: @child_id, software_module_id: @software_module_id).call
+        Child::HasModuleInCenterService.new(child_id: @child_id, software_module_id: @software_module_id, center_id: @center_id).call
     end
 end

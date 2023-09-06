@@ -151,7 +151,7 @@ class Api::V1::CentersController < Api::BaseApi
 
   def unassign_module_child
     begin
-      Center::UnassignModuleFromChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id]).call 
+      Center::UnassignModuleFromChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id], center_id: params[:id]).call 
       render json: "module is un assigned to child"
     rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
