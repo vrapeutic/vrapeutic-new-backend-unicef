@@ -1,8 +1,9 @@
 class Center::AssignModuleToChildService
 
-    def initialize(child_id:, software_module_id:)
+    def initialize(child_id:, software_module_id:, center_id:)
         @child_id = child_id
         @software_module_id = software_module_id
+        @center_id = center_id
     end
 
     def  call 
@@ -12,6 +13,6 @@ class Center::AssignModuleToChildService
     private
 
     def add_module_to_child
-        ChildSoftwareModule.create!(child_id: @child_id, software_module_id: @software_module_id)
+        ChildSoftwareModule.create!(child_id: @child_id, software_module_id: @software_module_id, center_id: @center_id)
     end
 end

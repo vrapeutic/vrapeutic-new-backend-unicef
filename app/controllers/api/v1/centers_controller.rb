@@ -141,7 +141,7 @@ class Api::V1::CentersController < Api::BaseApi
 
   def assign_module_child
     begin
-      Center::AssignModuleToChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id]).call 
+      Center::AssignModuleToChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id], center_id: params[:id]).call 
       render json: "module is assigned to child"
     rescue => e
       puts e.type # this throw active record  RecordNotUnique error 
