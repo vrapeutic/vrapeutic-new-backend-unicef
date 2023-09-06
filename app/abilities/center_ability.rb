@@ -35,6 +35,13 @@ class CenterAbility
           software_module_id: params[:software_module_id], 
           child_id: params[:child_id]
         ).call
+      when 'assign_doctor_child'
+        can :assign_doctor_child, Center if Authorization::Center::CanAssignDoctorToChildService.new(
+          current_doctor: doctor, 
+          center_id: params[:id], 
+          assignee_doctor_id: params[:doctor_id], 
+          child_id: params[:child_id]
+        ).call
 
       else
         false
