@@ -43,6 +43,14 @@ class CenterAbility
           child_id: params[:child_id]
         ).call
 
+      when 'unassign_doctor_child'
+        can :unassign_doctor_child, Center if Authorization::Center::CanUnassignDoctorFromChildService.new(
+          current_doctor: doctor, 
+          center_id: params[:id], 
+          assignee_doctor_id: params[:doctor_id], 
+          child_id: params[:child_id]
+        ).call
+
       else
         false
       end
