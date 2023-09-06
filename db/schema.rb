@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_06_135801) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_06_160801) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -109,7 +109,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_135801) do
     t.bigint "child_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["child_id", "software_module_id"], name: "index_child_software_modules_on_child_id_and_software_module_id", unique: true
+    t.bigint "center_id", null: false
+    t.index ["center_id"], name: "index_child_software_modules_on_center_id"
+    t.index ["child_id", "software_module_id", "center_id"], name: "child_modules_index", unique: true
     t.index ["child_id"], name: "index_child_software_modules_on_child_id"
     t.index ["software_module_id"], name: "index_child_software_modules_on_software_module_id"
   end
@@ -237,6 +239,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_135801) do
   add_foreign_key "child_doctors", "centers"
   add_foreign_key "child_doctors", "children"
   add_foreign_key "child_doctors", "doctors"
+  add_foreign_key "child_software_modules", "centers"
   add_foreign_key "child_software_modules", "children"
   add_foreign_key "child_software_modules", "software_modules"
   add_foreign_key "doctor_centers", "centers"
