@@ -53,6 +53,8 @@ class CenterAbility
 
       when 'add_headset'
         can :add_headset, Center if Authorization::Center::CanAddHeadsetService.new(current_doctor: doctor, center_id: params[:id]).call
+      when 'edit_headset'
+        can :edit_headset, Center if Authorization::Center::CanEditHeadsetService.new(current_doctor: doctor, center_id: params[:id], headset_id: params[:headset_id]).call
 
       else
         false
