@@ -168,6 +168,15 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def  unassign_doctor_child
+    begin
+      Center::UnassignDoctorFromChildService.new(assignee_doctor_id: params[:doctor_id], child_id: params[:child_id], center_id: params[:id]).call
+      render json: "doctor is un assigned from child"
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /centers/1
   def destroy
     @center.destroy
