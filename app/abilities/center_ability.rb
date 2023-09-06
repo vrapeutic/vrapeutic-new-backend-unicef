@@ -51,6 +51,9 @@ class CenterAbility
           child_id: params[:child_id]
         ).call
 
+      when 'add_headset'
+        can :add_headset, Center if Authorization::Center::CanAddHeadsetService.new(current_doctor: doctor, center_id: params[:id]).call
+
       else
         false
       end
