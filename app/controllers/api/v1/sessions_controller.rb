@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::BaseApi
-  before_action :set_session, only: %i[ show update destroy ]
+  before_action :set_session, only: %i[ show update destroy resend_otp ]
 
   before_action :authorized
 
@@ -37,6 +37,17 @@ class Api::V1::SessionsController < Api::BaseApi
     rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
     end
+  end
+
+  def resend_otp 
+    if @session.is_verified
+      return render json: {error: "session is already vdrified"}, status: :unprocessable_entity
+    end
+    # generate otp 
+    otp_code = Otp::GenerateService.new(doctor: current_doctor, code_type: Otp::SESSION_VERIFICATION).call
+    # send email
+    SessionOtpMailer.send_otp(current_doctor.email, otp_code).deliver_later
+    render json: 'otp is sent again'
   end
 
   # PATCH/PUT /sessions/1
