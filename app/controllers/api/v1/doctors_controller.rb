@@ -32,8 +32,8 @@ class Api::V1::DoctorsController < Api::BaseApi
         photo: params[:photo],
         certificate: params[:certificate]
       ).call
-      Otp::GenerateService.new(doctor: @doctor).call
-      OtpMailer.send_otp(@doctor, @doctor.otp.code).deliver_later
+      otp_code = Otp::GenerateService.new(doctor: @doctor).call
+      OtpMailer.send_otp(@doctor, otp_code).deliver_later
       render json: DoctorSerializer.new(@doctor).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
@@ -54,9 +54,9 @@ class Api::V1::DoctorsController < Api::BaseApi
     if @doctor.is_email_verified
       return render json: {error: "doctor is already vdrified"}, status: :unprocessable_entity 
     end
-    Otp::GenerateService.new(doctor: @doctor).call
+    otp_code = Otp::GenerateService.new(doctor: @doctor).call
     # send email 
-    OtpMailer.send_otp(@doctor, @doctor.otp.code).deliver_later
+    OtpMailer.send_otp(@doctor, otp_code).deliver_later
     render json: "otp is sent again"
   end
 
