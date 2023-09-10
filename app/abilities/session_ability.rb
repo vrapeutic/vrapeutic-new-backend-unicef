@@ -10,6 +10,8 @@ class SessionAbility
             center_id: params[:center_id], 
             headset_id: params[:headset_id]
         ).call
+      when 'resend_otp'
+        can :resend_otp, Session if Authorization::Session::CanDoctorResendOtpService.new(current_doctor: doctor, session_id:  params[:id]).call
 
       else
         false

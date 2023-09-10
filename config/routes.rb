@@ -15,7 +15,11 @@ Rails.application.routes.draw do
 
       resources :software_modules, only: %i[index create update]
 
-      resources :sessions, only: %i[create]
+      resources :sessions, only: %i[create] do 
+        member do
+          post :resend_otp
+        end
+      end
 
 
 
