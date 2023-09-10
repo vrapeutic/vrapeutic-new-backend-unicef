@@ -29,6 +29,10 @@ class Api::V1::SessionsController < Api::BaseApi
         child_id: params[:child_id], 
         headset_id: params[:headset_id]
       ).call
+      # generate otp 
+      otp_code = Otp::GenerateService.new(doctor: current_doctor, code_type: Otp::SESSION_VERIFICATION).call
+      # send email
+      SessionOtpMailer.send_otp(current_doctor.email, otp_code).deliver_later
       render json: SessionSerializer.new(session).serializable_hash
     rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
