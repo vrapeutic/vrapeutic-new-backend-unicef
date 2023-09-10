@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       resources :sessions, only: %i[create] do 
         member do
           post :resend_otp
+          put :validate_otp
         end
       end
 
