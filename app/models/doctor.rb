@@ -19,4 +19,6 @@ class Doctor < ApplicationRecord
     has_many :centers, through: :doctor_centers
     has_many :child_doctors, dependent: :destroy 
     has_many :doctors, through: :child_doctors
+    has_many :session_doctors, dependent: :destroy
+    has_many :sessions, through: :session_doctors
 end
