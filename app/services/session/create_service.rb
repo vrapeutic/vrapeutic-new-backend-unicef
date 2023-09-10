@@ -22,6 +22,6 @@ class Session::CreateService
     end
 
     def add_doctor_to_session
-
+        Session::AddDoctorService.new(session_id: @new_session.id, doctor_id: @doctor.id).call
     end
 end
