@@ -1,5 +1,5 @@
 class Api::V1::DoctorsController < Api::BaseApi
-  before_action :set_doctor, only: %i[ show update destroy validate_otp resend_otp ]
+  before_action :set_doctor, only: %i[ show destroy validate_otp resend_otp ]
   before_action :authorized, only: %i[ update ]
 
   def current_ability
