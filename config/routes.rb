@@ -15,6 +15,9 @@ Rails.application.routes.draw do
 
       resources :software_modules, only: %i[index create update]
 
+      resources :sessions, only: %i[create]
+
+
 
 
       resources :admins, only: %i[] do

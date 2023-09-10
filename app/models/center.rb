@@ -25,4 +25,5 @@ class Center < ApplicationRecord
     has_many :center_software_modules, dependent: :destroy
     has_many :software_modules, through: :center_software_modules
     has_many :headsets, dependent: :destroy
+    has_many :sessions, dependent: :destroy
 end

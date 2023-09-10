@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_10_165421) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_10_191011) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -206,6 +206,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_10_165421) do
     t.index ["doctor_id"], name: "index_otps_on_doctor_id"
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.bigint "center_id", null: false
+    t.bigint "headset_id", null: false
+    t.bigint "child_id", null: false
+    t.integer "evaluation"
+    t.float "duration"
+    t.boolean "is_verified", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["center_id"], name: "index_sessions_on_center_id"
+    t.index ["child_id"], name: "index_sessions_on_child_id"
+    t.index ["headset_id"], name: "index_sessions_on_headset_id"
+  end
+
   create_table "software_module_skills", force: :cascade do |t|
     t.bigint "software_module_id", null: false
     t.bigint "targeted_skill_id", null: false
@@ -264,6 +278,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_10_165421) do
   add_foreign_key "doctor_specialties", "specialties"
   add_foreign_key "headsets", "centers"
   add_foreign_key "otps", "doctors"
+  add_foreign_key "sessions", "centers"
+  add_foreign_key "sessions", "children"
+  add_foreign_key "sessions", "headsets"
   add_foreign_key "software_module_skills", "software_modules"
   add_foreign_key "software_module_skills", "targeted_skills"
 end

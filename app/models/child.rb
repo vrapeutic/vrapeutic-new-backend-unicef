@@ -17,4 +17,5 @@ class Child < ApplicationRecord
     has_many :software_modules, through: :child_software_modules
     has_many :child_doctors, dependent: :destroy 
     has_many :doctors, through: :child_doctors
+    has_many :sessions, dependent: :destroy
 end
