@@ -8,6 +8,7 @@ class Doctor::UpdateService
         @university = university
         @specialty_ids = specialty_ids
         @name = name
+        @specialty_records = nil
     end
 
     def call 
@@ -38,7 +39,7 @@ class Doctor::UpdateService
     end
 
     def update_doctor_specialties
-        if @specialty_records.length 
+        unless @specialty_records.nil? 
             # destroy old specialties 
             @doctor.specialties.destroy_all
             # create new specialties 

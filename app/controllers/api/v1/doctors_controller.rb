@@ -1,5 +1,11 @@
 class Api::V1::DoctorsController < Api::BaseApi
   before_action :set_doctor, only: %i[ show update destroy validate_otp resend_otp ]
+  before_action :authorized, only: %i[ update ]
+
+  def current_ability
+    @current_ability ||= DoctorAbility.new(current_doctor, params)
+  end
+  authorize_resource only: %i[ update ]
 
   # GET /doctors
   def index
@@ -83,11 +89,20 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   # PATCH/PUT /doctors/1
   def update
-    if @doctor.update(doctor_params)
-      render json: @doctor
-    else
-      render json: @doctor.errors, status: :unprocessable_entity
-    end
+    begin
+      doctor = Doctor::UpdateService.new(
+        doctor_id: params[:id], 
+        degree: params[:degree], 
+        certificate: params[:certificate], 
+        specialty_ids: params[:specialty_ids], 
+        photo: params[:photo], 
+        university: params[:university],
+        name: params[:name]
+      ).call 
+      render json: DoctorSerializer.new(doctor).serializable_hash
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end 
   end
 
   # DELETE /doctors/1

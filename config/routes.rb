@@ -45,7 +45,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :doctors, only: %i[create] do
+      resources :doctors, only: %i[create update] do
         member do
           post :validate_otp
           put :resend_otp
