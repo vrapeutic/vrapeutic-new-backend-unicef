@@ -12,6 +12,8 @@ class SessionAbility
         ).call
       when 'resend_otp'
         can :resend_otp, Session if Authorization::Session::CanDoctorResendOtpService.new(current_doctor: doctor, session_id:  params[:id]).call
+      when 'validate_otp'
+        can :validate_otp, Session if Authorization::Session::CanDoctorValidateOtpService.new(current_doctor: doctor, session_id:  params[:id]).call
 
       else
         false
