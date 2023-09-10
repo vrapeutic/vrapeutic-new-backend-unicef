@@ -14,7 +14,7 @@ class Doctor < ApplicationRecord
 
     has_many :doctor_specialties, dependent: :destroy
     has_many :specialties, through: :doctor_specialties
-    has_one :otp, dependent: :destroy
+    has_many :otps, dependent: :type
     has_many :doctor_centers, dependent: :destroy
     has_many :centers, through: :doctor_centers
     has_many :child_doctors, dependent: :destroy 
