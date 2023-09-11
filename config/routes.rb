@@ -65,6 +65,7 @@ Rails.application.routes.draw do
         post :complete_profile
         get :centers
         get :center_assigned_children
+        get :center_headsets
        end
       end
     end
