@@ -20,6 +20,8 @@ class SessionAbility
           session_id: params[:id], 
           software_module_id: params[:software_module_id]
         ).call
+      when 'add_doctor'
+        can :add_doctor, Session if Authorization::Session::CanAddDoctorService.new(current_doctor:doctor, session_id: params[:id], added_doctor_id: params[:added_doctor_id]).call
 
       else
         false
