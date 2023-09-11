@@ -1,4 +1,4 @@
-class Authorization::Session::CanDoctorAddSoftwareModuleService
+class Authorization::Session::CanAddSoftwareModuleService
 
     def initialize(current_doctor:, session_id:, software_module_id:)
         @current_doctor = current_doctor

@@ -1,4 +1,4 @@
-class Authorization::Session::CanDoctorValidateOtpService
+class Authorization::Session::CanResendOtpService
 
     def initialize(current_doctor:, session_id:)
         @current_doctor = current_doctor

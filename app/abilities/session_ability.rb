@@ -4,18 +4,18 @@ class SessionAbility
       case params[:action]
 
       when 'create'
-        can :create, Session if Authorization::Session::CanDoctorCreateService.new(
+        can :create, Session if Authorization::Session::CanCreateService.new(
             current_doctor: doctor, 
             child_id: params[:child_id], 
             center_id: params[:center_id], 
             headset_id: params[:headset_id]
         ).call
       when 'resend_otp'
-        can :resend_otp, Session if Authorization::Session::CanDoctorResendOtpService.new(current_doctor: doctor, session_id:  params[:id]).call
+        can :resend_otp, Session if Authorization::Session::CanResendOtpService.new(current_doctor: doctor, session_id:  params[:id]).call
       when 'validate_otp'
-        can :validate_otp, Session if Authorization::Session::CanDoctorValidateOtpService.new(current_doctor: doctor, session_id:  params[:id]).call
+        can :validate_otp, Session if Authorization::Session::CanValidateOtpService.new(current_doctor: doctor, session_id:  params[:id]).call
       when 'add_module'
-        can :add_module, Session if Authorization::Session::CanDoctorAddSoftwareModuleService.new(
+        can :add_module, Session if Authorization::Session::CanAddSoftwareModuleService.new(
           current_doctor: doctor, 
           session_id: params[:id], 
           software_module_id: params[:software_module_id]

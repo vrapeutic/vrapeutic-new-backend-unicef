@@ -1,4 +1,4 @@
-class Authorization::Session::CanDoctorCreateService
+class Authorization::Session::CanCreateService
 
     def initialize(current_doctor:, child_id:, center_id:, headset_id:)
         @current_doctor = current_doctor
