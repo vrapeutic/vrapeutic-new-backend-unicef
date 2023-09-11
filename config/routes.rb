@@ -64,6 +64,7 @@ Rails.application.routes.draw do
        collection do
         post :complete_profile
         get :centers
+        get :center_assigned_children
        end
       end
     end
