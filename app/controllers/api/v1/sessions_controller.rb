@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::BaseApi
-  before_action :set_session, only: %i[ show update destroy resend_otp validate_otp ]
+  before_action :set_session, only: %i[ show update destroy resend_otp validate_otp end_session ]
 
   before_action :authorized
 
@@ -78,6 +78,15 @@ class Api::V1::SessionsController < Api::BaseApi
       render json: "doctor is added successfully  to session"
     rescue => e
       puts e.type
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def end_session 
+    begin
+      updated_session = Session::EndService.new(session: @session).call
+      render json: SessionSerializer.new(updated_session).serializable_hash
+    rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end

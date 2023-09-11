@@ -21,6 +21,7 @@ Rails.application.routes.draw do
           put :validate_otp
           put :add_module
           put :add_doctor
+          put :end_session
         end
       end
 
