@@ -7,4 +7,6 @@ class Session < ApplicationRecord
 
   has_many :session_doctors, dependent: :destroy
   has_many :doctors, through: :session_doctors
+  has_many :session_modules, dependent: :destroy
+  has_many :software_modules, through: :session_modules
 end

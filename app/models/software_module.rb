@@ -11,4 +11,6 @@ class SoftwareModule < ApplicationRecord
     has_many :centers, through: :center_software_modules
     has_many :child_software_modules, dependent: :destroy
     has_many :children, through: :child_software_modules
+    has_many :session_modules, dependent: :destroy
+    has_many :sessions, through: :session_modules
 end
