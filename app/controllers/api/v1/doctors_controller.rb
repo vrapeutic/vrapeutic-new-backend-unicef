@@ -1,6 +1,6 @@
 class Api::V1::DoctorsController < Api::BaseApi
   before_action :set_doctor, only: %i[ show destroy validate_otp resend_otp ]
-  before_action :authorized, only: %i[ update ]
+  before_action :authorized, only: %i[ update centers ]
 
   def current_ability
     @current_ability ||= DoctorAbility.new(current_doctor, params)
@@ -103,6 +103,10 @@ class Api::V1::DoctorsController < Api::BaseApi
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end 
+  end
+
+  def centers 
+    render json: MiniCenterSerializer.new(current_doctor.centers).serializable_hash
   end
 
   # DELETE /doctors/1

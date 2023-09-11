@@ -63,6 +63,7 @@ Rails.application.routes.draw do
         end
        collection do
         post :complete_profile
+        get :centers
        end
       end
     end
