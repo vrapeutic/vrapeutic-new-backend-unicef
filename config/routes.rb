@@ -20,6 +20,7 @@ Rails.application.routes.draw do
           post :resend_otp
           put :validate_otp
           put :add_module
+          put :add_doctor
         end
       end
 

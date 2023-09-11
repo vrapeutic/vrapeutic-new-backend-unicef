@@ -72,6 +72,16 @@ class Api::V1::SessionsController < Api::BaseApi
     end
   end
 
+  def add_doctor
+    begin
+      Session::AddDoctorService.new(session_id: params[:id], doctor_id: params[:added_doctor_id]).call
+      render json: "doctor is added successfully  to session"
+    rescue => e
+      puts e.type
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
   # PATCH/PUT /sessions/1
   def update
     if @session.update(session_params)
