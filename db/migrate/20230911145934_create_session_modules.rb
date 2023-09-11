@@ -7,6 +7,6 @@ class CreateSessionModules < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :session_modules, [:session_id, :software_module_id], uniquq: true
+    add_index :session_modules, [:session_id, :software_module_id], unique: true
   end
 end

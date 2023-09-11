@@ -63,7 +63,13 @@ class Api::V1::SessionsController < Api::BaseApi
   end
 
   def add_module
-    render json: 'working'
+    begin
+      Session::AddSoftwareModuleService.new(session_id: params[:id], software_module_id: params[:software_module_id]).call
+      render json: "module is added to session successfully"
+    rescue => e
+      puts e.type
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /sessions/1
