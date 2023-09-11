@@ -62,6 +62,10 @@ class Api::V1::SessionsController < Api::BaseApi
     render json: {error: "otp is not valid or expired"}, status: :unprocessable_entity
   end
 
+  def add_module
+    render json: 'working'
+  end
+
   # PATCH/PUT /sessions/1
   def update
     if @session.update(session_params)

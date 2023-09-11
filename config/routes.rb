@@ -19,6 +19,7 @@ Rails.application.routes.draw do
         member do
           post :resend_otp
           put :validate_otp
+          put :add_module
         end
       end
 
