@@ -67,6 +67,7 @@ Rails.application.routes.draw do
         get :center_assigned_children
         get :center_headsets
         get :center_child_modules
+        get :center_child_doctors
        end
       end
     end

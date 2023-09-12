@@ -1,11 +1,11 @@
 class Api::V1::DoctorsController < Api::BaseApi
   before_action :set_doctor, only: %i[ show destroy validate_otp resend_otp ]
-  before_action :authorized, only: %i[ update centers center_assigned_children center_headsets center_child_modules ]
+  before_action :authorized, only: %i[ update centers center_assigned_children center_headsets center_child_modules center_child_doctors ]
 
   def current_ability
     @current_ability ||= DoctorAbility.new(current_doctor, params)
   end
-  authorize_resource only: %i[ update center_assigned_children center_headsets center_child_modules ]
+  authorize_resource only: %i[ update center_assigned_children center_headsets center_child_modules center_child_doctors  ]
 
   # GET /doctors
   def index
@@ -122,6 +122,11 @@ class Api::V1::DoctorsController < Api::BaseApi
   def center_child_modules
     modules = Doctor::GetCenterChildModulesService.new(center_id: params[:center_id], child_id: params[:child_id]).call
     render json: MiniSoftwareModuleSerializer.new(modules).serializable_hash
+  end
+
+  def center_child_doctors
+    doctors = Doctor::GetCenterChildDoctorsService.new(child_id: params[:child_id], center_id: params[:center_id] , current_doctor: current_doctor).call
+    render json: MiniDoctorSerializer.new(doctors).serializable_hash
   end
 
   # DELETE /doctors/1
