@@ -26,6 +26,8 @@ class SessionAbility
         can :end_session, Session if Authorization::Session::CanEndService.new(current_doctor: doctor, session_id: params[:id]).call
       when 'add_comment'
         can :add_comment, Session if Authorization::Session::CanAddCommentService.new(current_doctor: doctor, session_id: params[:id]).call
+      when 'add_evaluation'
+        can :add_evaluation, Session if Authorization::Session::CanAddEvaluationService.new(current_doctor: doctor, session_id: params[:id]).call
 
       else
         false

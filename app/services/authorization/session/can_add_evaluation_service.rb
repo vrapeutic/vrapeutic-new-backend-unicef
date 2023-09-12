@@ -1,4 +1,4 @@
-class Authorization::Session::CanAddCommentService
+class Authorization::Session::CanAddEvaluationService
 
     def initialize(current_doctor:, session_id:)
         @current_doctor = current_doctor
