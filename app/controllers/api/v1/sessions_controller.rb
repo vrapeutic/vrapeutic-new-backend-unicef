@@ -67,8 +67,8 @@ class Api::V1::SessionsController < Api::BaseApi
       Session::AddSoftwareModuleService.new(session_id: params[:id], software_module_id: params[:software_module_id]).call
       render json: "module is added to session successfully"
     rescue => e
-      puts e.type
-      render json: {error: e.message}, status: :unprocessable_entity
+      result = Response::HandleErrorService.new(error: e).call
+      render json: result[:data], status: result[:status]
     end
   end
 
@@ -77,8 +77,8 @@ class Api::V1::SessionsController < Api::BaseApi
       Session::AddDoctorService.new(session_id: params[:id], doctor_id: params[:added_doctor_id]).call
       render json: "doctor is added successfully  to session"
     rescue => e
-      puts e.type
-      render json: {error: e.message}, status: :unprocessable_entity
+      result = Response::HandleErrorService.new(error: e).call
+      render json: result[:data], status: result[:status]
     end
   end
 
@@ -88,6 +88,16 @@ class Api::V1::SessionsController < Api::BaseApi
       render json: SessionSerializer.new(updated_session).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def add_comment
+    begin
+      Session::AddCommentService.new(session_id: params[:id], comment_name: params[:name]).call
+      render json: "comment is added to session"
+    rescue => e
+      result = Response::HandleErrorService.new(error: e).call
+      render json: result[:data], status: result[:status]
     end
   end
 

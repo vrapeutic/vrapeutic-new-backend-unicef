@@ -22,6 +22,7 @@ Rails.application.routes.draw do
           put :add_module
           put :add_doctor
           put :end_session
+          post :add_comment
         end
       end
 
