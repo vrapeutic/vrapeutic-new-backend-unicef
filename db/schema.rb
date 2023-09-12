@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_11_171848) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_12_194026) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -206,6 +206,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_171848) do
     t.index ["doctor_id"], name: "index_otps_on_doctor_id"
   end
 
+  create_table "session_comments", force: :cascade do |t|
+    t.bigint "session_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id", "name"], name: "index_session_comments_on_session_id_and_name", unique: true
+    t.index ["session_id"], name: "index_session_comments_on_session_id"
+  end
+
   create_table "session_doctors", force: :cascade do |t|
     t.bigint "session_id", null: false
     t.bigint "doctor_id", null: false
@@ -299,6 +308,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_171848) do
   add_foreign_key "doctor_specialties", "specialties"
   add_foreign_key "headsets", "centers"
   add_foreign_key "otps", "doctors"
+  add_foreign_key "session_comments", "sessions"
   add_foreign_key "session_doctors", "doctors"
   add_foreign_key "session_doctors", "sessions"
   add_foreign_key "session_modules", "sessions"
