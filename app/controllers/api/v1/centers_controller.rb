@@ -144,8 +144,8 @@ class Api::V1::CentersController < Api::BaseApi
       Center::AssignModuleToChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id], center_id: params[:id]).call 
       render json: "module is assigned to child"
     rescue => e
-      puts e.type # this throw active record  RecordNotUnique error 
-      render json: {error: e.message}, status: :unprocessable_entity
+      result = Response::HandleErrorService.new(error: e).call
+      render json: result[:data], status: result[:status]
     end
   end
 
@@ -163,8 +163,8 @@ class Api::V1::CentersController < Api::BaseApi
       Center::AssignDoctorToChildService.new(assignee_doctor_id: params[:doctor_id], child_id: params[:child_id], center_id: params[:id]).call
       render json: "doctor is assigned to  child"
     rescue => e
-      puts e.type # this throw active record  RecordNotUnique error 
-      render json: {error: e.message}, status: :unprocessable_entity
+      result = Response::HandleErrorService.new(error: e).call
+      render json: result[:data], status: result[:status]
     end
   end
 
