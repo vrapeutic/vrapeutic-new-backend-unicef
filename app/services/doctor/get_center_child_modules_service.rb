@@ -12,7 +12,6 @@ class Doctor::GetCenterChildModulesService
     private
 
     def child_modules_in_center
-        child = Child.find(@child_id)
-        child.software_modules.where(child_software_modules: {center_id: @center_id})
+        Child::GetAssignedModulesInCenterService.new(child_id: @child_id, center_id: @center_id).call
     end
 end
