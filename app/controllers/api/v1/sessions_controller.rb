@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::BaseApi
-  before_action :set_session, only: %i[ show update destroy resend_otp validate_otp end_session ]
+  before_action :set_session, only: %i[ show update destroy resend_otp validate_otp end_session add_evaluation ]
 
   before_action :authorized
 
@@ -98,6 +98,15 @@ class Api::V1::SessionsController < Api::BaseApi
     rescue => e
       result = Response::HandleErrorService.new(error: e).call
       render json: result[:data], status: result[:status]
+    end
+  end
+
+  def add_evaluation
+    begin
+      Session::AddEvaluationService.new(session: @session, evaluation: params[:evaluation]).call
+      render json: "session is evaluated successfully"
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
     end
   end
 

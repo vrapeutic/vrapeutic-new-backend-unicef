@@ -1,4 +1,5 @@
 class Response::HandleErrorService
+    # use it to handle error in unique check for records in database level
 
     def initialize(error:)
         @error = error

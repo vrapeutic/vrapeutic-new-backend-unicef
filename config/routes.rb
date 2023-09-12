@@ -23,6 +23,7 @@ Rails.application.routes.draw do
           put :add_doctor
           put :end_session
           post :add_comment
+          put :add_evaluation
         end
       end
 
