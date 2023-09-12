@@ -9,6 +9,12 @@ class DoctorAbility
         can :center_assigned_children, Doctor if Authorization::Doctor::CanGetAssignedCenterChildrenService.new(current_doctor: doctor, center_id: params[:center_id]).call
       when 'center_headsets'
         can :center_headsets, Doctor if Authorization::Doctor::CanGetCenterHeadsetsService.new(current_doctor: doctor, center_id: params[:center_id]).call
+      when 'center_child_modules'
+        can :center_child_modules, Doctor if Authorization::Doctor::CanGetCenterChildModulesService.new(
+          current_doctor: doctor, 
+          center_id: params[:center_id], 
+          child_id: params[:child_id]
+        ).call
 
       else
         false
