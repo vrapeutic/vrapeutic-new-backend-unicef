@@ -15,6 +15,12 @@ class DoctorAbility
           center_id: params[:center_id], 
           child_id: params[:child_id]
         ).call
+      when 'center_child_doctors'
+        can :center_child_doctors, Doctor if Authorization::Doctor::CanGetCenterChildDoctorsService.new(
+          current_doctor: doctor, 
+          center_id: params[:center_id], 
+          child_id: params[:child_id]
+        ).call
 
       else
         false
