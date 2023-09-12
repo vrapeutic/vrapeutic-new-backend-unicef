@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::BaseApi
-  before_action :set_session, only: %i[ show update destroy resend_otp validate_otp end_session add_evaluation ]
+  before_action :set_session, only: %i[ show update destroy resend_otp validate_otp end_session add_comment add_evaluation ]
 
   before_action :authorized
 
@@ -93,7 +93,7 @@ class Api::V1::SessionsController < Api::BaseApi
 
   def add_comment
     begin
-      Session::AddCommentService.new(session_id: params[:id], comment_name: params[:name]).call
+      Session::AddCommentService.new(session: @session, comment_name: params[:name]).call
       render json: "comment is added to session"
     rescue => e
       result = Response::HandleErrorService.new(error: e).call
