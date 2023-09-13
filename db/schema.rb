@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_12_194026) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_13_191502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,37 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_194026) do
     t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "attention_distractors", force: :cascade do |t|
+    t.string "name"
+    t.float "time_following_it_seconds"
+    t.bigint "attention_performance_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attention_performance_id"], name: "index_attention_distractors_on_attention_performance_id"
+  end
+
+  create_table "attention_interruptions", force: :cascade do |t|
+    t.float "duration_seconds"
+    t.bigint "attention_performance_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attention_performance_id"], name: "index_attention_interruptions_on_attention_performance_id"
+  end
+
+  create_table "attention_performances", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "attention_targets", force: :cascade do |t|
+    t.datetime "start_time"
+    t.datetime "hit_time"
+    t.bigint "attention_performance_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attention_performance_id"], name: "index_attention_targets_on_attention_performance_id"
   end
 
   create_table "center_social_links", force: :cascade do |t|
@@ -287,6 +318,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_194026) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "attention_distractors", "attention_performances"
+  add_foreign_key "attention_interruptions", "attention_performances"
+  add_foreign_key "attention_targets", "attention_performances"
   add_foreign_key "center_social_links", "centers"
   add_foreign_key "center_software_modules", "centers"
   add_foreign_key "center_software_modules", "software_modules"

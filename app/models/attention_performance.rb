@@ -1,0 +1,2 @@
+class AttentionPerformance < ApplicationRecord
+end
