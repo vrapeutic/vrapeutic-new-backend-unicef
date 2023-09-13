@@ -28,6 +28,12 @@ class SessionAbility
         can :add_comment, Session if Authorization::Session::CanAddCommentService.new(current_doctor: doctor, session_id: params[:id]).call
       when 'add_evaluation'
         can :add_evaluation, Session if Authorization::Session::CanAddEvaluationService.new(current_doctor: doctor, session_id: params[:id]).call
+      when 'add_attention_performance'
+        can :add_attention_performance, Session if Authorization::Session::CanAddAttentionPerformanceService.new(
+          current_doctor: doctor, 
+          session_id: params[:id], 
+          software_module_id: params[:software_module_id]
+        ).call
 
       else
         false
