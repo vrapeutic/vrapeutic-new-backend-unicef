@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_13_162606) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_12_194026) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -195,13 +195,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_13_162606) do
     t.index ["name", "center_id"], name: "index_headsets_on_name_and_center_id", unique: true
   end
 
-  create_table "motor_performances", force: :cascade do |t|
-    t.integer "speed"
-    t.integer "response"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "otps", force: :cascade do |t|
     t.bigint "doctor_id", null: false
     t.string "code"
@@ -211,19 +204,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_13_162606) do
     t.integer "code_type", default: 0
     t.index ["doctor_id", "code_type"], name: "index_otps_on_doctor_id_and_code_type", unique: true
     t.index ["doctor_id"], name: "index_otps_on_doctor_id"
-  end
-
-  create_table "performances", force: :cascade do |t|
-    t.bigint "session_module_id", null: false
-    t.bigint "targeted_skill_id", null: false
-    t.string "performanceable_type", null: false
-    t.bigint "performanceable_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["performanceable_type", "performanceable_id"], name: "index_performances_on_performanceable"
-    t.index ["session_module_id", "targeted_skill_id"], name: "index_performances_on_session_module_id_and_targeted_skill_id", unique: true
-    t.index ["session_module_id"], name: "index_performances_on_session_module_id"
-    t.index ["targeted_skill_id"], name: "index_performances_on_targeted_skill_id"
   end
 
   create_table "session_comments", force: :cascade do |t|
@@ -328,8 +308,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_13_162606) do
   add_foreign_key "doctor_specialties", "specialties"
   add_foreign_key "headsets", "centers"
   add_foreign_key "otps", "doctors"
-  add_foreign_key "performances", "session_modules"
-  add_foreign_key "performances", "targeted_skills"
   add_foreign_key "session_comments", "sessions"
   add_foreign_key "session_doctors", "doctors"
   add_foreign_key "session_doctors", "sessions"
