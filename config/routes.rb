@@ -24,6 +24,7 @@ Rails.application.routes.draw do
           put :end_session
           post :add_comment
           put :add_evaluation
+          post :add_attention_performance
         end
       end
 

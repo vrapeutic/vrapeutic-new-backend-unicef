@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::BaseApi
-  before_action :set_session, only: %i[ show update destroy resend_otp validate_otp end_session add_comment add_evaluation ]
+  before_action :set_session, only: %i[ show update destroy resend_otp validate_otp end_session add_comment add_evaluation add_attention_performance ]
 
   before_action :authorized
 
@@ -105,6 +105,22 @@ class Api::V1::SessionsController < Api::BaseApi
     begin
       Session::AddEvaluationService.new(session: @session, evaluation: params[:evaluation]).call
       render json: "session is evaluated successfully"
+    rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def add_attention_performance
+    begin
+      Session::AddAttentionPerformanceService.new(
+        session: @session,
+        software_module_id: params[:software_module_id],
+        targets: params[:targets],
+        interruptions: params[:interruptions],
+        distractors: params[:distractors],
+        level: params[:level]
+      ).call
+      render json: "performance data is added to session"
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
