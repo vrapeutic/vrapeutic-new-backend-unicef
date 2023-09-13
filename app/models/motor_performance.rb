@@ -1,0 +1,2 @@
+class MotorPerformance < ApplicationRecord
+end
