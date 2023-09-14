@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::BaseApi
-  before_action :set_session, only: %i[ show update destroy resend_otp validate_otp end_session add_comment add_evaluation add_attention_performance ]
+  before_action :set_session, only: %i[ show update destroy resend_otp validate_otp end_session add_comment add_evaluation add_attention_performance add_attention_performance_modules ]
 
   before_action :authorized
 
@@ -122,6 +122,15 @@ class Api::V1::SessionsController < Api::BaseApi
       ).call
       render json: "performance data is added to session"
     rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def add_attention_performance_modules
+    begin
+      Session::AddAttentionPerformanceModulesService.new(session: @session, modules_data: params[:data]).call
+      render json: "all attention performance data is saved"
+    rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end

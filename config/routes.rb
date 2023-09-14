@@ -25,6 +25,7 @@ Rails.application.routes.draw do
           post :add_comment
           put :add_evaluation
           post :add_attention_performance
+          post :add_attention_performance_modules
         end
       end
 
