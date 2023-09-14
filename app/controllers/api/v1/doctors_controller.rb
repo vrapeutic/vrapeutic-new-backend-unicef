@@ -135,7 +135,7 @@ class Api::V1::DoctorsController < Api::BaseApi
       .left_joins(:doctors, :children)
       .group('centers.id')
       .includes(:specialties)
-    render json: current_doctor_centers, each_serializer: CenterSerializer, include: [:specialties]
+    render json: HomeCenterSerializer.new(current_doctor_centers).serializable_hash
   end
 
   # DELETE /doctors/1

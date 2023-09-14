@@ -1,6 +1,6 @@
 class HomeCenterSerializer
   include JSONAPI::Serializer
-  attributes :name, :longitude, :latitude, :logo, :website, :email, :phone_number, :doctors_count, :children_count
+  attributes :name, :longitude, :latitude, :logo, :website, :email, :phone_number, :doctors_count, :children_count, :specialties
 
   
 
