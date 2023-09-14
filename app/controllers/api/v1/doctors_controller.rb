@@ -1,6 +1,6 @@
 class Api::V1::DoctorsController < Api::BaseApi
   before_action :set_doctor, only: %i[ show destroy validate_otp resend_otp ]
-  before_action :authorized, only: %i[ update centers center_assigned_children center_headsets center_child_modules center_child_doctors ]
+  before_action :authorized, only: %i[ update centers center_assigned_children center_headsets center_child_modules center_child_doctors home_centers ]
 
   def current_ability
     @current_ability ||= DoctorAbility.new(current_doctor, params)
@@ -127,6 +127,15 @@ class Api::V1::DoctorsController < Api::BaseApi
   def center_child_doctors
     doctors = Doctor::GetCenterChildDoctorsService.new(child_id: params[:child_id], center_id: params[:center_id] , current_doctor: current_doctor).call
     render json: MiniDoctorSerializer.new(doctors).serializable_hash
+  end
+
+  def home_centers
+    current_doctor_centers = current_doctor.centers
+      .select('centers.*, COUNT(DISTINCT doctors.id) AS doctors_count, COUNT(DISTINCT children.id) AS children_count')
+      .left_joins(:doctors, :children)
+      .group('centers.id')
+      .includes(:specialties)
+    render json: current_doctor_centers, each_serializer: CenterSerializer, include: [:specialties]
   end
 
   # DELETE /doctors/1
