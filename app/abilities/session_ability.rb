@@ -34,6 +34,8 @@ class SessionAbility
           session_id: params[:id], 
           software_module_id: params[:software_module_id]
         ).call
+      when 'add_attention_performance_modules'
+        can :add_attention_performance_modules, Session if Authorization::Session::CanAddAttentionPerformanceModulesService.new(current_doctor: doctor, session_id: params[:id]).call
 
       else
         false
