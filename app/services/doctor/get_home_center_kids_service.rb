@@ -39,7 +39,6 @@ class Doctor::GetHomeCenterKidsService
             'AVG(sessions.evaluation) AS average_evaluation'
           )
           .left_joins(:child_centers, :sessions)
-          .where('sessions.doctor_id' => @current_doctor_id)
           .group('children.id, child_centers.created_at')
           .includes(:diagnoses)
     end
