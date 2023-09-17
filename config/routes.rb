@@ -74,6 +74,7 @@ Rails.application.routes.draw do
         get :center_child_doctors
         get :home_centers
         get :home_doctors
+        get :home_kids
        end
       end
     end
