@@ -1,13 +1,17 @@
 class Session::AddAttentionPerformanceModulesService
 
-    def initialize(session:, modules_data:)
+    def initialize(session:, modules_data:, duration:, vr_duration:)
         @session = session
         @modules_data = modules_data
+        @duration = duration
+        @vr_duration = vr_duration
     end
 
     def call 
         Session.transaction do 
-            check_session_is_ended?
+            # check_session_is_ended?
+            check_duration_existed
+            update_session
             add_attention_performance_module_date
         end
     end
@@ -18,6 +22,16 @@ class Session::AddAttentionPerformanceModulesService
         if @session.ended_at.nil?
             raise "session is already running and not ended yet"
         end
+    end
+
+    def check_duration_existed
+        raise "session duration is not existed, please provide it" if @duration.nil?
+        raise "vr duration is not existed, please provide it" if @vr_duration.nil?
+        raise "session duration can't be less than vr duration" if @vr_duration > @duration
+    end
+
+    def update_session
+        @session.update!(duration: @duration, vr_duration: @vr_duration)
     end
 
     def add_attention_performance_module_date
