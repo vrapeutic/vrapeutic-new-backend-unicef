@@ -84,7 +84,7 @@ class Api::V1::SessionsController < Api::BaseApi
 
   def end_session 
     begin
-      updated_session = Session::EndService.new(session: @session).call
+      updated_session = Session::EndService.new(session: @session, vr_duration: params[:vr_duration]).call
       render json: SessionSerializer.new(updated_session).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
