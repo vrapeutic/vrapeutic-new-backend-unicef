@@ -76,6 +76,7 @@ Rails.application.routes.draw do
         get :home_doctors
         get :home_kids
         get :center_statistics
+        get :center_vr_minutes
        end
       end
     end
