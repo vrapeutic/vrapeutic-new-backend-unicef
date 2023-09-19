@@ -25,6 +25,8 @@ class DoctorAbility
         can :home_doctors, Doctor if Authorization::Doctor::CanGetHomeDoctorsService.new(current_doctor: doctor, center_id: params[:center_id]).call
       when 'home_kids'
         can :home_kids, Doctor if Authorization::Doctor::CanGetHomeKidsService.new(current_doctor: doctor, center_id: params[:center_id]).call
+      when 'center_statistics'
+        can :center_statistics, Doctor if Authorization::Doctor::CanGetCenterStatisticsService.new(current_doctor: doctor, center_id: params[:center_id]).call
 
       else
         false
