@@ -28,7 +28,7 @@ class Doctor::CenterVrMinutesService
         .group("DATE_TRUNC('month', sessions.created_at)")
         .order("month")
 
-        vr_duration_per_month = result.map do |result|
+        result.map do |result|
             month_name = result.month.strftime("%B %Y") # Format the month as "Month Year"
             [month_name, result.total_vr_duration]
           end
