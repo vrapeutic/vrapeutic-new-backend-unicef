@@ -77,6 +77,7 @@ Rails.application.routes.draw do
         get :home_kids
         get :center_statistics
         get :center_vr_minutes
+        get :child_session_performance_data
        end
       end
     end
