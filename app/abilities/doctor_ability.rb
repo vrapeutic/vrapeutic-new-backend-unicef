@@ -29,6 +29,12 @@ class DoctorAbility
         can :center_statistics, Doctor if Authorization::Doctor::CanGetCenterStatisticsService.new(current_doctor: doctor, center_id: params[:center_id]).call
       when 'center_vr_minutes'
         can :center_vr_minutes, Doctor if Authorization::Doctor::CanGetCenterVrMinutesService.new(current_doctor: doctor, center_id: params[:center_id]).call
+      when 'child_session_performance_data'
+        can :child_session_performance_data, Doctor if Authorization::Doctor::CanGetChildSessionsDataService.new(
+          current_doctor: doctor, 
+          center_id: params[:center_id], 
+          child_id: params[:child_id]
+        ).call
 
       else
         false
