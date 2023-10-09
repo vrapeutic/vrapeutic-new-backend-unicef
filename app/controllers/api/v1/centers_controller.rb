@@ -195,6 +195,11 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def all_doctors
+    doctors = Doctor.where.not(id: current_doctor.id)
+    render json: MiniDoctorSerializer.new(doctors).serializable_hash
+  end
+
   # DELETE /centers/1
   def destroy
     @center.destroy
