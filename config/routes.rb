@@ -57,6 +57,7 @@ Rails.application.routes.draw do
           put :unassign_doctor_child
           post :add_headset
           put :edit_headset
+          get :all_doctors
         end
       end
 
