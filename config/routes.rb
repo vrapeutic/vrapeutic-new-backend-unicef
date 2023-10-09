@@ -60,6 +60,7 @@ Rails.application.routes.draw do
           get :all_doctors
           get :assigned_modules
           get :kids
+          get :doctors
         end
       end
 
