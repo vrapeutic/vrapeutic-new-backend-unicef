@@ -58,6 +58,7 @@ Rails.application.routes.draw do
           post :add_headset
           put :edit_headset
           get :all_doctors
+          get :assigned_modules
         end
       end
 

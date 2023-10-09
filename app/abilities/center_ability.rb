@@ -57,6 +57,8 @@ class CenterAbility
         can :edit_headset, Center if Authorization::Center::CanEditHeadsetService.new(current_doctor: doctor, center_id: params[:id], headset_id: params[:headset_id]).call
       when 'all_doctors'
         can :all_doctors, Center if Authorization::Center::CanGetAllDoctorsService.new(current_doctor: doctor, center_id: params[:id]).call
+      when 'assigned_modules'
+        can :assigned_modules, Center if Authorization::Center::CanGetAssignedModulesService.new(current_doctor: doctor, center_id: params[:id]).call
 
       else
         false
