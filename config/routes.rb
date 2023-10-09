@@ -59,6 +59,7 @@ Rails.application.routes.draw do
           put :edit_headset
           get :all_doctors
           get :assigned_modules
+          get :kids
         end
       end
 
