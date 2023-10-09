@@ -1,5 +1,5 @@
 class Api::V1::CentersController < Api::BaseApi
-  before_action :set_center, only: %i[ show update destroy invite_doctor assign_doctor assigned_modules kids ]
+  before_action :set_center, only: %i[ show update destroy invite_doctor assign_doctor assigned_modules kids doctors ]
   before_action :authorized
 
   def current_ability
@@ -208,6 +208,11 @@ class Api::V1::CentersController < Api::BaseApi
   def kids 
     kids = @center.children
     render json: ChildSerializer.new(kids).serializable_hash
+  end
+
+  def doctors
+    doctors = @center.doctors
+    render json: MiniDoctorSerializer.new(doctors).serializable_hash
   end
 
   # DELETE /centers/1
