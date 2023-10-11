@@ -37,6 +37,8 @@ Rails.application.routes.draw do
           post :send_otp
           put :edit_child
           put :edit_doctor
+          get :doctors
+          get :kids
         end
       end
 

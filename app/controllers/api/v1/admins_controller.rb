@@ -1,6 +1,6 @@
 class Api::V1::AdminsController < Api::BaseApi
   before_action :set_admin, only: %i[ show update destroy ]
-  before_action :validate_admin_otp, only: %i[ edit_child edit_doctor ]
+  before_action :validate_admin_otp, only: %i[ edit_child edit_doctor doctors kids ]
 
   def current_ability
     @current_ability ||= AdminAbility.new(params)
@@ -41,6 +41,16 @@ class Api::V1::AdminsController < Api::BaseApi
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
+  end
+
+  def doctors 
+    all_doctors = Doctor.all 
+    render json: DoctorSerializer.new(all_doctors).serializable_hash
+  end
+
+  def kids 
+    all_kids = Child.all 
+    render json: ChildSerializer.new(all_kids).serializable_hash
   end
 
   # GET /admins
