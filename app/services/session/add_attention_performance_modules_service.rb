@@ -9,7 +9,6 @@ class Session::AddAttentionPerformanceModulesService
 
     def call 
         Session.transaction do 
-            # check_session_is_ended?
             check_duration_existed
             update_session
             add_attention_performance_module_date
@@ -18,12 +17,6 @@ class Session::AddAttentionPerformanceModulesService
 
     private
 
-    def check_session_is_ended? 
-        if @session.ended_at.nil?
-            raise "session is already running and not ended yet"
-        end
-    end
-
     def check_duration_existed
         raise "session duration is not existed, please provide it" if @duration.nil?
         raise "vr duration is not existed, please provide it" if @vr_duration.nil?
@@ -31,7 +24,7 @@ class Session::AddAttentionPerformanceModulesService
     end
 
     def update_session
-        @session.update!(duration: @duration, vr_duration: @vr_duration)
+        @session.update!(duration: @duration, vr_duration: @vr_duration, ended_at: @session.created_at + @duration.to_f.minutes)
     end
 
     def add_attention_performance_module_date
