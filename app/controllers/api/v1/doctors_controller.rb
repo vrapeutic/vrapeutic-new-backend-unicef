@@ -1,11 +1,11 @@
 class Api::V1::DoctorsController < Api::BaseApi
   before_action :set_doctor, only: %i[ show destroy validate_otp resend_otp ]
-  before_action :authorized, only: %i[ update centers center_assigned_children center_headsets center_child_modules center_child_doctors home_centers home_doctors home_kids center_statistics center_vr_minutes child_session_performance_data ]
+  before_action :authorized, only: %i[ update centers center_assigned_children center_headsets center_child_modules center_child_doctors home_centers home_doctors home_kids center_statistics center_vr_minutes child_session_performance_data sessions_percentage ]
 
   def current_ability
     @current_ability ||= DoctorAbility.new(current_doctor, params)
   end
-  authorize_resource only: %i[ update center_assigned_children center_headsets center_child_modules center_child_doctors home_doctors home_kids center_statistics center_vr_minutes child_session_performance_data  ]
+  authorize_resource only: %i[ update center_assigned_children center_headsets center_child_modules center_child_doctors home_doctors home_kids center_statistics center_vr_minutes child_session_performance_data sessions_percentage  ]
 
   # GET /doctors
   def index
@@ -166,6 +166,11 @@ class Api::V1::DoctorsController < Api::BaseApi
       start_date: params[:start_date],
       end_date: params[:end_date]
     ).call
+    render json: result
+  end
+
+  def sessions_percentage
+    result = Doctor::CenterSessionsPercentageService.new(doctor: current_doctor, center_id: params[:center_id]).call
     render json: result
   end
 
