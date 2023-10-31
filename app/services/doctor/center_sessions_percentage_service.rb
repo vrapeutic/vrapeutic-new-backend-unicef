@@ -26,7 +26,7 @@ class Doctor::CenterSessionsPercentageService
         today_sessions = @sessions.where('DATE(sessions.created_at) = ?', Date.today).count
         yeterday_sessions = @sessions.where('DATE(sessions.created_at) = ?', Date.yesterday).count
         if yeterday_sessions > 0 
-            percentage = ((today_sessions - yeterday_sessions) / yeterday_sessions) * 100
+            percentage = ((today_sessions.to_f - yeterday_sessions) / yeterday_sessions) * 100
         else
             percentage = today_sessions * 100
         end
