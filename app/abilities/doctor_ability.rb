@@ -35,6 +35,8 @@ class DoctorAbility
           center_id: params[:center_id], 
           child_id: params[:child_id]
         ).call
+      when 'sessions_percentage'
+        can :sessions_percentage, Doctor if Authorization::Doctor::CanGetCenterSessionsPercentageService.new(current_doctor: doctor, center_id: params[:center_id]).call
 
       else
         false

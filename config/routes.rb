@@ -84,6 +84,7 @@ Rails.application.routes.draw do
         get :center_statistics
         get :center_vr_minutes
         get :child_session_performance_data
+        get :sessions_percentage
        end
       end
     end
