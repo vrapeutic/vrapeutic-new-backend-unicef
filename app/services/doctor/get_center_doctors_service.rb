@@ -24,9 +24,5 @@ class Doctor::GetCenterDoctorsService
                          .group('doctors.id, doctor_centers.created_at')
                          .includes(:specialties)
 
-        doctors.map do |doctor|
-            doctor.image_url = doctor.photo.url # Assuming doctor.photo is the CarrierWave field for photos
-            doctor
-        end
     end
 end
