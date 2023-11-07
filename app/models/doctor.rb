@@ -9,6 +9,8 @@ class Doctor < ApplicationRecord
     validates :degree, presence: true
     validates :certificate, presence: true
 
+    attr_accessor :image_url
+
     mount_uploader :photo, PhotoUploader
     mount_uploader :certificate, CertificateUploader
 
