@@ -17,6 +17,7 @@ class Doctor::GetCenterDoctorsService
                            'doctors.id AS id',
                            'doctors.name AS name',
                            'doctors.photo AS photo',
+                           'doctors.degree AS degree',
                            'doctor_centers.created_at AS join_date',
                            'COUNT(DISTINCT(sessions.id)) AS number_of_sessions'
                          )
