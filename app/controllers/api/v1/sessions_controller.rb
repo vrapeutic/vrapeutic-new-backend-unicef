@@ -23,6 +23,7 @@ class Api::V1::SessionsController < Api::BaseApi
   # POST /sessions
   def create
     begin
+      raise "headset is not available for session" unless Headset::IsAvailableForSessionService.new(headset_id: params[:headset_id], center_id: params[:center_id]).call
       session = Session::CreateService.new(
         doctor: current_doctor, 
         center_id: params[:center_id], 
