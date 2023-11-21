@@ -134,7 +134,7 @@ class Api::V1::DoctorsController < Api::BaseApi
       .select('centers.*, COUNT(DISTINCT doctors.id) AS doctors_count, COUNT(DISTINCT children.id) AS children_count')
       .left_joins(:doctors, :children)
       .group('centers.id')
-      .includes(:specialties)
+      .includes(:specialties, :center_social_links)
     render json: HomeCenterSerializer.new(current_doctor_centers).serializable_hash
   end
 
