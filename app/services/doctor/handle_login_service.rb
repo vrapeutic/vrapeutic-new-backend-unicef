@@ -26,7 +26,8 @@ class Doctor::HandleLoginService
         end
 
         # generate token 
-        Doctor::GenerateJwtTokenService.new(doctor_id: doctor.id).call
+        # Doctor::GenerateJwtTokenService.new(doctor_id: doctor.id).call
+        doctor
 
     end
     

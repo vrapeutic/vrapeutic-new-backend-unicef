@@ -41,6 +41,9 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   def validate_otp
+    if @doctor.is_email_verified
+      return render json: {error: "doctor is already vdrified"}, status: :unprocessable_entity 
+    end
     result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp]).call
     if result
       @doctor.update_column(:is_email_verified, true)
@@ -62,8 +65,11 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def sign_in
     begin
-      login_data = Doctor::HandleLoginService.new(email: params[:email], password: params[:password]).call
-      render json: login_data
+      @doctor = Doctor::HandleLoginService.new(email: params[:email], password: params[:password]).call
+      @doctor.update_column(:is_email_verified, false)
+      otp_code = Otp::GenerateService.new(doctor: @doctor).call
+      OtpMailer.send_otp(@doctor, otp_code).deliver_later
+      render json: DoctorSerializer.new(@doctor).serializable_hash
     rescue => e
       render json: e.message, status: :unauthorized
     end

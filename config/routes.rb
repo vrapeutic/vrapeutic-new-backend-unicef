@@ -51,7 +51,7 @@ Rails.application.routes.draw do
           # put :edit_doctor
           put :make_doctor_admin
           post :add_child
-          # put :edit_child
+          put :edit_child
           post :add_modules
           put :assign_module_child
           put :unassign_module_child
