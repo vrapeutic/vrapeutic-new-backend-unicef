@@ -15,6 +15,11 @@ class Doctor::HandleLoginService
             raise "Invalid credentials"
         end
 
+
+        if @email.downcase == ENV['ADMIN_EMAIL']
+            return {is_admin: true}
+        end
+
         doctor = Doctor.find_by(email: @email.downcase)
 
         unless doctor.present?
@@ -27,7 +32,7 @@ class Doctor::HandleLoginService
 
         # generate token 
         # Doctor::GenerateJwtTokenService.new(doctor_id: doctor.id).call
-        doctor
+        {doctor: doctor, is_admin: false}
 
     end
     

@@ -41,9 +41,7 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   def validate_otp
-    if @doctor.is_email_verified
-      return render json: {error: "doctor is already vdrified"}, status: :unprocessable_entity 
-    end
+    doctor_is_confirmed?
     result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp]).call
     if result
       @doctor.update_column(:is_email_verified, true)
@@ -54,9 +52,7 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   def resend_otp
-    if @doctor.is_email_verified
-      return render json: {error: "doctor is already vdrified"}, status: :unprocessable_entity 
-    end
+    doctor_is_confirmed?
     otp_code = Otp::GenerateService.new(doctor: @doctor).call
     # send email 
     OtpMailer.send_otp(@doctor, otp_code).deliver_later
@@ -65,11 +61,20 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def sign_in
     begin
-      @doctor = Doctor::HandleLoginService.new(email: params[:email], password: params[:password]).call
-      @doctor.update_column(:is_email_verified, false)
-      otp_code = Otp::GenerateService.new(doctor: @doctor).call
-      OtpMailer.send_otp(@doctor, otp_code).deliver_later
-      render json: DoctorSerializer.new(@doctor).serializable_hash
+      result = Doctor::HandleLoginService.new(email: params[:email], password: params[:password]).call
+      if result[:is_admin]
+        otp = Admin::GenerateOtpService.new.call
+        AdminOtpMailer.send_otp(ENV['ADMIN_EMAIL'], otp).deliver_later
+        return render json: result
+      else
+        @doctor = result[:doctor]
+        @doctor.update_column(:is_email_verified, false)
+        otp_code = Otp::GenerateService.new(doctor: @doctor).call
+        OtpMailer.send_otp(@doctor, otp_code).deliver_later
+        doctor_data = DoctorSerializer.new(@doctor).serializable_hash
+        return render json: {is_admin: result[:is_admin], doctor: doctor_data[:data]}
+      end
+      
     rescue => e
       render json: e.message, status: :unauthorized
     end
@@ -191,6 +196,12 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   private
+
+  def doctor_is_confirmed?
+    if @doctor.is_email_verified
+      return render json: {error: "doctor is already vdrified"}, status: :unprocessable_entity 
+    end
+  end
     # Use callbacks to share common setup or constraints between actions.
     def set_doctor
       @doctor = Doctor.find(params[:id])
