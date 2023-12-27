@@ -1,7 +1,12 @@
 class SoftwareModule::CreateService
 
-    def initialize(create_params:, targeted_skill_ids:)
-        @create_params = create_params
+    def initialize(name:, version:, technology:, min_age:, max_age:, image:, targeted_skill_ids:)
+        @name = name
+        @version = version
+        @technology= technology
+        @min_age = min_age
+        @max_age= max_age
+        @image = image
         @targeted_skill_ids = targeted_skill_ids
     end
 
@@ -19,7 +24,14 @@ class SoftwareModule::CreateService
     private
 
     def create_software_moudle
-        @new_software_module = SoftwareModule.create!(@create_params)
+        @new_software_module = SoftwareModule.create!(
+            name: @name,
+            version: @version,
+            technology: @technology,
+            min_age: @min_age,
+            max_age: @max_age,
+            image: @image
+        )
     end
 
     def check_targeted_skills_existed

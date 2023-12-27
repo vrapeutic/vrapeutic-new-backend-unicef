@@ -18,7 +18,14 @@ class Api::V1::SoftwareModulesController < Api::BaseApi
   # POST /software_modules
   def create
     begin
-      @new_software_module = SoftwareModule::CreateService.new(create_params: software_module_params.except(:targeted_skill_ids), targeted_skill_ids: params[:targeted_skill_ids]).call 
+      @new_software_module = SoftwareModule::CreateService.new(
+        name: params[:name],
+        version: params[:version],
+        technology: params[:technology],
+        min_age: params[:min_age],
+        max_age: params[:max_age],
+        image: params[:image],
+        targeted_skill_ids: params[:targeted_skill_ids]).call 
       render json: SoftwareModuleSerializer.new(@new_software_module).serializable_hash
     rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
@@ -52,6 +59,6 @@ class Api::V1::SoftwareModulesController < Api::BaseApi
 
     # Only allow a list of trusted parameters through.
     def software_module_params
-      params.require(:software_module).permit(:name, :version, :technology, :targeted_skill_ids)
+      params.require(:software_module).permit(:name, :version, :technology, :min_age, :max_age, :image,  :targeted_skill_ids)
     end
 end
