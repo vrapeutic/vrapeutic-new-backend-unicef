@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_27_204339) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_30_134034) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_27_204339) do
     t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "assigned_center_modules", force: :cascade do |t|
+    t.bigint "center_id", null: false
+    t.bigint "software_module_id", null: false
+    t.datetime "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["center_id", "software_module_id"], name: "assigned_center_modules_index", unique: true
+    t.index ["center_id"], name: "index_assigned_center_modules_on_center_id"
+    t.index ["software_module_id"], name: "index_assigned_center_modules_on_software_module_id"
   end
 
   create_table "attention_distractors", force: :cascade do |t|
@@ -333,6 +344,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_27_204339) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "assigned_center_modules", "centers"
+  add_foreign_key "assigned_center_modules", "software_modules"
   add_foreign_key "attention_distractors", "attention_performances"
   add_foreign_key "attention_interruptions", "attention_performances"
   add_foreign_key "attention_targets", "attention_performances"
