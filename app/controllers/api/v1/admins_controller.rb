@@ -1,6 +1,6 @@
 class Api::V1::AdminsController < Api::BaseApi
   before_action :set_admin, only: %i[ show update destroy ]
-  before_action :validate_admin_otp, only: %i[ edit_child edit_doctor doctors kids ]
+  before_action :validate_admin_otp, only: %i[ edit_child edit_doctor doctors kids assign_center_module ]
 
   def current_ability
     @current_ability ||= AdminAbility.new(params)
@@ -39,6 +39,15 @@ class Api::V1::AdminsController < Api::BaseApi
       ).call 
       render json: DoctorSerializer.new(doctor).serializable_hash
     rescue => e
+      render json: {error: e.message}, status: :unprocessable_entity
+    end
+  end
+
+  def assign_center_module 
+    begin
+      Admin::AssignCenterModuleService.new(center_id: params[:center_id], software_module_id: params[:software_module_id], end_date: params[:end_date]).call
+      render json: "assigned successfully"
+    rescue => e 
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
