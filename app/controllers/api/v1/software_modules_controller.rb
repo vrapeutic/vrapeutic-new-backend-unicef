@@ -1,7 +1,7 @@
 class Api::V1::SoftwareModulesController < Api::BaseApi
   before_action :set_software_module, only: %i[ show destroy ]
 
-  before_action :validate_admin_otp, only: %i[create update]
+  before_action :validate_admin_otp, only: %i[index create update]
 
   # GET /software_modules
   def index
