@@ -1,5 +1,5 @@
 class Api::V1::CentersController < Api::BaseApi
-  before_action :set_center, only: %i[ show update destroy invite_doctor assign_doctor assigned_modules kids doctors ]
+  before_action :set_center, only: %i[ show update destroy invite_doctor assign_doctor assigned_modules modules kids doctors ]
   before_action :authorized
 
   def current_ability
@@ -202,8 +202,15 @@ class Api::V1::CentersController < Api::BaseApi
     render json: MiniDoctorSerializer.new(doctors).serializable_hash
   end
 
+  # assigned modules by super admin but the center doesn't have them yet
   def assigned_modules
     modules = Center::AssignedModulesService.new(center: @center).call
+    render json: SoftwareModuleSerializer.new(modules).serializable_hash
+  end
+
+  # the modules that the center admin add to his center to use them
+  def modules 
+    modules = Center::ModulesService.new(center: @center).call
     render json: SoftwareModuleSerializer.new(modules).serializable_hash
   end
 

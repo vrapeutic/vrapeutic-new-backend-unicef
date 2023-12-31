@@ -63,8 +63,8 @@ class CenterAbility
         can :kids, Center if Authorization::Center::CanGetKidsService.new(current_doctor: doctor, center_id: params[:id]).call
       when 'doctors'
         can :doctors, Center if Authorization::Center::CanGetDoctorsService.new(current_doctor: doctor, center_id: params[:id]).call
-      # when 'modules'
-      #   can :modules, Center if Authorization::Center::CanGetModulesService.new(current_doctor: doctor, center_id: params[:id]).call
+      when 'modules'
+        can :modules, Center if Authorization::Center::CanGetModulesService.new(current_doctor: doctor, center_id: params[:id]).call
       else
         false
       end
