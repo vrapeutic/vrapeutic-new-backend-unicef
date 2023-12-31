@@ -29,7 +29,6 @@ class Center::AddModulesService
 
     def check_center_has_modules_assigned
         result = Center::HasAssignedModulesService.new(center_id: @center_id, software_module_ids: @software_module_ids).call
-        puts "result is #{result}"
         raise "center has no access to these modules" unless result
     end
 
