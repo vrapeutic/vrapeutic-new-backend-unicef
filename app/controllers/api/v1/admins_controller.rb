@@ -1,6 +1,6 @@
 class Api::V1::AdminsController < Api::BaseApi
   before_action :set_admin, only: %i[ show update destroy ]
-  before_action :validate_admin_otp, only: %i[ edit_child edit_doctor doctors kids assign_center_module ]
+  before_action :validate_admin_otp, only: %i[ edit_child edit_doctor doctors kids assign_center_module centers ]
 
   def current_ability
     @current_ability ||= AdminAbility.new(params)
@@ -55,6 +55,11 @@ class Api::V1::AdminsController < Api::BaseApi
   def doctors 
     all_doctors = Doctor.all 
     render json: DoctorSerializer.new(all_doctors).serializable_hash
+  end
+
+  def centers 
+    all_centers = Center.all 
+    render json: CenterSerializer.new(all_centers).serializable_hash
   end
 
   def kids 

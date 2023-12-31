@@ -38,6 +38,7 @@ Rails.application.routes.draw do
           put :edit_child
           put :edit_doctor
           get :doctors
+          get :centers
           get :kids
           post :assign_center_module
         end
