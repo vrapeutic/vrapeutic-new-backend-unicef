@@ -130,9 +130,7 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
-  def modules 
-    render json: "working"
-  end
+  
 
   def add_modules
     begin
