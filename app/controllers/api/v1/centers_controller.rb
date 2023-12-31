@@ -130,6 +130,10 @@ class Api::V1::CentersController < Api::BaseApi
     end
   end
 
+  def modules 
+    render json: "working"
+  end
+
   def add_modules
     begin
       Center::AddModulesService.new(software_module_ids: params[:software_module_ids], center_id: params[:id]).call 
