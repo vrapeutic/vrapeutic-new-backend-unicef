@@ -8,6 +8,7 @@ class Center::AddModulesService
     def call 
         Center.transaction do 
             check_software_modules_existed
+            check_center_has_modules_assigned
             find_center
             add_modules_to_center
         end
@@ -24,6 +25,12 @@ class Center::AddModulesService
 
     def check_software_modules_existed
         @software_module_records = SoftwareModule::CheckIsExistedService.new(software_module_ids: @software_module_ids).call
+    end
+
+    def check_center_has_modules_assigned
+        result = Center::HasAssignedModulesService.new(center_id: @center_id, software_module_ids: @software_module_ids).call
+        puts "result is #{result}"
+        raise "center has no access to these modules" unless result
     end
 
     def add_modules_to_center
