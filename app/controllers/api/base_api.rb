@@ -54,8 +54,8 @@ module Api
       end
 
       def validate_admin_otp 
-        return render json: "unauthenticated admin" unless admin_auth_header
-        render json: "otp is not valid or expired" unless Admin::ValidateOtpService.new(entered_otp: admin_auth_header).call 
+        return render json: "unauthenticated admin", status: :unauthorized unless admin_auth_header
+        render json: "otp is not valid or expired", status: :unauthorized unless Admin::ValidateOtpService.new(entered_otp: admin_auth_header).call 
       end
   
     end
