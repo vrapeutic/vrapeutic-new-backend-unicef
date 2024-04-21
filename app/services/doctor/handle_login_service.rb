@@ -4,7 +4,7 @@ class Doctor::HandleLoginService
         @password = password
     end
 
-    def call 
+    def call
         handle_login
     end
 
@@ -15,8 +15,9 @@ class Doctor::HandleLoginService
             raise "Invalid credentials"
         end
 
+        superadmins = (ENV['ADMIN_EMAILS'].present? ? ENV['ADMIN_EMAILS'].split(',') : []) + [ENV['ADMIN_EMAIL']]
 
-        if @email.downcase == ENV['ADMIN_EMAIL']
+        if superadmins.include?(@email.downcase)
             return {is_admin: true}
         end
 
@@ -25,15 +26,15 @@ class Doctor::HandleLoginService
         unless doctor.present?
             raise "Invalid credentials"
         end
-    
+
         unless doctor.authenticate(@password).present?
             raise "Invalid credentials"
         end
 
-        # generate token 
+        # generate token
         # Doctor::GenerateJwtTokenService.new(doctor_id: doctor.id).call
         {doctor: doctor, is_admin: false}
 
     end
-    
+
 end
