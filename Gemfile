@@ -48,6 +48,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'pry'
 end
 
 group :development, :test do
@@ -78,4 +79,3 @@ gem 'image_processing', '~> 1.2'
 gem 'mini_magick'
 gem 'delayed_job_active_record'
 gem 'cancancan'
-
