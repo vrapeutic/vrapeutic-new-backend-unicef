@@ -1,22 +1,23 @@
 class Center::AddChildService
 
-    def initialize(name:, email:, age: nil, center_id:, diagnosis_ids: [])
+    def initialize(name:, email:, age: nil, photo: nil, center_id:, diagnosis_ids: [])
         @name = name
         @email = email
         @age = age
+        @photo = photo
         @center_id = center_id
         @diagnosis_ids = diagnosis_ids
     end
 
-    def call 
+    def call
         check_diagnoses_existed
-        Child.transaction do 
+        Child.transaction do
             create_child
             create_chid_diagnoses
             create_child_center
             @new_child
         end
-        rescue => e 
+        rescue => e
             raise e
     end
 
@@ -28,6 +29,7 @@ class Center::AddChildService
             email: @email.downcase
         }
         options[:age] = @age unless @age.nil?
+        options[:photo] = @photo unless @photo.nil?
         @new_child = Child.create!(options)
     end
 

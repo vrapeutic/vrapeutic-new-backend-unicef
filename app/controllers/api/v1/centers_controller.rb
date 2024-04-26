@@ -23,13 +23,13 @@ class Api::V1::CentersController < Api::BaseApi
   def create
     begin
       new_center = Center::CreateService.new(
-        name: params[:name], 
-        longitude: params[:longitude], 
-        latitude:params[:latitude], 
-        website:params[:website], 
-        logo:params[:logo], 
-        certificate:params[:certificate], 
-        registration_number:params[:registration_number], 
+        name: params[:name],
+        longitude: params[:longitude],
+        latitude:params[:latitude],
+        website:params[:website],
+        logo:params[:logo],
+        certificate:params[:certificate],
+        registration_number:params[:registration_number],
         tax_id: params[:tax_id],
         current_doctor: current_doctor,
         specialty_ids: params[:specialty_ids],
@@ -47,9 +47,9 @@ class Api::V1::CentersController < Api::BaseApi
   def update
     begin
       updated_center = Center::EditService.new(
-        current_center: @center, 
-        edit_params: edit_center_params.except(:social_links, :specialty_ids), 
-        specialty_ids: params[:specialty_ids], 
+        current_center: @center,
+        edit_params: edit_center_params.except(:social_links, :specialty_ids),
+        specialty_ids: params[:specialty_ids],
         social_links: params[:social_links]
       ).call
       render json: CenterSerializer.new(updated_center).serializable_hash
@@ -70,7 +70,7 @@ class Api::V1::CentersController < Api::BaseApi
 
   def assign_doctor
     begin
-      Center::AssignDoctorService.new(doctor_id: params[:doctor_id], center_id: @center.id).call 
+      Center::AssignDoctorService.new(doctor_id: params[:doctor_id], center_id: @center.id).call
       render json: "assigned successfully"
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
@@ -80,13 +80,13 @@ class Api::V1::CentersController < Api::BaseApi
   def edit_doctor
     begin
       new_doctor = Doctor::UpdateService.new(
-        doctor_id: params[:doctor_id], 
-        degree: params[:degree], 
-        certificate: params[:certificate], 
-        specialty_ids: params[:specialty_ids], 
-        photo: params[:photo], 
+        doctor_id: params[:doctor_id],
+        degree: params[:degree],
+        certificate: params[:certificate],
+        specialty_ids: params[:specialty_ids],
+        photo: params[:photo],
         university: params[:university]
-      ).call 
+      ).call
       render json: DoctorSerializer.new(new_doctor).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
@@ -95,7 +95,7 @@ class Api::V1::CentersController < Api::BaseApi
 
   def make_doctor_admin
     begin
-      Center::MakeDoctorAdminService.new(doctor_id: params[:doctor_id], center_id: params[:id]).call 
+      Center::MakeDoctorAdminService.new(doctor_id: params[:doctor_id], center_id: params[:id]).call
       render json: "assigned successfully"
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
@@ -105,14 +105,15 @@ class Api::V1::CentersController < Api::BaseApi
   def add_child
     begin
       new_child = Center::AddChildService.new(
-        name: params[:name], 
-        email: params[:email], 
-        age: params[:age], 
-        center_id: params[:id], 
+        name: params[:name],
+        email: params[:email],
+        age: params[:age],
+        photo: params[:photo],
+        center_id: params[:id],
         diagnosis_ids: params[:diagnosis_ids]
-      ).call 
-      render json: ChildSerializer.new(new_child).serializable_hash
-    rescue => e 
+      ).call
+      render json: ChildSerializer.new(new_child, param_options).serializable_hash
+    rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
@@ -120,30 +121,30 @@ class Api::V1::CentersController < Api::BaseApi
   def edit_child
     begin
       child = Center::EditChildService.new(
-        child_id: params[:child_id], 
-        edit_params: edit_child_params.except(:diagnosis_ids), 
+        child_id: params[:child_id],
+        edit_params: edit_child_params.except(:diagnosis_ids),
         diagnosis_ids: params[:child][:diagnosis_ids]
       ).call
-      render json: ChildSerializer.new(child).serializable_hash
-    rescue => e 
+      render json: ChildSerializer.new(child, param_options).serializable_hash
+    rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
 
-  
+
 
   def add_modules
     begin
-      Center::AddModulesService.new(software_module_ids: params[:software_module_ids], center_id: params[:id]).call 
+      Center::AddModulesService.new(software_module_ids: params[:software_module_ids], center_id: params[:id]).call
       render json: "modules added successfully"
-    rescue => e 
+    rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
 
   def assign_module_child
     begin
-      Center::AssignModuleToChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id], center_id: params[:id]).call 
+      Center::AssignModuleToChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id], center_id: params[:id]).call
       render json: "module is assigned to child"
     rescue => e
       result = Response::HandleErrorService.new(error: e).call
@@ -153,9 +154,9 @@ class Api::V1::CentersController < Api::BaseApi
 
   def unassign_module_child
     begin
-      Center::UnassignModuleFromChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id], center_id: params[:id]).call 
+      Center::UnassignModuleFromChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id], center_id: params[:id]).call
       render json: "module is un assigned to child"
-    rescue => e 
+    rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
@@ -181,18 +182,18 @@ class Api::V1::CentersController < Api::BaseApi
 
   def add_headset
     begin
-      new_headset = Center::AddHeadsetService.new(headset_params: headset_params, center_id: params[:id]).call 
+      new_headset = Center::AddHeadsetService.new(headset_params: headset_params, center_id: params[:id]).call
       render json: HeadsetSerializer.new(new_headset).serializable_hash
-    rescue => e 
+    rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
 
   def edit_headset
     begin
-      headset = Center::EditHeadsetService.new(headset_params: headset_params, headset_id: params[:headset_id]).call 
+      headset = Center::EditHeadsetService.new(headset_params: headset_params, headset_id: params[:headset_id]).call
       render json: HeadsetSerializer.new(headset).serializable_hash
-    rescue => e 
+    rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
@@ -209,14 +210,14 @@ class Api::V1::CentersController < Api::BaseApi
   end
 
   # the modules that the center admin add to his center to use them
-  def modules 
+  def modules
     modules = Center::ModulesService.new(center: @center).call
     render json: SoftwareModuleSerializer.new(modules).serializable_hash
   end
 
-  def kids 
+  def kids
     kids = @center.children
-    render json: ChildSerializer.new(kids).serializable_hash
+    render json: ChildSerializer.new(kids, param_options).serializable_hash
   end
 
   def doctors
@@ -245,7 +246,7 @@ class Api::V1::CentersController < Api::BaseApi
     end
 
     def edit_child_params
-      params.require(:child).permit(:name, :age, :diagnosis_ids)
+      params.require(:child).permit(:name, :age, :photo, :diagnosis_ids)
     end
 
     def headset_params
