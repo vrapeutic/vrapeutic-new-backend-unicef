@@ -8,6 +8,7 @@ class Child < ApplicationRecord
         less_than_or_equal_to: 40,
         allow_nil: true
       }
+    mount_uploader :photo, PhotoUploader
 
     has_many :child_diagnoses, dependent: :destroy
     has_many :diagnoses, through: :child_diagnoses
@@ -15,7 +16,7 @@ class Child < ApplicationRecord
     has_many :centers, through: :child_centers
     has_many :child_software_modules, dependent: :destroy
     has_many :software_modules, through: :child_software_modules
-    has_many :child_doctors, dependent: :destroy 
+    has_many :child_doctors, dependent: :destroy
     has_many :doctors, through: :child_doctors
     has_many :sessions, dependent: :destroy
 end

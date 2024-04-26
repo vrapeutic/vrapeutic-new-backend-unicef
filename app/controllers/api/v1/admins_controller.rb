@@ -7,64 +7,64 @@ class Api::V1::AdminsController < Api::BaseApi
   end
   authorize_resource only: %i[ edit_doctor ]
 
-  def send_otp 
+  def send_otp
     otp = Admin::GenerateOtpService.new.call
     AdminOtpMailer.send_otp(ENV['ADMIN_EMAIL'], otp).deliver_later
     render json: "otp is sent successfully"
   end
 
-  def edit_child 
+  def edit_child
     begin
       child = Admin::EditChildService.new(
-        child_id: params[:child_id], 
-        edit_params: edit_child_params.except(:diagnosis_ids), 
+        child_id: params[:child_id],
+        edit_params: edit_child_params.except(:diagnosis_ids),
         diagnosis_ids: params[:child][:diagnosis_ids]
       ).call
-      render json: ChildSerializer.new(child).serializable_hash
+      render json: ChildSerializer.new(child, param_options).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
 
-  def edit_doctor 
+  def edit_doctor
     begin
       doctor = Admin::EditDoctorService.new(
-        doctor_id: params[:doctor_id], 
-        degree: params[:degree], 
-        certificate: params[:certificate], 
-        specialty_ids: params[:specialty_ids], 
-        photo: params[:photo], 
+        doctor_id: params[:doctor_id],
+        degree: params[:degree],
+        certificate: params[:certificate],
+        specialty_ids: params[:specialty_ids],
+        photo: params[:photo],
         university: params[:university],
         name: params[:name]
-      ).call 
+      ).call
       render json: DoctorSerializer.new(doctor).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
 
-  def assign_center_module 
+  def assign_center_module
     begin
       Admin::AssignCenterModuleService.new(center_id: params[:center_id], software_module_id: params[:software_module_id], end_date: params[:end_date]).call
       render json: "assigned successfully"
-    rescue => e 
+    rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
     end
   end
 
-  def doctors 
-    all_doctors = Doctor.all 
+  def doctors
+    all_doctors = Doctor.all
     render json: DoctorSerializer.new(all_doctors).serializable_hash
   end
 
-  def centers 
-    all_centers = Center.all 
+  def centers
+    all_centers = Center.all
     render json: CenterSerializer.new(all_centers).serializable_hash
   end
 
-  def kids 
-    all_kids = Child.all 
-    render json: ChildSerializer.new(all_kids).serializable_hash
+  def kids
+    all_kids = Child.all
+    render json: ChildSerializer.new(all_kids, param_options).serializable_hash
   end
 
   # GET /admins
@@ -116,6 +116,6 @@ class Api::V1::AdminsController < Api::BaseApi
     end
 
     def edit_child_params
-      params.require(:child).permit(:name, :age, :diagnosis_ids)
+      params.require(:child).permit(:name, :age, :photo, :diagnosis_ids)
     end
 end

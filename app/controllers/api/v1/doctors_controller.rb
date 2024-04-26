@@ -54,7 +54,7 @@ class Api::V1::DoctorsController < Api::BaseApi
   def resend_otp
     doctor_is_confirmed?
     otp_code = Otp::GenerateService.new(doctor: @doctor).call
-    # send email 
+    # send email
     OtpMailer.send_otp(@doctor, otp_code).deliver_later
     render json: "otp is sent again"
   end
@@ -74,7 +74,7 @@ class Api::V1::DoctorsController < Api::BaseApi
         doctor_data = DoctorSerializer.new(@doctor).serializable_hash
         return render json: {is_admin: result[:is_admin], doctor: doctor_data[:data]}
       end
-      
+
     rescue => e
       render json: e.message, status: :unauthorized
     end
@@ -91,7 +91,7 @@ class Api::V1::DoctorsController < Api::BaseApi
         specialty_ids: params[:specialty_ids],
         photo: params[:photo],
         certificate: params[:certificate]
-      ).call 
+      ).call
       render json: DoctorSerializer.new(new_doctor).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
@@ -102,27 +102,27 @@ class Api::V1::DoctorsController < Api::BaseApi
   def update
     begin
       doctor = Doctor::UpdateService.new(
-        doctor_id: params[:id], 
-        degree: params[:degree], 
-        certificate: params[:certificate], 
-        specialty_ids: params[:specialty_ids], 
-        photo: params[:photo], 
+        doctor_id: params[:id],
+        degree: params[:degree],
+        certificate: params[:certificate],
+        specialty_ids: params[:specialty_ids],
+        photo: params[:photo],
         university: params[:university],
         name: params[:name]
-      ).call 
+      ).call
       render json: DoctorSerializer.new(doctor).serializable_hash
     rescue => e
       render json: {error: e.message}, status: :unprocessable_entity
-    end 
+    end
   end
 
-  def centers 
+  def centers
     render json: MiniCenterSerializer.new(current_doctor.centers).serializable_hash
   end
 
   def center_assigned_children
     children = Doctor::GetAssignedCenterChildrenService.new(doctor: current_doctor, center_id: params[:center_id]).call
-    render json: MiniChildSerializer.new(children).serializable_hash
+    render json: MiniChildSerializer.new(children, param_options).serializable_hash
   end
 
   def center_headsets
@@ -150,7 +150,7 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   def home_doctors
-    doctors = Doctor::GetCenterDoctorsService.new(current_doctor: current_doctor, center_id: params[:center_id]).call 
+    doctors = Doctor::GetCenterDoctorsService.new(current_doctor: current_doctor, center_id: params[:center_id]).call
     render json: HomeDoctorSerializer.new(doctors).serializable_hash
   end
 
@@ -171,8 +171,8 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def child_session_performance_data
     result = Doctor::ChildCenterSessionsDataService.new(
-      doctor: current_doctor, 
-      center_id: params[:center_id], 
+      doctor: current_doctor,
+      center_id: params[:center_id],
       child_id: params[:child_id],
       start_date: params[:start_date],
       end_date: params[:end_date]
@@ -199,7 +199,7 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def doctor_is_confirmed?
     if @doctor.is_email_verified
-      return render json: {error: "doctor is already vdrified"}, status: :unprocessable_entity 
+      return render json: {error: "doctor is already vdrified"}, status: :unprocessable_entity
     end
   end
     # Use callbacks to share common setup or constraints between actions.

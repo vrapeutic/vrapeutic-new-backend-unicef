@@ -1,5 +1,4 @@
-class CenterSerializer
-  include JSONAPI::Serializer
+class CenterSerializer < BaseSerializer
   attributes :name, :website, :longitude, :latitude, :registration_number, :tax_id, :email, :phone_number
 
   attribute :logo_url do |center|

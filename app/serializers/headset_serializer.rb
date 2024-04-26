@@ -1,4 +1,3 @@
-class HeadsetSerializer
-  include JSONAPI::Serializer
-  attributes :version, :name, :brand, :model, :key, :center
+class HeadsetSerializer < BaseSerializer
+  attributes :version, :name, :brand, :model, :key, :center, :created_at, :updated_at
 end
