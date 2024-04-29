@@ -97,7 +97,7 @@ class Api::V1::CentersController < Api::BaseApi
       age: params[:age],
       photo: params[:photo],
       center_id: params[:id],
-      diagnosis_ids: params[:diagnosis_ids]
+      diagnosis_ids: params[:diagnosis_ids].is_a?(String) ? params[:diagnosis_ids]&.split(',') : params[:diagnosis_ids]
     ).call
     render json: ChildSerializer.new(new_child, param_options).serializable_hash
   rescue StandardError => e
