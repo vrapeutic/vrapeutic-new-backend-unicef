@@ -122,7 +122,7 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def center_assigned_children
     children = Doctor::GetAssignedCenterChildrenService.new(doctor: current_doctor, center_id: params[:center_id]).call
-    render json: MiniChildSerializer.new(children, param_options).serializable_hash
+    render json: ChildSerializer.new(children, param_options).serializable_hash
   end
 
   def center_headsets
@@ -132,12 +132,12 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def center_child_modules
     modules = Doctor::GetCenterChildModulesService.new(center_id: params[:center_id], child_id: params[:child_id]).call
-    render json: MiniSoftwareModuleSerializer.new(modules).serializable_hash
+    render json: SoftwareModuleSerializer.new(modules).serializable_hash
   end
 
   def center_child_doctors
     doctors = Doctor::GetCenterChildDoctorsService.new(child_id: params[:child_id], center_id: params[:center_id] , current_doctor: current_doctor).call
-    render json: MiniDoctorSerializer.new(doctors).serializable_hash
+    render json: DoctorSerializer.new(doctors).serializable_hash
   end
 
   def home_centers
