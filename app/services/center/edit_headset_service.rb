@@ -1,25 +1,24 @@
 class Center::EditHeadsetService
+  def initialize(headset_params:, headset_id:)
+    @headset_id = headset_id
+    @headset_params = headset_params
+  end
 
-    def initialize(headset_params:, headset_id:)
-        @headset_id = headset_id
-        @headset_params = headset_params
+  def call
+    Headset.transaction do
+      find_headset
+      update_headset
+      @headset
     end
+  end
 
-    def call 
-        Headset.transaction do 
-            find_headset
-            update_headset
-            @headset
-        end
-    end
+  private
 
-    private
+  def find_headset
+    @headset = Headset.find(@headset_id)
+  end
 
-    def find_headset
-        @headset = Headset.find(@headset_id)
-    end
-
-    def update_headset
-        @headset.update!(@headset_params)
-    end
+  def update_headset
+    @headset.update!(@headset_params)
+  end
 end

@@ -1,40 +1,30 @@
 class Doctor::HandleLoginService
-    def initialize(email:, password:)
-        @email = email
-        @password = password
-    end
+  def initialize(email:, password:)
+    @email = email
+    @password = password
+  end
 
-    def call
-        handle_login
-    end
+  def call
+    handle_login
+  end
 
-    private
+  private
 
-    def handle_login
-        unless @email.present? || @password.present?
-            raise "Invalid credentials"
-        end
+  def handle_login
+    raise 'Invalid credentials' unless @email.present? || @password.present?
 
-        superadmins = (ENV['ADMIN_EMAILS'].present? ? ENV['ADMIN_EMAILS'].split(',') : []) + [ENV['ADMIN_EMAIL']]
+    superadmins = (ENV['ADMIN_EMAILS'].present? ? ENV['ADMIN_EMAILS'].split(',') : []) + [ENV['ADMIN_EMAIL']]
 
-        if superadmins.include?(@email.downcase)
-            return {is_admin: true}
-        end
+    return { is_admin: true } if superadmins.include?(@email.downcase)
 
-        doctor = Doctor.find_by(email: @email.downcase)
+    doctor = Doctor.find_by(email: @email.downcase)
 
-        unless doctor.present?
-            raise "Invalid credentials"
-        end
+    raise 'Invalid credentials' unless doctor.present?
 
-        unless doctor.authenticate(@password).present?
-            raise "Invalid credentials"
-        end
+    raise 'Invalid credentials' unless doctor.authenticate(@password).present?
 
-        # generate token
-        # Doctor::GenerateJwtTokenService.new(doctor_id: doctor.id).call
-        {doctor: doctor, is_admin: false}
-
-    end
-
+    # generate token
+    # Doctor::GenerateJwtTokenService.new(doctor_id: doctor.id).call
+    { doctor: doctor, is_admin: false }
+  end
 end

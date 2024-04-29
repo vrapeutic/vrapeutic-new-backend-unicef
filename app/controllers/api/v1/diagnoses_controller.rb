@@ -1,5 +1,5 @@
 class Api::V1::DiagnosesController < Api::BaseApi
-  before_action :set_diagnosis, only: %i[ show update destroy ]
+  before_action :set_diagnosis, only: %i[show update destroy]
 
   # GET /diagnoses
   def index
@@ -39,13 +39,14 @@ class Api::V1::DiagnosesController < Api::BaseApi
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_diagnosis
-      @diagnosis = Diagnosis.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def diagnosis_params
-      params.require(:diagnosis).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_diagnosis
+    @diagnosis = Diagnosis.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def diagnosis_params
+    params.require(:diagnosis).permit(:name)
+  end
 end

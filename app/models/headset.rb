@@ -1,5 +1,4 @@
 class Headset < ApplicationRecord
-
   validates :brand, presence: true
   validates :key, presence: true, uniqueness: true
 
@@ -11,6 +10,6 @@ class Headset < ApplicationRecord
   private
 
   def lowercase_name
-    self.name = self.name.downcase if self.name
+    self.name = name.downcase if name
   end
 end

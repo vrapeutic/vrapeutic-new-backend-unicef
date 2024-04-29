@@ -301,6 +301,13 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.29.0)
       parser (>= 3.2.1.0)
+    rubocop-performance (1.19.1)
+      rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
+    rubocop-rails (2.22.1)
+      activesupport (>= 4.2.0)
+      rack (>= 1.1)
+      rubocop (>= 1.33.0, < 2.0)
     ruby-debug-ide (0.7.3)
       rake (>= 0.8.1)
     ruby-progressbar (1.13.0)
@@ -369,6 +376,9 @@ DEPENDENCIES
   rack-cors
   rails (~> 7.0.5)
   rspec-rails
+  rubocop (~> 1.22)
+  rubocop-performance (~> 1.14)
+  rubocop-rails (~> 2.15)
   ruby-debug-ide
   sidekiq
   solargraph

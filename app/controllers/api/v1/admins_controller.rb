@@ -1,55 +1,50 @@
 class Api::V1::AdminsController < Api::BaseApi
-  before_action :set_admin, only: %i[ show update destroy ]
-  before_action :validate_admin_otp, only: %i[ edit_child edit_doctor doctors kids assign_center_module centers ]
+  before_action :set_admin, only: %i[show update destroy]
+  before_action :validate_admin_otp, only: %i[edit_child edit_doctor doctors kids assign_center_module centers]
 
   def current_ability
     @current_ability ||= AdminAbility.new(params)
   end
-  authorize_resource only: %i[ edit_doctor ]
+  authorize_resource only: %i[edit_doctor]
 
   def send_otp
     otp = Admin::GenerateOtpService.new.call
     AdminOtpMailer.send_otp(ENV['ADMIN_EMAIL'], otp).deliver_later
-    render json: "otp is sent successfully"
+    render json: 'otp is sent successfully'
   end
 
   def edit_child
-    begin
-      child = Admin::EditChildService.new(
-        child_id: params[:child_id],
-        edit_params: edit_child_params.except(:diagnosis_ids),
-        diagnosis_ids: params[:child][:diagnosis_ids]
-      ).call
-      render json: ChildSerializer.new(child, param_options).serializable_hash
-    rescue => e
-      render json: {error: e.message}, status: :unprocessable_entity
-    end
+    child = Admin::EditChildService.new(
+      child_id: params[:child_id],
+      edit_params: edit_child_params.except(:diagnosis_ids),
+      diagnosis_ids: params[:child][:diagnosis_ids]
+    ).call
+    render json: ChildSerializer.new(child, param_options).serializable_hash
+  rescue StandardError => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def edit_doctor
-    begin
-      doctor = Admin::EditDoctorService.new(
-        doctor_id: params[:doctor_id],
-        degree: params[:degree],
-        certificate: params[:certificate],
-        specialty_ids: params[:specialty_ids],
-        photo: params[:photo],
-        university: params[:university],
-        name: params[:name]
-      ).call
-      render json: DoctorSerializer.new(doctor).serializable_hash
-    rescue => e
-      render json: {error: e.message}, status: :unprocessable_entity
-    end
+    doctor = Admin::EditDoctorService.new(
+      doctor_id: params[:doctor_id],
+      degree: params[:degree],
+      certificate: params[:certificate],
+      specialty_ids: params[:specialty_ids],
+      photo: params[:photo],
+      university: params[:university],
+      name: params[:name]
+    ).call
+    render json: DoctorSerializer.new(doctor).serializable_hash
+  rescue StandardError => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def assign_center_module
-    begin
-      Admin::AssignCenterModuleService.new(center_id: params[:center_id], software_module_id: params[:software_module_id], end_date: params[:end_date]).call
-      render json: "assigned successfully"
-    rescue => e
-      render json: {error: e.message}, status: :unprocessable_entity
-    end
+    Admin::AssignCenterModuleService.new(center_id: params[:center_id], software_module_id: params[:software_module_id],
+                                         end_date: params[:end_date]).call
+    render json: 'assigned successfully'
+  rescue StandardError => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def doctors
@@ -105,17 +100,18 @@ class Api::V1::AdminsController < Api::BaseApi
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_admin
-      @admin = Admin.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def admin_params
-      params.require(:admin).permit(:otp, :expires_at)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_admin
+    @admin = Admin.find(params[:id])
+  end
 
-    def edit_child_params
-      params.require(:child).permit(:name, :age, :photo, :diagnosis_ids)
-    end
+  # Only allow a list of trusted parameters through.
+  def admin_params
+    params.require(:admin).permit(:otp, :expires_at)
+  end
+
+  def edit_child_params
+    params.require(:child).permit(:name, :age, :photo, :diagnosis_ids)
+  end
 end

@@ -7,8 +7,9 @@ class CenterSocialLink < ApplicationRecord
 
   before_validation :lowercase_link
 
-  private 
+  private
+
   def lowercase_link
-    self.link = self.link.downcase
+    self.link = link.downcase
   end
 end

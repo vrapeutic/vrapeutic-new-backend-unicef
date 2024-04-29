@@ -1,5 +1,5 @@
 class Api::V1::SpecialtiesController < Api::BaseApi
-  before_action :set_specialty, only: %i[ show update destroy ]
+  before_action :set_specialty, only: %i[show update destroy]
 
   # GET /specialties
   def index
@@ -39,13 +39,14 @@ class Api::V1::SpecialtiesController < Api::BaseApi
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_specialty
-      @specialty = Specialty.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def specialty_params
-      params.require(:specialty).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_specialty
+    @specialty = Specialty.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def specialty_params
+    params.require(:specialty).permit(:name)
+  end
 end

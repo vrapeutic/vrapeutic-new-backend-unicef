@@ -1,27 +1,26 @@
 class Authorization::Session::CanEndService
+  def initialize(current_doctor:, session_id:)
+    @current_doctor = current_doctor
+    @session_id = session_id
+  end
 
-    def initialize(current_doctor:, session_id:)
-        @current_doctor = current_doctor
-        @session_id = session_id
-    end
+  def call
+    set_session
+    session_is_verified? && session_has_doctor?
+  end
 
-    def call 
-        get_session
-        session_is_verified? && session_has_doctor?
-    end
+  private
 
-    private
+  def set_session
+    @session = Session.find(@session_id)
+  end
 
-    def get_session 
-        @session = Session.find(@session_id)
-    end
+  def session_is_verified?
+    @session.is_verified
+  end
 
-    def session_is_verified? 
-        @session.is_verified
-    end
-
-    # check if this doctor in session
-    def session_has_doctor? 
-        Session::HasDoctorService.new(session_id: @session_id, doctor_id: @current_doctor.id).call
-    end
+  # check if this doctor in session
+  def session_has_doctor?
+    Session::HasDoctorService.new(session_id: @session_id, doctor_id: @current_doctor.id).call
+  end
 end
