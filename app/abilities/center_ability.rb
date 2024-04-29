@@ -1,6 +1,7 @@
 class CenterAbility
     include CanCan::Ability
-    def initialize(doctor ,params)
+
+    def initialize(doctor, params)
       case params[:action]
 
       when 'update'
@@ -23,31 +24,31 @@ class CenterAbility
         can :add_modules, Center if Authorization::Center::CanAddModulesService.new(current_doctor: doctor, center_id: params[:id]).call
       when 'assign_module_child'
         can :assign_module_child, Center if Authorization::Center::CanAssignModuleToChildService.new(
-          current_doctor: doctor, 
-          center_id: params[:id], 
-          software_module_id: params[:software_module_id], 
+          current_doctor: doctor,
+          center_id: params[:id],
+          software_module_id: params[:software_module_id],
           child_id: params[:child_id]
         ).call
       when 'unassign_module_child'
         can :unassign_module_child, Center if Authorization::Center::CanUnassignModuleFromChildService.new(
-          current_doctor: doctor, 
-          center_id: params[:id], 
-          software_module_id: params[:software_module_id], 
+          current_doctor: doctor,
+          center_id: params[:id],
+          software_module_id: params[:software_module_id],
           child_id: params[:child_id]
         ).call
       when 'assign_doctor_child'
         can :assign_doctor_child, Center if Authorization::Center::CanAssignDoctorToChildService.new(
-          current_doctor: doctor, 
-          center_id: params[:id], 
-          assignee_doctor_id: params[:doctor_id], 
+          current_doctor: doctor,
+          center_id: params[:id],
+          assignee_doctor_id: params[:doctor_id],
           child_id: params[:child_id]
         ).call
 
       when 'unassign_doctor_child'
         can :unassign_doctor_child, Center if Authorization::Center::CanUnassignDoctorFromChildService.new(
-          current_doctor: doctor, 
-          center_id: params[:id], 
-          assignee_doctor_id: params[:doctor_id], 
+          current_doctor: doctor,
+          center_id: params[:id],
+          assignee_doctor_id: params[:doctor_id],
           child_id: params[:child_id]
         ).call
 
@@ -57,17 +58,9 @@ class CenterAbility
         can :edit_headset, Center if Authorization::Center::CanEditHeadsetService.new(current_doctor: doctor, center_id: params[:id], headset_id: params[:headset_id]).call
       when 'all_doctors'
         can :all_doctors, Center if Authorization::Center::CanGetAllDoctorsService.new(current_doctor: doctor, center_id: params[:id]).call
-      when 'assigned_modules'
-        can :assigned_modules, Center if Authorization::Center::CanGetAssignedModulesService.new(current_doctor: doctor, center_id: params[:id]).call
-      when 'kids'
-        can :kids, Center if Authorization::Center::CanGetKidsService.new(current_doctor: doctor, center_id: params[:id]).call
-      when 'doctors'
-        can :doctors, Center if Authorization::Center::CanGetDoctorsService.new(current_doctor: doctor, center_id: params[:id]).call
-      when 'modules'
-        can :modules, Center if Authorization::Center::CanGetModulesService.new(current_doctor: doctor, center_id: params[:id]).call
       else
         false
       end
     end
-  
+
   end

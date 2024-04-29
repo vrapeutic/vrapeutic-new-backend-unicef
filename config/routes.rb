@@ -1,10 +1,9 @@
-Rails.application.routes.draw do  
+Rails.application.routes.draw do
 
   get '/', to: 'application#health_check'
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-
       post '/sign_in', to: 'doctors#sign_in'
 
       resources :specialties, only: %i[index]
@@ -15,7 +14,7 @@ Rails.application.routes.draw do
 
       resources :software_modules, only: %i[index create update]
 
-      resources :sessions, only: %i[create] do 
+      resources :sessions, only: %i[create] do
         member do
           post :resend_otp
           put :validate_otp
@@ -29,9 +28,6 @@ Rails.application.routes.draw do
         end
       end
 
-
-
-
       resources :admins, only: %i[] do
         collection do
           post :send_otp
@@ -44,8 +40,15 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :centers do
+        scope ':center_id' do
+          resources :doctors, only: %i[index show]
+          resources :kids, controller: 'children', only: %i[index show]
+          resources :modules, controller: 'software_modules', only: %i[index show]
+          get :assigned_modules, controller: 'software_modules'
+        end
+      end
 
-      
       resources :centers, only: %i[create update] do
         member do
           post :invite_doctor
@@ -62,10 +65,6 @@ Rails.application.routes.draw do
           post :add_headset
           put :edit_headset
           get :all_doctors
-          get :assigned_modules
-          get :kids
-          get :doctors
-          get :modules
         end
       end
 
