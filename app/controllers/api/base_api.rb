@@ -2,7 +2,6 @@ module Api
   class Api::BaseApi < ApplicationController
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
     rescue_from ActiveRecord::RecordNotUnique, with: :record_is_existed_before
-
     rescue_from CanCan::AccessDenied do |exception|
       render json: exception.message, status: :forbidden
     end

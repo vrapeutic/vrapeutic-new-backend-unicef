@@ -1,5 +1,5 @@
 class Api::V1::CentersController < Api::BaseApi
-  before_action :set_center, only: %i[show update destroy invite_doctor assign_doctor assigned_modules modules kids doctors]
+  before_action :set_center, only: %i[show update destroy invite_doctor assign_doctor]
   before_action :authorized
 
   def current_ability
@@ -78,7 +78,7 @@ class Api::V1::CentersController < Api::BaseApi
       photo: params[:photo],
       university: params[:university]
     ).call
-    render json: DoctorSerializer.new(new_doctor).serializable_hash
+    render json: DoctorSerializer.new(new_doctor, param_options).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
@@ -170,29 +170,7 @@ class Api::V1::CentersController < Api::BaseApi
 
   def all_doctors
     doctors = Doctor.where.not(id: current_doctor.id)
-    render json: MiniDoctorSerializer.new(doctors).serializable_hash
-  end
-
-  # assigned modules by super admin but the center doesn't have them yet
-  def assigned_modules
-    modules = Center::AssignedModulesService.new(center: @center).call
-    render json: SoftwareModuleSerializer.new(modules).serializable_hash
-  end
-
-  # the modules that the center admin add to his center to use them
-  def modules
-    modules = Center::ModulesService.new(center: @center).call
-    render json: SoftwareModuleSerializer.new(modules).serializable_hash
-  end
-
-  def kids
-    kids = @center.children
-    render json: ChildSerializer.new(kids, param_options).serializable_hash
-  end
-
-  def doctors
-    doctors = @center.doctors
-    render json: MiniDoctorSerializer.new(doctors).serializable_hash
+    render json: DoctorSerializer.new(doctors, param_options).serializable_hash
   end
 
   # DELETE /centers/1
