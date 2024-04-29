@@ -1,5 +1,6 @@
 class SoftwareModule < ApplicationRecord
   validates :name, presence: true
+  validates :package_name, presence: true, uniqueness: true
   validates :version, presence: true
   validates :technology, presence: true
   validates :min_age, presence: true

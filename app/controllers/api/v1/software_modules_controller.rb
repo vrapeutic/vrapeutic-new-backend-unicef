@@ -12,7 +12,7 @@ class Api::V1::SoftwareModulesController < Api::BaseApi
 
   # GET /software_modules/1
   def show
-    render json: @software_module
+    render json: SoftwareModuleSerializer.new(@software_modules).serializable_hash
   end
 
   # POST /software_modules
@@ -21,6 +21,7 @@ class Api::V1::SoftwareModulesController < Api::BaseApi
       name: params[:name],
       version: params[:version],
       technology: params[:technology],
+      package_name: params[:package_name],
       min_age: params[:min_age],
       max_age: params[:max_age],
       image: params[:image],
@@ -57,6 +58,6 @@ class Api::V1::SoftwareModulesController < Api::BaseApi
 
   # Only allow a list of trusted parameters through.
   def software_module_params
-    params.require(:software_module).permit(:name, :version, :technology, :min_age, :max_age, :image, :targeted_skill_ids)
+    params.require(:software_module).permit(:name, :version, :technology, :package_name, :min_age, :max_age, :image, :targeted_skill_ids)
   end
 end

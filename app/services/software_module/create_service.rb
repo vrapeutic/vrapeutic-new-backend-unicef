@@ -1,8 +1,9 @@
 class SoftwareModule::CreateService
-  def initialize(name:, version:, technology:, min_age:, max_age:, image:, targeted_skill_ids:)
+  def initialize(name:, version:, technology:, package_name:, min_age:, max_age:, image:, targeted_skill_ids:)
     @name = name
     @version = version
     @technology = technology
+    @package_name = package_name
     @min_age = min_age.to_i
     @max_age = max_age.to_i
     @image = image
@@ -28,6 +29,7 @@ class SoftwareModule::CreateService
       name: @name,
       version: @version,
       technology: @technology,
+      package_name: @package_name,
       min_age: @min_age,
       max_age: @max_age,
       image: @image

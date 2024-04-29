@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_26_223238) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_29_201705) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -324,6 +324,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_26_223238) do
     t.integer "min_age"
     t.integer "max_age"
     t.string "image"
+    t.string "package_name"
   end
 
   create_table "specialties", force: :cascade do |t|
