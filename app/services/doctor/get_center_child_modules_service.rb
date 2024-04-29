@@ -1,17 +1,16 @@
 class Doctor::GetCenterChildModulesService
+  def initialize(center_id:, child_id:)
+    @center_id = center_id
+    @child_id = child_id
+  end
 
-    def initialize(center_id:, child_id:)
-        @center_id = center_id
-        @child_id = child_id
-    end
+  def call
+    child_modules_in_center
+  end
 
-    def call 
-        child_modules_in_center
-    end
+  private
 
-    private
-
-    def child_modules_in_center
-        Child::GetAssignedModulesInCenterService.new(child_id: @child_id, center_id: @center_id).call
-    end
+  def child_modules_in_center
+    Child::GetAssignedModulesInCenterService.new(child_id: @child_id, center_id: @center_id).call
+  end
 end

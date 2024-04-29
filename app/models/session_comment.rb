@@ -5,8 +5,9 @@ class SessionComment < ApplicationRecord
 
   validates :name, presence: true
 
-  private 
+  private
+
   def lowercase_name
-    self.name = self.name.downcase if self.name
+    self.name = name.downcase if name
   end
 end

@@ -1,18 +1,17 @@
 class Center::UnassignDoctorFromChildService
+  def initialize(assignee_doctor_id:, child_id:, center_id:)
+    @assignee_doctor_id = assignee_doctor_id
+    @child_id = child_id
+    @center_id = center_id
+  end
 
-    def initialize(assignee_doctor_id:, child_id:, center_id:)
-        @assignee_doctor_id = assignee_doctor_id
-        @child_id = child_id
-        @center_id = center_id
-    end
+  def call
+    un_assign_doctor_to_child
+  end
 
-    def call 
-        un_assign_doctor_to_child
-    end
+  private
 
-    private
-
-    def un_assign_doctor_to_child
-        ChildDoctor.find_by(child_id: @child_id, doctor_id: @assignee_doctor_id, center_id: @center_id).destroy
-    end
+  def un_assign_doctor_to_child
+    ChildDoctor.find_by(child_id: @child_id, doctor_id: @assignee_doctor_id, center_id: @center_id).destroy
+  end
 end

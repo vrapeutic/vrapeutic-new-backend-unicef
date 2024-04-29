@@ -1,17 +1,16 @@
 class Center::AssignDoctorService
+  def initialize(doctor_id:, center_id:)
+    @doctor_id = doctor_id
+    @center_id = center_id
+  end
 
-    def initialize(doctor_id:, center_id:)
-        @doctor_id = doctor_id
-        @center_id = center_id
-    end
+  def call
+    create_doctor_center_role
+  end
 
-    def call 
-        create_doctor_center_role
-    end
+  private
 
-    private
-
-    def create_doctor_center_role
-        DoctorCenter.create!(center_id: @center_id, doctor_id: @doctor_id)
-    end
+  def create_doctor_center_role
+    DoctorCenter.create!(center_id: @center_id, doctor_id: @doctor_id)
+  end
 end

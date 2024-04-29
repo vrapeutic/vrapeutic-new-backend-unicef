@@ -1,17 +1,17 @@
-class Center::ModulesService 
-    # get all modules that the center can use 
+class Center::ModulesService
+  # get all modules that the center can use
 
-    def initialize(center: )
-        @center = center
-    end
+  def initialize(center:)
+    @center = center
+  end
 
-    def call 
-        asssigned_modules
-    end
+  def call
+    asssigned_modules
+  end
 
-    private
+  private
 
-    def asssigned_modules 
-        @center.software_modules.includes(:targeted_skills)
-    end
+  def asssigned_modules
+    @center.software_modules.includes(:targeted_skills)
+  end
 end

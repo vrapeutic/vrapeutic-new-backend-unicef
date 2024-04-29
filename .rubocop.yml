@@ -1,0 +1,81 @@
+require: rubocop-performance
+AllCops:
+    TargetRubyVersion: 3.0.6
+    Include:
+        - 'app/**/*.rb'
+        - 'lib/**/*.rb'
+    Exclude:
+        - 'bin/**/*'
+        - 'node_modules/**/*'
+        - 'api_docs/**/*'
+Bundler:
+  Severity: error
+Gemspec:
+  Severity: error
+Style/FrozenStringLiteralComment:
+    Enabled: false
+Style/Documentation:
+    Enabled: false
+Style/Lambda:
+    Enabled: false
+Style/ClassAndModuleChildren:
+    Enabled: false
+Metrics/MethodLength:
+    Enabled: false
+Layout/LineLength:
+    Max: 150
+    IgnoredPatterns: ['\A#']
+Metrics/ParameterLists:
+    Max: 15
+Metrics/BlockLength:
+    Enabled: false
+Metrics/AbcSize:
+    Enabled: false
+Metrics/PerceivedComplexity:
+    Enabled: false
+Metrics/CyclomaticComplexity:
+    Enabled: false
+Metrics/ClassLength:
+    Enabled: false
+Style/CommandLiteral:
+    Enabled: false
+Naming/PredicateName:
+    Enabled: false
+Layout/EmptyLinesAroundAttributeAccessor:
+    Enabled: true
+Layout/SpaceAroundMethodCallOperator:
+    Enabled: true
+Lint/RaiseException:
+    Enabled: true
+Lint/StructNewOverride:
+    Enabled: true
+Style/ExponentialNotation:
+    Enabled: true
+Style/HashEachMethods:
+    Enabled: false
+Style/HashTransformKeys:
+    Enabled: true
+Style/HashTransformValues:
+    Enabled: true
+Style/SlicingWithRange:
+    Enabled: true
+Style/SymbolProc:
+    Enabled: false
+Style/GlobalVars:
+    Enabled: false
+Style/SingleArgumentDig:
+    Enabled: false
+Naming/VariableNumber:
+    Enabled: false
+Style/CaseLikeIf:
+    Enabled: false
+Style/HashAsLastArrayItem:
+    Enabled: false
+Style/RedundantAssignment:
+    Enabled: false
+Style/ClassEqualityComparison:
+    Enabled: false
+Style/StringConcatenation:
+    Enabled: false
+Style/RedundantRegexpEscape:
+    Enabled: false

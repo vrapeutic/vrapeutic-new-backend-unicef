@@ -1,20 +1,21 @@
-class Specialty::CheckIsExistedService 
+class Specialty::CheckIsExistedService
+  def initialize(specialty_ids:)
+    @specialty_ids = specialty_ids
+  end
 
-    def initialize(specialty_ids:)
-        @specialty_ids = specialty_ids
-    end
+  def call
+    check_if_existed
+  end
 
-    def call 
-        check_if_existed
-    end
+  private
 
-    private
+  def check_if_existed
+    error_message = 'specialties not found, please provide at least one'
+    raise error_message if @specialty_ids.nil?
 
-    def check_if_existed
-        error_message = 'specialties not found, please provide at least one'
-        raise error_message if @specialty_ids.nil? 
-        specialty_records = Specialty.where(id: @specialty_ids)
-        raise error_message if specialty_records.count == 0
-        specialty_records
-    end
+    specialty_records = Specialty.where(id: @specialty_ids)
+    raise error_message if specialty_records.count.zero?
+
+    specialty_records
+  end
 end

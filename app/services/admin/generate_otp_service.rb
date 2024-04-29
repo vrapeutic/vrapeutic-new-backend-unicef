@@ -1,22 +1,21 @@
 class Admin::GenerateOtpService
+  def initialize(expires_at: Time.now + 60.minutes)
+    @expires_at = expires_at
+  end
 
-    def initialize(expires_at: Time.now +  60.minutes)
-        @expires_at = expires_at
+  def call
+    Admin.transaction do
+      generate_otp
+      @otp
     end
+  end
 
-    def call 
-        Admin.transaction do 
-            generate_otp
-            @otp
-        end
-    end
+  private
 
-    private
-
-    def generate_otp 
-        @otp = SecureRandom.hex(3)
-        options = {otp: @otp, expires_at: @expires_at}
-        admin = Admin.first 
-        admin.update!(options)
-    end
+  def generate_otp
+    @otp = SecureRandom.hex(3)
+    options = { otp: @otp, expires_at: @expires_at }
+    admin = Admin.first
+    admin.update!(options)
+  end
 end

@@ -3,7 +3,7 @@ class Session < ApplicationRecord
   belongs_to :headset
   belongs_to :child
 
-  enum evaluation: {very_bad: 0, bad: 1, fair: 2, good: 3, very_good: 4, excellent: 5}
+  enum evaluation: { very_bad: 0, bad: 1, fair: 2, good: 3, very_good: 4, excellent: 5 }
 
   validates_numericality_of :vr_duration, allow_nil: true, greater_than: 0
 
