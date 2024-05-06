@@ -1,5 +1,6 @@
 class Child < ApplicationRecord
   validates :name, presence: true
+  validates :photo, presence: true
   validates :email, presence: true, uniqueness: true
   validates :age, numericality: {
     only_integer: true,
@@ -7,6 +8,7 @@ class Child < ApplicationRecord
     less_than_or_equal_to: 40,
     allow_nil: true
   }
+
   mount_uploader :photo, PhotoUploader
 
   has_many :child_diagnoses, dependent: :destroy
