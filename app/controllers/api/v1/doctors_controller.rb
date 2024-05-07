@@ -164,7 +164,7 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   def center_vr_minutes
-    result = Doctor::CenterVrMinutesService.new(doctor: current_doctor, center_id: params[:center_id]).call
+    result = Doctor::CenterVrMinutesService.new(doctor: current_doctor, center_id: params[:center_id], year: params[:year]).call
     render json: result
   end
 
