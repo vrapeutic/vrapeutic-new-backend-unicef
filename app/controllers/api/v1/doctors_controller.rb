@@ -3,7 +3,7 @@ class Api::V1::DoctorsController < Api::BaseApi
   before_action :authorized,
                 only: %i[update centers center_assigned_children center_headsets
                          center_child_modules center_child_doctors home_centers home_doctors
-                         home_kids center_statistics center_vr_minutes
+                         home_kids center_statistics center_vr_minutes center_child_sessions
                          child_session_performance_data sessions_percentage kids_percentage]
 
   def current_ability
@@ -128,13 +128,21 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def center_child_modules
     modules = Doctor::GetCenterChildModulesService.new(center_id: params[:center_id], child_id: params[:child_id]).call
-    render json: SoftwareModuleSerializer.new(modules).serializable_hash
+
+    render json: SoftwareModuleSerializer.new(modules, param_options).serializable_hash
   end
 
   def center_child_doctors
     doctors = Doctor::GetCenterChildDoctorsService.new(child_id: params[:child_id], center_id: params[:center_id],
                                                        current_doctor: current_doctor).call
-    render json: DoctorSerializer.new(doctors).serializable_hash
+
+    render json: DoctorSerializer.new(doctors, param_options).serializable_hash
+  end
+
+  def center_child_sessions
+    sessions = Session::GetCenterChildSessionsService.new(child_id: params[:child_id], center_id: params[:center_id]).call
+
+    render json: SessionSerializer.new(sessions, param_options).serializable_hash
   end
 
   def home_centers

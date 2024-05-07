@@ -80,6 +80,7 @@ Rails.application.routes.draw do
         get :center_headsets
         get :center_child_modules
         get :center_child_doctors
+        get :center_child_sessions
         get :home_centers
         get :home_doctors
         get :home_kids
