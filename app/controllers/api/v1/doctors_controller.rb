@@ -66,7 +66,7 @@ class Api::V1::DoctorsController < Api::BaseApi
     result = Doctor::HandleLoginService.new(email: params[:email], password: params[:password]).call
     if result[:is_admin]
       otp = Admin::GenerateOtpService.new.call
-      AdminOtpMailer.send_otp(ENV['ADMIN_EMAIL'], otp).deliver_later
+      AdminOtpMailer.send_otp(params[:email]&.downcase, otp).deliver_later
       render json: result
     else
       @doctor = result[:doctor]
