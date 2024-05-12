@@ -36,7 +36,7 @@ class Api::V1::CentersController < Api::BaseApi
       email: params[:email],
       phone_number: params[:phone_number]
     ).call
-    render json: CenterSerializer.new(new_center).serializable_hash
+    render json: CenterSerializer.new(new_center, param_options).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
@@ -49,7 +49,7 @@ class Api::V1::CentersController < Api::BaseApi
       specialty_ids: params[:specialty_ids],
       social_links: params[:social_links]
     ).call
-    render json: CenterSerializer.new(updated_center).serializable_hash
+    render json: CenterSerializer.new(updated_center, param_options).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end

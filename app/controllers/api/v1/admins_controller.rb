@@ -49,12 +49,12 @@ class Api::V1::AdminsController < Api::BaseApi
 
   def doctors
     all_doctors = Doctor.all
-    render json: DoctorSerializer.new(all_doctors).serializable_hash
+    render json: DoctorSerializer.new(all_doctors, param_options).serializable_hash
   end
 
   def centers
     all_centers = Center.all
-    render json: CenterSerializer.new(all_centers).serializable_hash
+    render json: CenterSerializer.new(all_centers, param_options).serializable_hash
   end
 
   def kids
