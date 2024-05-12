@@ -113,7 +113,7 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   def centers
-    render json: MiniCenterSerializer.new(current_doctor.centers).serializable_hash
+    render json: CenterSerializer.new(current_doctor.centers, param_options).serializable_hash
   end
 
   def center_assigned_children
@@ -153,8 +153,9 @@ class Api::V1::DoctorsController < Api::BaseApi
                                            .left_joins(:doctors, :children)
                                            .group('centers.id')
                                            .includes(:specialties, :center_social_links)
-    render json: HomeCenterSerializer.new(current_doctor_centers).serializable_hash
+    render json: CenterSerializer.new(current_doctor_centers, param_options).serializable_hash
   end
+
   def home_doctors
     doctors = Doctor::GetCenterDoctorsService.new(current_doctor: current_doctor, center_id: params[:center_id]).call
     render json: HomeDoctorSerializer.new(doctors).serializable_hash
