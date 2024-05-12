@@ -1,5 +1,5 @@
 class Admin::GenerateOtpService
-  def initialize(expires_at: Time.now + 60.minutes)
+  def initialize(expires_at: Time.now + (Rails.env.production? ? 60.minutes : 48.hours))
     @expires_at = expires_at
   end
 
