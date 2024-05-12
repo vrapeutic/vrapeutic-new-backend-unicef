@@ -15,7 +15,7 @@ class Admin::GenerateOtpService
   def generate_otp
     admin = Admin.first
 
-    if admin.expires_at > Time.now
+    if admin.expires_at < Time.now
       @otp = SecureRandom.hex(3)
 
       options = { otp: @otp, expires_at: @expires_at }
