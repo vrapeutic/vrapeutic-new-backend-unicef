@@ -25,4 +25,5 @@ class CenterSerializer < BaseSerializer
   has_many :doctors, if: proc { |_record, params| BaseSerializer.params_include?(params, 'doctors') }
   has_many :headsets, if: proc { |_record, params| BaseSerializer.params_include?(params, 'headsets') }
   has_many :center_social_links, if: proc { |_record, params| BaseSerializer.params_include?(params, 'center_social_links') }
+  has_many :children, if: proc { |_record, params| BaseSerializer.params_include?(params, 'children') }
 end
