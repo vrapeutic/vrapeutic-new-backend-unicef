@@ -37,6 +37,7 @@ Rails.application.routes.draw do
           get :centers
           get :kids
           post :assign_center_module
+          post '/assign_center_headset/:center_id' => 'admins#assign_center_headset'
         end
       end
 

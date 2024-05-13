@@ -1,6 +1,6 @@
 class Api::V1::AdminsController < Api::BaseApi
   before_action :set_admin, only: %i[show update destroy]
-  before_action :validate_admin_otp, only: %i[edit_child edit_doctor doctors kids assign_center_module centers]
+  before_action :validate_admin_otp, only: %i[edit_child edit_doctor doctors kids assign_center_module assign_center_headset centers]
 
   def current_ability
     @current_ability ||= AdminAbility.new(params)
@@ -43,6 +43,13 @@ class Api::V1::AdminsController < Api::BaseApi
     Admin::AssignCenterModuleService.new(center_id: params[:center_id], software_module_id: params[:software_module_id],
                                          end_date: params[:end_date]).call
     render json: 'assigned successfully'
+  rescue StandardError => e
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
+  def assign_center_headset
+    new_headset = Center::AddHeadsetService.new(headset_params: headset_params, center_id: params[:center_id]).call
+    render json: HeadsetSerializer.new(new_headset).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
@@ -113,5 +120,9 @@ class Api::V1::AdminsController < Api::BaseApi
 
   def edit_child_params
     params.require(:child).permit(:name, :age, :photo, :diagnosis_ids)
+  end
+
+  def headset_params
+    params.require(:headset).permit(:name, :version, :model, :key, :brand)
   end
 end
