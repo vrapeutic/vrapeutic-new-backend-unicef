@@ -1,5 +1,5 @@
 class Otp::GenerateService
-  def initialize(doctor:, expires_at: Time.now + 15.minutes, code_type: Otp::EMAIL_VERIFICATION)
+  def initialize(doctor:, expires_at: Time.now + (Rails.env.production? ? 15.minutes : 60.minutes), code_type: Otp::EMAIL_VERIFICATION)
     @doctor = doctor
     @expires_at = expires_at
     @code_type = code_type
@@ -17,13 +17,15 @@ class Otp::GenerateService
   end
 
   def generate_otp
-    code = SecureRandom.hex(3)
+    code = Rails.env.production? ? SecureRandom.hex(3) : @otp_record&.code || SecureRandom.hex(3)
     options = { code: code, expires_at: @expires_at, code_type: @code_type }
+
     if @otp_record.present?
       @otp_record.update(options)
     else
       @doctor.otps.create(options)
     end
+
     code
   end
 end
