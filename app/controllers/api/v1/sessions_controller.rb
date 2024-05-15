@@ -33,17 +33,17 @@ class Api::V1::SessionsController < Api::BaseApi
       child_id: params[:child_id],
       headset_id: params[:headset_id]
     ).call
-    # generate otp
-    otp_code = Otp::GenerateService.new(doctor: current_doctor, code_type: Otp::SESSION_VERIFICATION).call
-    # send email
-    SessionOtpMailer.send_otp(current_doctor.email, otp_code).deliver_later
+    # # generate otp
+    # otp_code = Otp::GenerateService.new(doctor: current_doctor, code_type: Otp::SESSION_VERIFICATION).call
+    # # send email
+    # SessionOtpMailer.send_otp(current_doctor.email, otp_code).deliver_later
     render json: SessionSerializer.new(session).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def resend_otp
-    return render json: { error: 'session is already vdrified' }, status: :unprocessable_entity if @session.is_verified
+    return render json: { error: 'session is already verified' }, status: :unprocessable_entity if @session.is_verified
 
     # generate otp
     otp_code = Otp::GenerateService.new(doctor: current_doctor, code_type: Otp::SESSION_VERIFICATION).call
@@ -53,7 +53,7 @@ class Api::V1::SessionsController < Api::BaseApi
   end
 
   def validate_otp
-    return render json: { error: 'session is already vdrified' }, status: :unprocessable_entity if @session.is_verified
+    return render json: { error: 'session is already verified' }, status: :unprocessable_entity if @session.is_verified
 
     result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp], code_type: Otp::SESSION_VERIFICATION).call
     if result
