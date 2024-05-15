@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       namespace :centers do
         scope ':center_id' do
           resources :doctors, only: %i[index show]
+          resources :sessions, only: %i[index show]
           resources :kids, controller: 'children', only: %i[index show]
           resources :modules, controller: 'software_modules', only: %i[index show]
           get :assigned_modules, controller: 'software_modules'
