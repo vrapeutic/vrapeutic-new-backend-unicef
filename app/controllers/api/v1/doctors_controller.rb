@@ -158,7 +158,7 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def home_doctors
     doctors = Doctor::GetCenterDoctorsService.new(current_doctor: current_doctor, center_id: params[:center_id]).call
-    render json: DoctorSerializer.new(doctors).serializable_hash
+    render json: HomeDoctorSerializer.new(doctors).serializable_hash
   end
 
   def home_kids

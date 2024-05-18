@@ -1,6 +1,5 @@
 class DoctorSerializer < BaseSerializer
-  attributes :name, :email, :degree, :university, :is_email_verified, :created_at, :updated_at,
-             :join_date, :number_of_sessions, :specialties
+  attributes :name, :email, :degree, :university, :is_email_verified, :created_at, :updated_at
 
   attribute :photo_url do |doctor|
     doctor.photo_url
