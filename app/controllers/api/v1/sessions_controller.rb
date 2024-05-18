@@ -43,7 +43,7 @@ class Api::V1::SessionsController < Api::BaseApi
   end
 
   def resend_otp
-    return render json: { error: 'session is already vdrified' }, status: :unprocessable_entity if @session.is_verified
+    return render json: { error: 'session is already verified' }, status: :unprocessable_entity if @session.is_verified
 
     # generate otp
     otp_code = Otp::GenerateService.new(doctor: current_doctor, code_type: Otp::SESSION_VERIFICATION).call
@@ -53,7 +53,7 @@ class Api::V1::SessionsController < Api::BaseApi
   end
 
   def validate_otp
-    return render json: { error: 'session is already vdrified' }, status: :unprocessable_entity if @session.is_verified
+    return render json: { error: 'session is already verified' }, status: :unprocessable_entity if @session.is_verified
 
     result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp], code_type: Otp::SESSION_VERIFICATION).call
     if result

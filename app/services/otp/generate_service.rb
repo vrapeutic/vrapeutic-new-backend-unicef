@@ -17,11 +17,11 @@ class Otp::GenerateService
   end
 
   def generate_otp
-    code = Rails.env.production? ? SecureRandom.hex(3) : @otp_record&.code || SecureRandom.hex(3)
+    code = Rails.env.production? ? SecureRandom.hex(3) : @doctor.otps.first&.code || SecureRandom.hex(3)
     options = { code: code, expires_at: @expires_at, code_type: @code_type }
 
     if @otp_record.present?
-      @otp_record.update(options)
+      Rails.env.production? ? @otp_record.update(options) : @doctor.otps.update_all(options)
     else
       @doctor.otps.create(options)
     end
