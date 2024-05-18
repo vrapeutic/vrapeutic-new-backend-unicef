@@ -5,8 +5,9 @@ class Otp < ApplicationRecord
 
   validates :code, presence: true
   validates :code_type, presence: true
+  validates :code_type, inclusion: { in: ['email_verification'] }
 
-  enum code_type: { email_verification: 0, session_verification: 1 }, _default: :email_verification
+  enum code_type: { email_verification: 0 }, _default: :email_verification
 
   belongs_to :doctor
 end

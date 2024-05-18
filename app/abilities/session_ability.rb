@@ -3,6 +3,10 @@ class SessionAbility
   def initialize(doctor, params)
     case params[:action]
 
+    when 'index'
+      can :index, Session if Authorization::Session::CanGetSessionsService.new(current_doctor: doctor, center_id: params[:center_id]).call
+    when 'show'
+      can :show, Session if Authorization::Session::CanGetSessionsService.new(current_doctor: doctor, center_id: params[:center_id]).call
     when 'create'
       can :create, Session if Authorization::Session::CanCreateService.new(
         current_doctor: doctor,

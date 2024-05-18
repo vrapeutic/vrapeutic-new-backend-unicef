@@ -16,8 +16,8 @@ Rails.application.routes.draw do
 
       resources :sessions, only: %i[create] do
         member do
-          post :resend_otp
-          put :validate_otp
+          # post :resend_otp
+          # put :validate_otp
           put :add_module
           put :add_doctor
           put :end_session
@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       namespace :centers do
         scope ':center_id' do
           resources :doctors, only: %i[index show]
+          resources :sessions, only: %i[index show]
           resources :kids, controller: 'children', only: %i[index show]
           resources :modules, controller: 'software_modules', only: %i[index show]
           get :assigned_modules, controller: 'software_modules'
