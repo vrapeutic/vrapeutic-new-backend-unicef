@@ -12,7 +12,7 @@ class Center::AssignedModulesService
   private
 
   def asssigned_modules
-    modules_id = @center.assigned_center_modules.where('end_date > ?', Time.now).select(:software_module_id)
+    modules_id = @center.assigned_center_modules.where('end_date > ?', AssignedCenterModule::END_DATE).select(:software_module_id)
     SoftwareModule.where(id: modules_id).includes(:targeted_skills)
   end
 end

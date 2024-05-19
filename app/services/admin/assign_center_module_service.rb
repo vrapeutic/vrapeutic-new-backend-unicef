@@ -18,6 +18,6 @@ class Admin::AssignCenterModuleService
 
   def validate_end_date
     raise 'end date is not existed , please provide it' unless @end_date.present?
-    raise 'end date must be in the future' unless Time.parse(@end_date) >= Time.now
+    raise 'end date must be in the future' unless Time.parse(@end_date) >= (AssignedCenterModule::END_DATE + 24.hours)
   end
 end

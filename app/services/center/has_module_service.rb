@@ -11,6 +11,6 @@ class Center::HasModuleService
   private
 
   def center_has_module?
-    CenterSoftwareModule.find_by(center_id: @center_id, software_module_id: @software_module_id).present? ? true : false
+    AssignedCenterModule.find_by(center_id: @center_id, software_module_id: @software_module_id).present? ? true : false
   end
 end

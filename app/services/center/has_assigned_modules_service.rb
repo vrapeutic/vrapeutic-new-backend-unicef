@@ -13,7 +13,9 @@ class Center::HasAssignedModulesService
   private
 
   def modules_assigned_to_center?
-    result = AssignedCenterModule.where(center_id: @center_id, software_module_id: @software_module_ids)
+    result = AssignedCenterModule.where(center_id: @center_id, software_module_id: @software_module_ids).where('end_date > ?',
+                                                                                                               AssignedCenterModule::END_DATE)
+
     result.count.positive?
   end
 end

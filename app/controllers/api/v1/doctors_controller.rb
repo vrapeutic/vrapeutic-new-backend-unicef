@@ -48,10 +48,10 @@ class Api::V1::DoctorsController < Api::BaseApi
     result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp]).call
     if result
       @doctor.update_column(:is_email_verified, true)
-      token_data = Doctor::GenerateJwtTokenService.new(doctor_id: @doctor.id).call
-      return render json: token_data
+      render json: Doctor::GenerateJwtTokenService.new(doctor_id: @doctor.id).call
+    else
+      render json: { error: 'otp is not valid or expired' }, status: :unprocessable_entity
     end
-    render json: { error: 'otp is not valid or expired' }, status: :unprocessable_entity
   end
 
   def resend_otp
