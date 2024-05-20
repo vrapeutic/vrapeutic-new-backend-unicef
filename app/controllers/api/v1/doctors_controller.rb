@@ -38,7 +38,7 @@ class Api::V1::DoctorsController < Api::BaseApi
     ).call
     otp_code = Otp::GenerateService.new(doctor: @doctor).call
     OtpMailer.send_otp(@doctor, otp_code).deliver_later
-    render json: DoctorSerializer.new(@doctor).serializable_hash
+    render json: DoctorSerializer.new(@doctor, param_options).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
@@ -73,7 +73,7 @@ class Api::V1::DoctorsController < Api::BaseApi
       @doctor.update_column(:is_email_verified, false)
       otp_code = Otp::GenerateService.new(doctor: @doctor).call
       OtpMailer.send_otp(@doctor, otp_code).deliver_later
-      doctor_data = DoctorSerializer.new(@doctor).serializable_hash
+      doctor_data = DoctorSerializer.new(@doctor, param_options).serializable_hash
       render json: { is_admin: result[:is_admin], doctor: doctor_data[:data] }
     end
   rescue StandardError => e
@@ -91,7 +91,7 @@ class Api::V1::DoctorsController < Api::BaseApi
       photo: params[:photo],
       certificate: params[:certificate]
     ).call
-    render json: DoctorSerializer.new(new_doctor).serializable_hash
+    render json: DoctorSerializer.new(new_doctor, param_options).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
@@ -123,7 +123,7 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def center_headsets
     headsets = Doctor::GetCenterHeadsetsService.new(center_id: params[:center_id]).call
-    render json: MiniHeadsetSerializer.new(headsets).serializable_hash
+    render json: MiniHeadsetSerializer.new(headsets, param_options).serializable_hash
   end
 
   def center_child_modules
@@ -158,12 +158,12 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def home_doctors
     doctors = Doctor::GetCenterDoctorsService.new(current_doctor: current_doctor, center_id: params[:center_id]).call
-    render json: HomeDoctorSerializer.new(doctors).serializable_hash
+    render json: HomeDoctorSerializer.new(doctors, param_options).serializable_hash
   end
 
   def home_kids
     kids = Doctor::GetHomeCenterKidsService.new(current_doctor: current_doctor, center_id: params[:center_id]).call
-    render json: HomeKidSerializer.new(kids).serializable_hash
+    render json: HomeKidSerializer.new(kids, param_options).serializable_hash
   end
 
   def center_statistics
