@@ -44,22 +44,28 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   def validate_otp
-    doctor_is_confirmed?
-    result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp]).call
-    if result
-      @doctor.update_column(:is_email_verified, true)
-      render json: Doctor::GenerateJwtTokenService.new(doctor_id: @doctor.id).call
+    if @doctor.is_email_verified
+      render json: { error: 'doctor is already verified' }, status: :unprocessable_entity
     else
-      render json: { error: 'otp is not valid or expired' }, status: :unprocessable_entity
+      result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp]).call
+      if result
+        @doctor.update_column(:is_email_verified, true)
+        render json: Doctor::GenerateJwtTokenService.new(doctor_id: @doctor.id).call, status: :ok
+      else
+        render json: { error: 'otp is not valid or expired' }, status: :unprocessable_entity
+      end
     end
   end
 
   def resend_otp
-    doctor_is_confirmed?
-    otp_code = Otp::GenerateService.new(doctor: @doctor).call
-    # send email
-    OtpMailer.send_otp(@doctor, otp_code).deliver_later
-    render json: 'otp is sent again'
+    if @doctor.is_email_verified
+      render json: { error: 'doctor is already verified' }, status: :unprocessable_entity
+    else
+      otp_code = Otp::GenerateService.new(doctor: @doctor).call
+      # send email
+      OtpMailer.send_otp(@doctor, otp_code).deliver_later
+      render json: 'otp is sent again'
+    end
   end
 
   def sign_in
@@ -203,12 +209,6 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   private
-
-  def doctor_is_confirmed?
-    return unless @doctor.is_email_verified
-
-    render json: { error: 'doctor is already vdrified' }, status: :unprocessable_entity
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_doctor
