@@ -7,7 +7,7 @@ class Authorization::Session::CanAddDoctorService
 
   def call
     set_session_center_and_child
-    current_doctor_is_not_added_doctor? && session_is_verified? && session_has_doctor? && child_assigned_to_doctor_in_center?
+    current_doctor_is_not_added_doctor? && session_has_doctor? && child_assigned_to_doctor_in_center?
   end
 
   private

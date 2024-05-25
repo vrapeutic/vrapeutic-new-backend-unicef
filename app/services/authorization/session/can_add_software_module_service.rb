@@ -7,7 +7,7 @@ class Authorization::Session::CanAddSoftwareModuleService
 
   def call
     set_session_center_and_child
-    session_is_verified? && session_has_doctor? && child_has_module?
+    session_has_doctor? && child_has_module?
   end
 
   private

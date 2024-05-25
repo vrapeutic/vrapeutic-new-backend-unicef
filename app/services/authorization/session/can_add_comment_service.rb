@@ -6,7 +6,7 @@ class Authorization::Session::CanAddCommentService
 
   def call
     set_session
-    session_is_verified? && is_doctor_in_session?
+    is_doctor_in_session?
   end
 
   private

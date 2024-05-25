@@ -6,7 +6,7 @@ class Authorization::Session::CanEndService
 
   def call
     set_session
-    session_is_verified? && session_has_doctor?
+    session_has_doctor?
   end
 
   private

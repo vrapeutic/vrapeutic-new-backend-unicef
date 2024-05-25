@@ -7,7 +7,7 @@ class Authorization::Session::CanAddAttentionPerformanceService
 
   def call
     set_session
-    session_is_verified? && is_doctor_in_session? && session_has_module?
+    is_doctor_in_session? && session_has_module?
   end
 
   private
