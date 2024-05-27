@@ -1,6 +1,8 @@
 class Api::V1::SessionsController < Api::BaseApi
   before_action :set_session,
-                only: %i[show update destroy resend_otp validate_otp end_session add_comment add_evaluation add_attention_performance
+                only: %i[show update destroy resend_otp validate_otp end_session add_comment add_evaluation
+                         add_note_and_evaluation
+                         add_attention_performance
                          add_attention_performance_modules]
 
   before_action :authorized
@@ -99,6 +101,14 @@ class Api::V1::SessionsController < Api::BaseApi
     render json: 'session is evaluated successfully'
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
+  end
+
+  def add_note_and_evaluation
+    Session::AddNoteAndEvaluationService.new(session: @session, note: params[:note], evaluation: params[:evaluation]).call
+    render json: SessionSerializer.new(@session, param_options).serializable_hash
+  rescue StandardError => e
+    result = Response::HandleErrorService.new(error: e).call
+    render json: result[:data], status: result[:status]
   end
 
   def add_attention_performance
