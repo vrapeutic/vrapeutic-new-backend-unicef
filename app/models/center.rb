@@ -1,4 +1,8 @@
 class Center < ApplicationRecord
+  # constant variables
+  RANSACKABLE_ATTRIBUTES = %w[id name website tax_id registration_number email phone_number created_at updated_at].freeze
+  RANSACKABLE_ASSOCIATIONS = %w[doctors specialties children headsets sessions software_modules].freeze
+
   validates :latitude, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }, allow_nil: true
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, allow_nil: true
   validates :name, presence: true

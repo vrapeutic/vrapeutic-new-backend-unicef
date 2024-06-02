@@ -36,7 +36,7 @@ class Api::V1::SoftwareModulesController < Api::BaseApi
   def update
     software_module = SoftwareModule::UpdateService.new(
       edit_params: software_module_params.except(:targeted_skill_ids),
-      targeted_skill_ids: params[:targeted_skill_ids],
+      targeted_skill_ids: params[:targeted_skill_ids] || params[:software_module][:targeted_skill_ids],
       software_module_id: params[:id]
     ).call
     render json: SoftwareModuleSerializer.new(software_module).serializable_hash

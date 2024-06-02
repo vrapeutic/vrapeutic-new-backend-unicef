@@ -1,4 +1,8 @@
 class SoftwareModule < ApplicationRecord
+  # constant variables
+  RANSACKABLE_ATTRIBUTES = %w[id name package_name version technology min_age max_age created_at updated_at].freeze
+  RANSACKABLE_ASSOCIATIONS = %w[targeted_skills centers children sessions].freeze
+
   validates :name, presence: true
   validates :package_name, presence: true, uniqueness: true
   validates :version, presence: true

@@ -5,6 +5,7 @@ class Api::V1::AdminsController < Api::BaseApi
   def current_ability
     @current_ability ||= AdminAbility.new(params)
   end
+
   authorize_resource only: %i[edit_doctor]
 
   def send_otp
@@ -60,13 +61,13 @@ class Api::V1::AdminsController < Api::BaseApi
   end
 
   def centers
-    all_centers = Center.all
-    render json: CenterSerializer.new(all_centers, param_options).serializable_hash
+    q = Center.ransack_query(sort: params[:sort], query: params[:q])
+    render json: CenterSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 
   def kids
-    all_kids = Child.all
-    render json: ChildSerializer.new(all_kids, param_options).serializable_hash
+    q = Child.ransack_query(sort: params[:sort], query: params[:q])
+    render json: ChildSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 
   # GET /admins

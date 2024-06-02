@@ -1,4 +1,8 @@
 class Child < ApplicationRecord
+  # constant variables
+  RANSACKABLE_ATTRIBUTES = %w[id name email ago created_at updated_at].freeze
+  RANSACKABLE_ASSOCIATIONS = %w[diagnoses centers software_modules doctors sessions].freeze
+
   validates :name, presence: true
   validates :photo, presence: true
   validates :email, presence: true, uniqueness: true
