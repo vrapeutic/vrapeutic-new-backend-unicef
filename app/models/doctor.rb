@@ -1,4 +1,7 @@
 class Doctor < ApplicationRecord
+  RANSACKABLE_ATTRIBUTES = %w[id name email university degree created_at updated_at].freeze
+  RANSACKABLE_ASSOCIATIONS = %w[specialties centers children sessions].freeze
+
   has_secure_password
 
   validates :name, presence: true
