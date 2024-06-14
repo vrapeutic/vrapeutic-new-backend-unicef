@@ -1,6 +1,6 @@
 class Api::V1::AdminsController < Api::BaseApi
   before_action :set_admin, only: %i[show update destroy]
-  # before_action :validate_admin_otp, only: %i[edit_child edit_doctor doctors kids assign_center_module assign_center_headset centers]
+  before_action :validate_admin_otp, only: %i[edit_child edit_doctor doctors kids assign_center_module assign_center_headset centers]
 
   def current_ability
     @current_ability ||= AdminAbility.new(params)
