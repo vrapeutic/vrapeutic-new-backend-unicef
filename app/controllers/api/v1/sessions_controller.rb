@@ -126,8 +126,12 @@ class Api::V1::SessionsController < Api::BaseApi
   end
 
   def add_attention_performance_modules
-    Session::AddAttentionPerformanceModulesService.new(session: @session, modules_data: params[:data], duration: params[:duration],
-                                                       vr_duration: params[:vr_duration]).call
+    Session::AddAttentionPerformanceModulesService.new(
+      session: @session,
+      modules_data: params[:data],
+      duration: params[:duration],
+      vr_duration: params[:vr_duration]
+    ).call
     render json: 'all attention performance data is saved'
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity

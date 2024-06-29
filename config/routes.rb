@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
-
-  get '/', to: 'application#health_check'
+  get "/", to: "application#health_check"
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      post '/sign_in', to: 'doctors#sign_in'
+      post "/sign_in", to: "doctors#sign_in"
 
       resources :specialties, only: %i[index]
 
@@ -25,7 +24,7 @@ Rails.application.routes.draw do
           put :add_evaluation
           put :add_note_and_evaluation
           post :add_attention_performance
-          post :add_attention_performance_modules
+          # post :add_attention_performance_modules
         end
       end
 
@@ -38,17 +37,17 @@ Rails.application.routes.draw do
           get :centers
           get :kids
           post :assign_center_module
-          post '/assign_center_headset/:center_id' => 'admins#assign_center_headset'
+          post "/assign_center_headset/:center_id" => "admins#assign_center_headset"
         end
       end
 
       namespace :centers do
-        scope ':center_id' do
+        scope ":center_id" do
           resources :doctors, only: %i[index show]
           resources :sessions, only: %i[index show]
-          resources :kids, controller: 'children', only: %i[index show]
-          resources :modules, controller: 'software_modules', only: %i[index show]
-          get :assigned_modules, controller: 'software_modules'
+          resources :kids, controller: "children", only: %i[index show]
+          resources :modules, controller: "software_modules", only: %i[index show]
+          get :assigned_modules, controller: "software_modules"
         end
       end
 
@@ -76,23 +75,23 @@ Rails.application.routes.draw do
           post :validate_otp
           put :resend_otp
         end
-       collection do
-        post :complete_profile
-        get :centers
-        get :center_assigned_children
-        get :center_headsets
-        get :center_child_modules
-        get :center_child_doctors
-        get :center_child_sessions
-        get :home_centers
-        get :home_doctors
-        get :home_kids
-        get :center_statistics
-        get :center_vr_minutes
-        get :child_session_performance_data
-        get :sessions_percentage
-        get :kids_percentage
-       end
+        collection do
+          post :complete_profile
+          get :centers
+          get :center_assigned_children
+          get :center_headsets
+          get :center_child_modules
+          get :center_child_doctors
+          get :center_child_sessions
+          get :home_centers
+          get :home_doctors
+          get :home_kids
+          get :center_statistics
+          get :center_vr_minutes
+          get :child_session_performance_data
+          get :sessions_percentage
+          get :kids_percentage
+        end
       end
     end
   end

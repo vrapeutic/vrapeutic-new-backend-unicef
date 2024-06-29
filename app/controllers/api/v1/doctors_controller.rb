@@ -128,7 +128,7 @@ class Api::V1::DoctorsController < Api::BaseApi
   end
 
   def center_headsets
-    headsets = Doctor::GetCenterHeadsetsService.new(center_id: params[:center_id]).call
+    headsets = Doctor::GetCenterHeadsetsService.new(center_id: params[:center_id], scope: params[:scope]).call
     render json: MiniHeadsetSerializer.new(headsets, param_options).serializable_hash
   end
 
@@ -153,9 +153,9 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def home_centers
     current_doctor_centers = current_doctor.centers
-                                           .select('centers.*, COUNT(DISTINCT doctors.id)
+                                           .select("centers.*, COUNT(DISTINCT doctors.id)
                                            AS doctors_count, COUNT(DISTINCT children.id)
-                                           AS children_count')
+                                           AS children_count")
                                            .left_joins(:doctors, :children)
                                            .group('centers.id')
                                            .includes(:specialties, :center_social_links)

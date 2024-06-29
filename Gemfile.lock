@@ -132,6 +132,9 @@ GEM
     connection_pool (2.4.1)
     crass (1.0.6)
     date (3.3.3)
+    date_validator (0.12.0)
+      activemodel (>= 3)
+      activesupport (>= 3)
     debase (0.2.4.1)
       debase-ruby_core_source (>= 0.10.2)
     debase-ruby_core_source (3.2.1)
@@ -368,6 +371,7 @@ DEPENDENCIES
   carrierwave (~> 2.0)
   carrierwave-aws (~> 1.5.0)
   carrierwave-i18n
+  date_validator
   debase
   debug
   delayed_job_active_record

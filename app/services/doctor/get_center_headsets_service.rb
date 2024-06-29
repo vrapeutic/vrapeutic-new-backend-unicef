@@ -1,6 +1,7 @@
 class Doctor::GetCenterHeadsetsService
-  def initialize(center_id:)
+  def initialize(center_id:, scope: 'all')
     @center_id = center_id
+    @scope = scope
   end
 
   def call
@@ -11,6 +12,12 @@ class Doctor::GetCenterHeadsetsService
 
   def center_headsets
     center = Center.find(@center_id)
-    center.headsets
+    if @scope == 'active'
+      center.headsets.active
+    elsif @scope == 'inactive'
+      center.headsets.inactive
+    else
+      center.headsets
+    end
   end
 end
