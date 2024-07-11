@@ -26,7 +26,6 @@ class Center < ApplicationRecord
   has_many :children, through: :child_centers
   has_many :headsets, dependent: :destroy
   has_many :sessions, dependent: :destroy
-  has_many :center_software_modules, dependent: :destroy
   has_many :assigned_center_modules, -> { where('end_date > ?', AssignedCenterModule::END_DATE) }, dependent: :destroy
   has_many :software_modules, through: :assigned_center_modules
 end

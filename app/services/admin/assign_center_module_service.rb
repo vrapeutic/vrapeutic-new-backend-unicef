@@ -13,7 +13,13 @@ class Admin::AssignCenterModuleService
   private
 
   def assign_module_to_center
-    AssignedCenterModule.create!(center_id: @center_id, software_module_id: @software_module_id, end_date: @end_date)
+    assigned_center = AssignedCenterModule.find_by(center_id: @center_id, software_module_id: @software_module_id)
+
+    if assigned_center&.id?
+      assigned_center.update(end_date: @end_date)
+    else
+      AssignedCenterModule.create!(center_id: @center_id, software_module_id: @software_module_id, end_date: @end_date)
+    end
   end
 
   def validate_end_date

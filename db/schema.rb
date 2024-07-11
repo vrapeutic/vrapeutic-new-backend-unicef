@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_27_215048) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_11_171215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -71,16 +71,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_27_215048) do
     t.datetime "updated_at", null: false
     t.index ["center_id"], name: "index_center_social_links_on_center_id"
     t.index ["link"], name: "index_center_social_links_on_link", unique: true
-  end
-
-  create_table "center_software_modules", force: :cascade do |t|
-    t.bigint "software_module_id", null: false
-    t.bigint "center_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["center_id", "software_module_id"], name: "center_modules_index", unique: true
-    t.index ["center_id"], name: "index_center_software_modules_on_center_id"
-    t.index ["software_module_id"], name: "index_center_software_modules_on_software_module_id"
   end
 
   create_table "center_specialties", force: :cascade do |t|
@@ -348,8 +338,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_27_215048) do
   add_foreign_key "attention_interruptions", "attention_performances"
   add_foreign_key "attention_targets", "attention_performances"
   add_foreign_key "center_social_links", "centers"
-  add_foreign_key "center_software_modules", "centers"
-  add_foreign_key "center_software_modules", "software_modules"
   add_foreign_key "center_specialties", "centers"
   add_foreign_key "center_specialties", "specialties"
   add_foreign_key "child_centers", "centers"
