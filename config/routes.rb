@@ -51,6 +51,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :headsets, only: %i[] do
+        member do
+          get :free_headset unless Rails.env.production?
+        end
+      end
+
       resources :centers, only: %i[create update] do
         member do
           post :invite_doctor
