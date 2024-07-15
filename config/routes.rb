@@ -36,7 +36,9 @@ Rails.application.routes.draw do
           get :doctors
           get :centers
           get :kids
+          get :headsets
           post :assign_center_module
+          put :edit_headset
           post "/assign_center_headset/:center_id" => "admins#assign_center_headset"
         end
       end

@@ -1,9 +1,13 @@
 class Headset < ApplicationRecord
-  validates :brand, presence: true
-  validates :key, presence: true, uniqueness: true
+  # constant variables
+  RANSACKABLE_ATTRIBUTES = %w[id version name brand model key center_id created_at updated_at].freeze
+  RANSACKABLE_ASSOCIATIONS = %w[center sessions].freeze
 
   belongs_to :center
   has_many :sessions, dependent: :destroy
+
+  validates :brand, presence: true
+  validates :key, presence: true, uniqueness: true
 
   scope :active, -> {
                    includes(:sessions)

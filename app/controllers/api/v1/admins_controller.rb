@@ -1,6 +1,5 @@
 class Api::V1::AdminsController < Api::BaseApi
-  before_action :set_admin, only: %i[show update destroy]
-  before_action :validate_admin_otp, only: %i[edit_child edit_doctor doctors kids assign_center_module assign_center_headset centers]
+  # before_action :validate_admin_otp, only: %i[edit_child edit_doctor doctors kids headsets assign_center_module assign_center_headset centers]
 
   def send_otp
     otp = Admin::GenerateOtpService.new.call
@@ -11,7 +10,7 @@ class Api::V1::AdminsController < Api::BaseApi
   def edit_child
     child = Admin::EditChildService.new(
       child_id: params[:child_id],
-      edit_params: edit_child_params.except(:diagnosis_ids),
+      edit_params: child_params.except(:diagnosis_ids),
       diagnosis_ids: params[:child][:diagnosis_ids]
     ).call
     render json: ChildSerializer.new(child, param_options).serializable_hash
@@ -44,7 +43,14 @@ class Api::V1::AdminsController < Api::BaseApi
 
   def assign_center_headset
     new_headset = Center::AddHeadsetService.new(headset_params: headset_params, center_id: params[:center_id]).call
-    render json: HeadsetSerializer.new(new_headset).serializable_hash
+    render json: HeadsetSerializer.new(new_headset, param_options).serializable_hash
+  rescue StandardError => e
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
+  def edit_headset
+    headset = Center::EditHeadsetService.new(headset_params: headset_params, headset_id: params[:headset_id]).call
+    render json: HeadsetSerializer.new(headset).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
@@ -64,56 +70,19 @@ class Api::V1::AdminsController < Api::BaseApi
     render json: ChildSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 
-  # GET /admins
-  def index
-    @admins = Admin.all
-
-    render json: @admins
-  end
-
-  # GET /admins/1
-  def show
-    render json: @admin
-  end
-
-  # POST /admins
-  def create
-    @admin = Admin.new(admin_params)
-
-    if @admin.save
-      render json: @admin, status: :created, location: @admin
-    else
-      render json: @admin.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /admins/1
-  def update
-    if @admin.update(admin_params)
-      render json: @admin
-    else
-      render json: @admin.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /admins/1
-  def destroy
-    @admin.destroy
+  def headsets
+    q = Headset.ransack_query(sort: params[:sort], query: params[:q])
+    render json: HeadsetSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 
   private
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_admin
-    @admin = Admin.find(params[:id])
-  end
 
   # Only allow a list of trusted parameters through.
   def admin_params
     params.require(:admin).permit(:otp, :expires_at)
   end
 
-  def edit_child_params
+  def child_params
     params.require(:child).permit(:name, :age, :photo, :diagnosis_ids)
   end
 
