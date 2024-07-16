@@ -18,7 +18,7 @@ gem 'puma', '6.3.0'
 # gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
+gem 'redis', '~> 4.0'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem 'kredis'
@@ -42,19 +42,17 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem 'spring'
   gem 'letter_opener'
+  gem 'listen'
 end
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem 'debase', require: false
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'pry'
   gem 'rspec-rails'
-end
-
-group :development, :test do
-  gem 'debase', require: false
   gem 'rubocop', '~> 1.22', require: false
   gem 'rubocop-performance', '~> 1.14', require: false
   gem 'rubocop-rails', '~> 2.15', require: false
@@ -62,15 +60,7 @@ group :development, :test do
   gem 'solargraph', require: false
 end
 
-group :development do
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem 'spring'
-  gem 'listen'
-end
-
-gem 'dotenv-rails', groups: %i[development test production]
-gem 'rack-cors'
-
+gem 'after_commit_everywhere'
 gem 'aws-sdk-rails', '~> 3.6.0'
 gem 'bcrypt', '~> 3.1.7'
 gem 'cancancan'
@@ -78,11 +68,11 @@ gem 'carrierwave', '~> 2.0'
 gem 'carrierwave-aws', '~> 1.5.0'
 gem 'carrierwave-i18n'
 gem 'date_validator'
-gem 'delayed_job_active_record'
-gem 'httparty'
 gem 'image_processing', '~> 1.2'
 gem 'jsonapi-serializer'
 gem 'jwt'
 gem 'mini_magick'
+gem 'rack-cors'
 gem 'ransack'
 gem 'sidekiq'
+gem 'sidekiq-scheduler'
