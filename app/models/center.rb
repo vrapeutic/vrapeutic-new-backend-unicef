@@ -7,12 +7,12 @@ class Center < ApplicationRecord
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, allow_nil: true
   validates :name, presence: true
   validates :website, uniqueness: true
-  validates :logo, presence: true
-  validates :certificate, presence: true
   validates :registration_number, presence: true, uniqueness: true
   validates :tax_id, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
   validates :phone_number, presence: true, uniqueness: true
+  validates :logo, presence: true, unless: -> { logo_url.present? }
+  validates :certificate, presence: true, unless: -> { certificate_url.present? }
 
   mount_uploader :logo, PhotoUploader
   mount_uploader :certificate, CertificateUploader
@@ -26,6 +26,6 @@ class Center < ApplicationRecord
   has_many :children, through: :child_centers
   has_many :headsets, -> { kept }, dependent: :destroy
   has_many :sessions, dependent: :destroy
-  has_many :assigned_center_modules, -> { where("end_date > ?", AssignedCenterModule::END_DATE) }, dependent: :destroy
+  has_many :assigned_center_modules, -> { where('end_date > ?', AssignedCenterModule::END_DATE) }, dependent: :destroy
   has_many :software_modules, through: :assigned_center_modules
 end

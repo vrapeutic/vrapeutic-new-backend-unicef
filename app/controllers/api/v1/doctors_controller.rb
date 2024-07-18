@@ -68,24 +68,6 @@ class Api::V1::DoctorsController < Api::BaseApi
     end
   end
 
-  def sign_in
-    result = Doctor::HandleLoginService.new(email: params[:email], password: params[:password]).call
-    if result[:is_admin]
-      otp = Admin::GenerateOtpService.new.call
-      AdminOtpMailer.send_otp(params[:email]&.downcase, otp).deliver_later
-      render json: result
-    else
-      @doctor = result[:doctor]
-      @doctor.update_column(:is_email_verified, false)
-      otp_code = Otp::GenerateService.new(doctor: @doctor).call
-      OtpMailer.send_otp(@doctor, otp_code).deliver_later
-      doctor_data = DoctorSerializer.new(@doctor, param_options).serializable_hash
-      render json: { is_admin: result[:is_admin], doctor: doctor_data[:data] }
-    end
-  rescue StandardError => e
-    render json: e.message, status: :unauthorized
-  end
-
   def complete_profile
     new_doctor = Doctor::CompleteProfileService.new(
       token: params[:token],

@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
-  get "/", to: "application#health_check"
+  get '/', to: 'application#health_check'
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      post "/sign_in", to: "doctors#sign_in"
+      post '/sign_in', to: 'auth#sign_in'
+      get '/forget_password', to: 'auth#forget_password'
+      post '/reset_password', to: 'auth#reset_password'
 
       resources :specialties, only: %i[index]
 
@@ -39,18 +41,18 @@ Rails.application.routes.draw do
           get :headsets
           post :assign_center_module
           put :edit_headset
-          delete "/delete_headset/:headset_id" => "admins#delete_headset"
-          post "/assign_center_headset/:center_id" => "admins#assign_center_headset"
+          delete '/delete_headset/:headset_id' => 'admins#delete_headset'
+          post '/assign_center_headset/:center_id' => 'admins#assign_center_headset'
         end
       end
 
       namespace :centers do
-        scope ":center_id" do
+        scope ':center_id' do
           resources :doctors, only: %i[index show]
           resources :sessions, only: %i[index show]
-          resources :kids, controller: "children", only: %i[index show]
-          resources :modules, controller: "software_modules", only: %i[index show]
-          get :assigned_modules, controller: "software_modules"
+          resources :kids, controller: 'children', only: %i[index show]
+          resources :modules, controller: 'software_modules', only: %i[index show]
+          get :assigned_modules, controller: 'software_modules'
         end
       end
 

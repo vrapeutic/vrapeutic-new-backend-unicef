@@ -1,5 +1,6 @@
 class Api::V1::AdminsController < Api::BaseApi
-  before_action :validate_admin_otp, only: %i[edit_child edit_doctor edit_headset delete_headset doctors kids headsets assign_center_module assign_center_headset centers]
+  before_action :validate_admin_otp,
+                only: %i[edit_child edit_doctor edit_headset delete_headset doctors kids headsets assign_center_module assign_center_headset centers]
 
   def send_otp
     otp = Admin::GenerateOtpService.new.call
@@ -56,11 +57,9 @@ class Api::V1::AdminsController < Api::BaseApi
   end
 
   def delete_headset
-    headset = Headset.find(params[:headset_id])
+    headset = Headset.kept.find(params[:headset_id])
     headset.discard
     head :no_content
-  rescue StandardError => e
-    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def doctors

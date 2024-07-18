@@ -5,12 +5,12 @@ class Doctor < ApplicationRecord
   has_secure_password
 
   validates :name, presence: true
-  validates :photo, presence: true
   validates :email, presence: true, uniqueness: true
   validates :password, length: { minimum: 6 }, if: :password
   validates :university, presence: true
   validates :degree, presence: true
-  validates :certificate, presence: true
+  validates :photo, presence: true, unless: -> { photo_url.present? }
+  validates :certificate, presence: true, unless: -> { certificate_url.present? }
 
   mount_uploader :photo, PhotoUploader
   mount_uploader :certificate, CertificateUploader
