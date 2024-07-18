@@ -39,6 +39,7 @@ Rails.application.routes.draw do
           get :headsets
           post :assign_center_module
           put :edit_headset
+          delete "/delete_headset/:headset_id" => "admins#delete_headset"
           post "/assign_center_headset/:center_id" => "admins#assign_center_headset"
         end
       end

@@ -12,12 +12,13 @@ class Doctor::GetCenterHeadsetsService
 
   def center_headsets
     center = Center.find(@center_id)
+
     if @scope == 'active'
       center.headsets.active
     elsif @scope == 'inactive'
       center.headsets.inactive
     else
-      center.headsets
+      center.headsets.kept
     end
   end
 end
