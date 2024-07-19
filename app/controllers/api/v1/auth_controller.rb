@@ -19,21 +19,24 @@ class Api::V1::AuthController < Api::BaseApi
 
   def forget_password
     doctor = Doctor.find_by_email!(user_email_param)
-    forget_password_token = JsonWebToken.encode({ id: doctor.id, email: user_email_param }, 1.hours.from_now)
+    otp_code = Otp::GenerateService.new(doctor: doctor, code_type: Otp::FORGET_PASSWORD, expires_at: 1.hours.from_now).call
 
-    DoctorMailer.forget_password(doctor: doctor, token: forget_password_token).deliver_later
+    DoctorMailer.forget_password(doctor: doctor, otp_code: otp_code).deliver_later
 
     render json: DoctorSerializer.new(doctor, param_options).serializable_hash, status: :ok
   end
 
   def reset_password
-    decoded_data = JsonWebToken.decode(user_token_param)
-    doctor = Doctor.find_by_email!(decoded_data['email'])
+    doctor = Doctor.find_by_email!(user_email_param)
 
-    if doctor.update(reset_password_params)
-      render json: DoctorSerializer.new(doctor, param_options).serializable_hash, status: :ok
+    if Otp::ValidateService.new(doctor: doctor, entered_otp: user_otp_param, code_type: Otp::FORGET_PASSWORD).call
+      if doctor.update(reset_password_params)
+        render json: DoctorSerializer.new(doctor, param_options).serializable_hash, status: :ok
+      else
+        render json: doctor.errors, status: :unprocessable_entity
+      end
     else
-      render json: doctor.errors, status: :unprocessable_entity
+      render json: 'otp is not valid or expired', status: :unauthorized
     end
   end
 
@@ -43,8 +46,8 @@ class Api::V1::AuthController < Api::BaseApi
     params.require(:email)
   end
 
-  def user_token_param
-    params.require(:token)
+  def user_otp_param
+    params.require(:otp)
   end
 
   def reset_password_params
