@@ -24,17 +24,8 @@ default: &default
 
 development:
   <<: *default
-  # database: vrapeutic_api_development
-  # database: vrapeutic_all_staging_db
-  # username: vrapeutic
-  # password: 23238424929824
-  # host: vrapeutic-all-staging-rds.cgrtdb8a2hjf.eu-west-1.rds.amazonaws.com
-  # port: 5432
-  database: vrapeutic_api_production
-  username: postgres
-  password: 159357258
-  host: vrapeutic-db-production.cgrtdb8a2hjf.eu-west-1.rds.amazonaws.com
-  port: 5432
+  database: vrapeutic_api_development
+
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
