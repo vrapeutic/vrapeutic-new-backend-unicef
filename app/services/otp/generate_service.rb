@@ -28,7 +28,7 @@ class Otp::GenerateService
     if @otp_record.present?
       Rails.env.production? ? @otp_record.update(options) : @otp_records.update_all(options)
     else
-      @doctor.otps.create(options)
+      @doctor.otps.create(options.merge!(code_type: @code_type))
     end
 
     code
