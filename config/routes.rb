@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       post '/sign_in', to: 'auth#sign_in'
       get '/forget_password', to: 'auth#forget_password'
       post '/reset_password', to: 'auth#reset_password'
+      post '/validate_otp', to: 'auth#validate_otp'
 
       resources :specialties, only: %i[index]
 

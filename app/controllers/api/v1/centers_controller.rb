@@ -7,18 +7,6 @@ class Api::V1::CentersController < Api::BaseApi
   end
   authorize_resource
 
-  # GET /centers
-  def index
-    @centers = Center.all
-
-    render json: @centers
-  end
-
-  # GET /centers/1
-  def show
-    render json: @center
-  end
-
   # POST /centers
   def create
     new_center = Center::CreateService.new(
