@@ -201,6 +201,6 @@ class Api::V1::CentersController < Api::BaseApi
   end
 
   def headset_params
-    params.require(:headset).permit(:name, :version, :model, :key, :brand)
+    params.require(:headset).permit(:model, :key)
   end
 end

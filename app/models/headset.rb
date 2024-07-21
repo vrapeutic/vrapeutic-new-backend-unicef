@@ -8,7 +8,7 @@ class Headset < ApplicationRecord
   belongs_to :center
   has_many :sessions, dependent: :destroy
 
-  validates :brand, presence: true, unless: :discarded_at?
+  validates :model, presence: true, unless: :discarded_at?
   validates :key, presence: true, uniqueness: true, unless: :discarded_at?
 
   scope :active, -> {
