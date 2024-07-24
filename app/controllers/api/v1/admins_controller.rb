@@ -78,7 +78,7 @@ class Api::V1::AdminsController < Api::BaseApi
   end
 
   def headsets
-    q = Headset.ransack_query(sort: params[:sort], query: params[:q])
+    q = Headset.kept.ransack_query(sort: params[:sort], query: params[:q])
     render json: HeadsetSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 

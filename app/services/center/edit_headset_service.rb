@@ -15,7 +15,7 @@ class Center::EditHeadsetService
   private
 
   def find_headset
-    @headset = Headset.find(@headset_id)
+    @headset = Headset.kept.find(@headset_id)
   end
 
   def update_headset
