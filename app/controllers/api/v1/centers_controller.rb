@@ -1,25 +1,16 @@
 class Api::V1::CentersController < Api::BaseApi
-  before_action :set_center, only: %i[show update destroy invite_doctor assign_doctor]
+  before_action :set_center,
+                only: %i[update invite_doctor assign_doctor make_doctor_admin
+                         add_child add_modules assign_doctor_child unassign_doctor_child]
   before_action :authorized
+
+  authorize_resource
+  skip_authorize_resource only: %i[add_modules assign_module_child unassign_module_child assign_doctor_child unassign_doctor_child]
 
   def current_ability
     @current_ability ||= CenterAbility.new(current_doctor, params)
   end
-  authorize_resource
 
-  # GET /centers
-  def index
-    @centers = Center.all
-
-    render json: @centers
-  end
-
-  # GET /centers/1
-  def show
-    render json: @center
-  end
-
-  # POST /centers
   def create
     new_center = Center::CreateService.new(
       name: params[:name],
@@ -41,7 +32,6 @@ class Api::V1::CentersController < Api::BaseApi
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
-  # PATCH/PUT /centers/1
   def update
     updated_center = Center::EditService.new(
       current_center: @center,
@@ -84,7 +74,7 @@ class Api::V1::CentersController < Api::BaseApi
   end
 
   def make_doctor_admin
-    Center::MakeDoctorAdminService.new(doctor_id: params[:doctor_id], center_id: params[:id]).call
+    Center::MakeDoctorAdminService.new(doctor_id: params[:doctor_id], center_id: @center.id).call
     render json: 'assigned successfully'
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
@@ -96,7 +86,7 @@ class Api::V1::CentersController < Api::BaseApi
       email: params[:email],
       age: params[:age],
       photo: params[:photo],
-      center_id: params[:id],
+      center_id: @center.id,
       diagnosis_ids: params[:diagnosis_ids].is_a?(String) ? params[:diagnosis_ids]&.split(',') : params[:diagnosis_ids]
     ).call
     render json: ChildSerializer.new(new_child, param_options).serializable_hash
@@ -116,66 +106,67 @@ class Api::V1::CentersController < Api::BaseApi
   end
 
   def add_modules
-    Center::AddModulesService.new(software_module_ids: params[:software_module_ids], center_id: params[:id]).call
-    render json: 'modules added successfully'
-  rescue StandardError => e
-    render json: { error: e.message }, status: :unprocessable_entity
+    redirect_back_or_to(
+      { controller: 'api/v1/centers/software_modules', action: 'add_modules', center_id: params[:id],
+        software_module_ids: params[:software_module_ids] }, status: :see_other
+    )
   end
 
   def assign_module_child
-    Center::AssignModuleToChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id],
-                                           center_id: params[:id]).call
-    render json: 'module is assigned to child'
-  rescue StandardError => e
-    result = Response::HandleErrorService.new(error: e).call
-    render json: result[:data], status: result[:status]
+    redirect_back_or_to(
+      { controller: 'api/v1/centers/software_modules', action: 'assign_module_child', center_id: params[:id],
+        id: params[:software_module_id] }, status: :see_other
+    )
   end
 
   def unassign_module_child
-    Center::UnassignModuleFromChildService.new(child_id: params[:child_id], software_module_id: params[:software_module_id],
-                                               center_id: params[:id]).call
-    render json: 'module is un assigned to child'
-  rescue StandardError => e
-    render json: { error: e.message }, status: :unprocessable_entity
+    redirect_back_or_to(
+      { controller: 'api/v1/centers/software_modules', action: 'unassign_module_child', center_id: params[:id],
+        id: params[:software_module_id] }, status: :see_other
+    )
   end
 
   def assign_doctor_child
-    Center::AssignDoctorToChildService.new(assignee_doctor_id: params[:doctor_id], child_id: params[:child_id], center_id: params[:id]).call
-    render json: 'doctor is assigned to  child'
+    redirect_back_or_to(
+      { controller: 'api/v1/centers/doctors', action: 'assign_doctor_child', center_id: params[:id],
+        id: params[:doctor_id] }, status: :see_other
+    )
+  end
+
+  def unassign_doctor_child
+    redirect_back_or_to(
+      { controller: 'api/v1/centers/doctors', action: 'unassign_doctor_child', center_id: params[:id],
+        id: params[:doctor_id] }, status: :see_other
+    )
+  end
+
+  def add_headset
+    new_headset = Center::AddHeadsetService.new(
+      headset_params: headset_params,
+      center_id: params[:id]
+    ).call
+
+    render json: HeadsetSerializer.new(new_headset).serializable_hash
   rescue StandardError => e
     result = Response::HandleErrorService.new(error: e).call
     render json: result[:data], status: result[:status]
   end
 
-  def unassign_doctor_child
-    Center::UnassignDoctorFromChildService.new(assignee_doctor_id: params[:doctor_id], child_id: params[:child_id], center_id: params[:id]).call
-    render json: 'doctor is un assigned from child'
-  rescue StandardError => e
-    render json: { error: e.message }, status: :unprocessable_entity
-  end
-
-  def add_headset
-    new_headset = Center::AddHeadsetService.new(headset_params: headset_params, center_id: params[:id]).call
-    render json: HeadsetSerializer.new(new_headset).serializable_hash
-  rescue StandardError => e
-    render json: { error: e.message }, status: :unprocessable_entity
-  end
-
   def edit_headset
-    headset = Center::EditHeadsetService.new(headset_params: headset_params, headset_id: params[:headset_id]).call
+    headset = Center::EditHeadsetService.new(
+      headset_params: headset_params,
+      headset_id: params[:headset_id]
+    ).call
+
     render json: HeadsetSerializer.new(headset).serializable_hash
   rescue StandardError => e
-    render json: { error: e.message }, status: :unprocessable_entity
+    result = Response::HandleErrorService.new(error: e).call
+    render json: result[:data], status: result[:status]
   end
 
   def all_doctors
     doctors = Doctor.where.not(id: current_doctor.id)
     render json: DoctorSerializer.new(doctors, param_options).serializable_hash
-  end
-
-  # DELETE /centers/1
-  def destroy
-    @center.destroy
   end
 
   private

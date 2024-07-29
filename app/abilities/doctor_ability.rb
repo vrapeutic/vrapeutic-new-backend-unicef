@@ -57,6 +57,27 @@ class DoctorAbility
       can :kids_percentage, Doctor if Authorization::Doctor::CanGetCenterKidsPercentageService.new(current_doctor: doctor,
                                                                                                    center_id: params[:center_id]).call
 
+    when 'assign_doctor_child'
+      if Authorization::Center::CanAssignDoctorToChildService.new(
+        current_doctor: doctor,
+        center_id: params[:center_id],
+        assignee_doctor_id: params[:id],
+        child_id: params[:child_id]
+      ).call
+        can :assign_doctor_child,
+            Center
+      end
+
+    when 'unassign_doctor_child'
+      if Authorization::Center::CanUnassignDoctorFromChildService.new(
+        current_doctor: doctor,
+        center_id: params[:center_id],
+        assignee_doctor_id: params[:id],
+        child_id: params[:child_id]
+      ).call
+        can :unassign_doctor_child,
+            Center
+      end
     else
       false
     end

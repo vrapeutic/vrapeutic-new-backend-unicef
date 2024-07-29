@@ -48,10 +48,23 @@ Rails.application.routes.draw do
 
       namespace :centers do
         scope ':center_id' do
-          resources :doctors, only: %i[index show]
+          resources :doctors, only: %i[index show] do
+            member do
+              get :assign_doctor_child
+              get :unassign_doctor_child
+            end
+          end
           resources :sessions, only: %i[index show]
           resources :kids, controller: 'children', only: %i[index show]
-          resources :modules, controller: 'software_modules', only: %i[index show]
+          resources :modules, controller: 'software_modules', only: %i[index show] do
+            collection do
+              get :add_modules
+            end
+            member do
+              get :assign_module_child
+              get :unassign_module_child
+            end
+          end
           get :assigned_modules, controller: 'software_modules'
         end
       end

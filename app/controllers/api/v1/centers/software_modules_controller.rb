@@ -1,7 +1,7 @@
 class Api::V1::Centers::SoftwareModulesController < Api::BaseApi
   before_action :set_center
-  before_action :set_modules, only: %i[index show]
-  before_action :set_module, only: :show
+  before_action :set_center_software_modules, only: %i[index show assign_module_child unassign_module_child]
+  before_action :set_center_software_module, only: %i[show assign_module_child unassign_module_child]
   before_action :authorized
 
   def current_ability
@@ -10,7 +10,7 @@ class Api::V1::Centers::SoftwareModulesController < Api::BaseApi
   authorize_resource
 
   def index
-    render json: SoftwareModuleSerializer.new(@modules, param_options).serializable_hash
+    render json: SoftwareModuleSerializer.new(@software_modules, param_options).serializable_hash
   end
 
   def assigned_modules
@@ -19,7 +19,45 @@ class Api::V1::Centers::SoftwareModulesController < Api::BaseApi
   end
 
   def show
-    render json: SoftwareModuleSerializer.new(@module, param_options).serializable_hash
+    render json: SoftwareModuleSerializer.new(@software_module, param_options).serializable_hash
+  end
+
+  def add_modules
+    Center::AddModulesService.new(
+      software_module_ids: params[:software_module_ids],
+      center_id: @center.id
+    ).call
+
+    render json: 'modules added successfully'
+  rescue StandardError => e
+    result = Response::HandleErrorService.new(error: e).call
+    render json: result[:data], status: result[:status]
+  end
+
+  def assign_module_child
+    Center::AssignModuleToChildService.new(
+      child_id: params[:child_id],
+      software_module_id: @software_module.id,
+      center_id: @center.id
+    ).call
+
+    render json: 'module is assigned to child'
+  rescue StandardError => e
+    result = Response::HandleErrorService.new(error: e).call
+    render json: result[:data], status: result[:status]
+  end
+
+  def unassign_module_child
+    Center::UnassignModuleFromChildService.new(
+      child_id: params[:child_id],
+      software_module_id: @software_module.id,
+      center_id: @center.id
+    ).call
+
+    render json: 'module is un assigned to child'
+  rescue StandardError => e
+    result = Response::HandleErrorService.new(error: e).call
+    render json: result[:data], status: result[:status]
   end
 
   private
@@ -28,11 +66,11 @@ class Api::V1::Centers::SoftwareModulesController < Api::BaseApi
     @center = Center.find(params[:center_id])
   end
 
-  def set_modules
-    @modules = Center::ModulesService.new(center: @center).call
+  def set_center_software_modules
+    @software_modules = Center::ModulesService.new(center: @center).call
   end
 
-  def set_module
-    @module = @modules.find(params[:id])
+  def set_center_software_module
+    @software_module = @software_modules.find(params[:id])
   end
 end
