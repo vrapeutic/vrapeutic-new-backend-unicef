@@ -8,6 +8,7 @@ class Api::V1::AdminsController < Api::BaseApi
     render json: 'otp is sent successfully'
   end
 
+  # children actions
   def edit_child
     child = Admin::EditChildService.new(
       child_id: params[:child_id],
@@ -19,6 +20,7 @@ class Api::V1::AdminsController < Api::BaseApi
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
+  # doctors actions
   def edit_doctor
     doctor = Admin::EditDoctorService.new(
       doctor_id: params[:doctor_id],
@@ -34,14 +36,7 @@ class Api::V1::AdminsController < Api::BaseApi
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
-  def assign_center_module
-    Admin::AssignCenterModuleService.new(center_id: params[:center_id], software_module_id: params[:software_module_id],
-                                         end_date: params[:end_date]).call
-    render json: 'assigned successfully'
-  rescue StandardError => e
-    render json: { error: e.message }, status: :unprocessable_entity
-  end
-
+  # headsets actions
   def assign_center_headset
     new_headset = Center::AddHeadsetService.new(headset_params: headset_params, center_id: params[:center_id]).call
     render json: HeadsetSerializer.new(new_headset, param_options).serializable_hash
@@ -62,24 +57,13 @@ class Api::V1::AdminsController < Api::BaseApi
     head :no_content
   end
 
-  def doctors
-    q = Doctor.ransack_query(sort: params[:sort], query: params[:q])
-    render json: DoctorSerializer.new(q.result(distinct: true), param_options).serializable_hash
-  end
-
-  def centers
-    q = Center.ransack_query(sort: params[:sort], query: params[:q])
-    render json: CenterSerializer.new(q.result(distinct: true), param_options).serializable_hash
-  end
-
-  def kids
-    q = Child.ransack_query(sort: params[:sort], query: params[:q])
-    render json: ChildSerializer.new(q.result(distinct: true), param_options).serializable_hash
-  end
-
-  def headsets
-    q = Headset.kept.ransack_query(sort: params[:sort], query: params[:q])
-    render json: HeadsetSerializer.new(q.result(distinct: true), param_options).serializable_hash
+  # software_modules actions
+  def assign_center_module
+    Admin::AssignCenterModuleService.new(center_id: params[:center_id], software_module_id: params[:software_module_id],
+                                         end_date: params[:end_date]).call
+    render json: 'assigned successfully'
+  rescue StandardError => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   private

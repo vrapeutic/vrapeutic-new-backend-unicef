@@ -34,45 +34,10 @@ Rails.application.routes.draw do
       resources :admins, only: %i[] do
         collection do
           post :send_otp
-          put :edit_child
-          put :edit_doctor
-          get :doctors
-          get :centers
-          get :kids
-          get :headsets
           post :assign_center_module
           put :edit_headset
           delete '/delete_headset/:headset_id' => 'admins#delete_headset'
           post '/assign_center_headset/:center_id' => 'admins#assign_center_headset'
-        end
-      end
-
-      namespace :centers do
-        scope ':center_id' do
-          resources :doctors, only: %i[index show] do
-            member do
-              get :assign_doctor_child
-              get :unassign_doctor_child
-            end
-          end
-          resources :sessions, only: %i[index show]
-          resources :kids, controller: 'children', only: %i[index show]
-          resources :modules, controller: 'software_modules', only: %i[index show] do
-            collection do
-              get :add_modules
-            end
-            member do
-              get :assign_module_child
-              get :unassign_module_child
-            end
-          end
-          get :assigned_modules, controller: 'software_modules'
-        end
-      end
-
-      resources :headsets, only: %i[] do
-        member do
-          get :free_headset unless Rails.env.production?
         end
       end
 
@@ -117,6 +82,48 @@ Rails.application.routes.draw do
           get :sessions_percentage
           get :kids_percentage
         end
+      end
+
+      namespace :centers do
+        scope ':center_id' do
+          resources :doctors, only: %i[index show] do
+            member do
+              get :assign_doctor_child
+              get :unassign_doctor_child
+            end
+          end
+          resources :sessions, only: %i[index show]
+          resources :kids, controller: 'children', only: %i[index show]
+          resources :modules, controller: 'software_modules', only: %i[index show] do
+            collection do
+              get :add_modules
+            end
+            member do
+              get :assign_module_child
+              get :unassign_module_child
+            end
+          end
+          get :assigned_modules, controller: 'software_modules'
+        end
+      end
+
+      resources :headsets, only: %i[] do
+        member do
+          get :free_headset unless Rails.env.production?
+        end
+      end
+
+      get 'admins/kids', to: 'admins/children#index'
+      put 'admins/edit_child', to: 'admins/children#edit'
+      put 'admins/edit_doctor', to: 'admins/doctors#edit'
+
+      namespace :admins do
+        resources :doctors, only: %i[index show edit]
+        resources :children, only: %i[index show edit]
+        resources :software_modules, only: %i[index show]
+        resources :centers, only: %i[index show]
+        resources :specialties, only: %i[index show]
+        resources :headsets, only: %i[index show]
       end
     end
   end
