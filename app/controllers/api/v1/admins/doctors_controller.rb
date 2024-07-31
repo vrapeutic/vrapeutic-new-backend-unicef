@@ -26,7 +26,6 @@ class Api::V1::Admins::DoctorsController < Api::BaseApi
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
-
   private
 
   def set_doctor

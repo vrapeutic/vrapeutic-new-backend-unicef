@@ -9,12 +9,8 @@ Rails.application.routes.draw do
       post '/validate_otp', to: 'auth#validate_otp'
 
       resources :specialties, only: %i[index]
-
       resources :diagnoses, only: %i[index]
-
       resources :targeted_skills, only: %i[index]
-
-      resources :software_modules, only: %i[index create update]
 
       resources :sessions, only: %i[create] do
         member do
@@ -97,27 +93,39 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :admins, only: %i[] do
-        collection do
-          post :send_otp
-          post :assign_center_module
-          post '/assign_center_headset/:center_id' => 'admins#assign_center_headset'
-        end
-      end
-
       get 'admins/kids', to: 'admins/children#index'
       put 'admins/edit_child', to: 'admins/children#update'
+
       put 'admins/edit_doctor', to: 'admins/doctors#update'
+
       put 'admins/edit_headset', to: 'admins/headsets#update'
       delete 'admins/delete_headset/:headset_id', to: 'admins/headsets#destroy'
+
+      post 'software_modules', to: 'admins/software_modules#create'
+      put 'software_modules/:id', to: 'admins/software_modules#update'
+
+      post 'admins/assign_center_headset/:center_id', to: 'admins/centers#assign_center_headset'
+      post 'admins/assign_center_module', to: 'admins/centers#assign_center_module'
+
+      post 'admins/send_otp', to: 'admins/otps#send_otp'
 
       namespace :admins do
         resources :doctors, only: %i[index show update]
         resources :children, only: %i[index show update]
-        resources :software_modules, only: %i[index show]
-        resources :centers, only: %i[index show]
+        resources :software_modules, only: %i[index show create update]
+        resources :centers, only: %i[index show] do
+          collection do
+            post :assign_center_module
+            post 'assign_center_headset/:center_id', to: 'centers#assign_center_headset'
+          end
+        end
         resources :specialties, only: %i[index show]
         resources :headsets, only: %i[index show update destroy]
+        resources :otps, only: %i[] do
+          collection do
+            post :send_otp
+          end
+        end
       end
 
       resources :headsets, only: %i[] do
