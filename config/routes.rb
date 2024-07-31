@@ -31,33 +31,6 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :admins, only: %i[] do
-        collection do
-          post :send_otp
-          post :assign_center_module
-          post '/assign_center_headset/:center_id' => 'admins#assign_center_headset'
-        end
-      end
-
-      resources :centers, only: %i[create update] do
-        member do
-          post :invite_doctor
-          post :assign_doctor
-          # put :edit_doctor
-          put :make_doctor_admin
-          post :add_child
-          put :edit_child
-          post :add_modules
-          put :assign_module_child
-          put :unassign_module_child
-          put :assign_doctor_child
-          put :unassign_doctor_child
-          post :add_headset
-          put :edit_headset
-          get :all_doctors
-        end
-      end
-
       resources :doctors, only: %i[create update] do
         member do
           post :validate_otp
@@ -82,32 +55,53 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :centers, only: %i[create update] do
+        member do
+          post :invite_doctor
+          post :assign_doctor
+          put :make_doctor_admin
+          post :add_child
+          put :edit_child
+          post :add_headset
+          put :edit_headset
+        end
+      end
+
+      post 'centers/:center_id/add_modules', to: 'centers/software_modules#add_modules'
+      put 'centers/:center_id/assign_module_child', to: 'centers/software_modules#assign_module_child'
+      put 'centers/:center_id/unassign_module_child', to: 'centers/software_modules#unassign_module_child'
+      put 'centers/:center_id/assign_doctor_child', to: 'centers/doctors#assign_doctor_child'
+      put 'centers/:center_id/unassign_doctor_child', to: 'centers/doctors#unassign_doctor_child'
+      get 'centers/:center_id/all_doctors', to: 'centers/doctors#index'
+
       namespace :centers do
         scope ':center_id' do
           resources :doctors, only: %i[index show] do
             member do
-              get :assign_doctor_child
-              get :unassign_doctor_child
+              put :assign_doctor_child
+              put :unassign_doctor_child
             end
           end
           resources :sessions, only: %i[index show]
           resources :kids, controller: 'children', only: %i[index show]
           resources :modules, controller: 'software_modules', only: %i[index show] do
             collection do
-              get :add_modules
+              post :add_modules
             end
             member do
-              get :assign_module_child
-              get :unassign_module_child
+              put :assign_module_child
+              put :unassign_module_child
             end
           end
           get :assigned_modules, controller: 'software_modules'
         end
       end
 
-      resources :headsets, only: %i[] do
-        member do
-          get :free_headset unless Rails.env.production?
+      resources :admins, only: %i[] do
+        collection do
+          post :send_otp
+          post :assign_center_module
+          post '/assign_center_headset/:center_id' => 'admins#assign_center_headset'
         end
       end
 
@@ -124,6 +118,12 @@ Rails.application.routes.draw do
         resources :centers, only: %i[index show]
         resources :specialties, only: %i[index show]
         resources :headsets, only: %i[index show update destroy]
+      end
+
+      resources :headsets, only: %i[] do
+        member do
+          get :free_headset unless Rails.env.production?
+        end
       end
     end
   end

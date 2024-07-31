@@ -71,6 +71,6 @@ class Api::V1::Centers::SoftwareModulesController < Api::BaseApi
   end
 
   def set_center_software_module
-    @software_module = @software_modules.find(params[:id])
+    @software_module = @software_modules.find(params[:id] || params[:software_module_id])
   end
 end

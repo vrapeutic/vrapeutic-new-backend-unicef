@@ -54,6 +54,6 @@ class Api::V1::Centers::DoctorsController < Api::BaseApi
   end
 
   def set_center_doctor
-    @doctor = @doctors.find(params[:id])
+    @doctor = @doctors.find(params[:id] || params[:doctor_id])
   end
 end

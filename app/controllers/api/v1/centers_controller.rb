@@ -5,7 +5,6 @@ class Api::V1::CentersController < Api::BaseApi
   before_action :authorized
 
   authorize_resource
-  skip_authorize_resource only: %i[add_modules assign_module_child unassign_module_child assign_doctor_child unassign_doctor_child]
 
   def current_ability
     @current_ability ||= CenterAbility.new(current_doctor, params)
@@ -105,41 +104,6 @@ class Api::V1::CentersController < Api::BaseApi
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
-  def add_modules
-    redirect_back_or_to(
-      { controller: 'api/v1/centers/software_modules', action: 'add_modules', center_id: params[:id],
-        software_module_ids: params[:software_module_ids] }, status: :see_other
-    )
-  end
-
-  def assign_module_child
-    redirect_back_or_to(
-      { controller: 'api/v1/centers/software_modules', action: 'assign_module_child', center_id: params[:id],
-        id: params[:software_module_id] }, status: :see_other
-    )
-  end
-
-  def unassign_module_child
-    redirect_back_or_to(
-      { controller: 'api/v1/centers/software_modules', action: 'unassign_module_child', center_id: params[:id],
-        id: params[:software_module_id] }, status: :see_other
-    )
-  end
-
-  def assign_doctor_child
-    redirect_back_or_to(
-      { controller: 'api/v1/centers/doctors', action: 'assign_doctor_child', center_id: params[:id],
-        id: params[:doctor_id] }, status: :see_other
-    )
-  end
-
-  def unassign_doctor_child
-    redirect_back_or_to(
-      { controller: 'api/v1/centers/doctors', action: 'unassign_doctor_child', center_id: params[:id],
-        id: params[:doctor_id] }, status: :see_other
-    )
-  end
-
   def add_headset
     new_headset = Center::AddHeadsetService.new(
       headset_params: headset_params,
@@ -162,11 +126,6 @@ class Api::V1::CentersController < Api::BaseApi
   rescue StandardError => e
     result = Response::HandleErrorService.new(error: e).call
     render json: result[:data], status: result[:status]
-  end
-
-  def all_doctors
-    doctors = Doctor.where.not(id: current_doctor.id)
-    render json: DoctorSerializer.new(doctors, param_options).serializable_hash
   end
 
   private
