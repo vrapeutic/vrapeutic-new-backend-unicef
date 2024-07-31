@@ -4,7 +4,7 @@ class Child < ApplicationRecord
   RANSACKABLE_ASSOCIATIONS = %w[diagnoses centers software_modules doctors sessions].freeze
 
   validates :name, presence: true
-  validates :photo, presence: true
+  validates :photo, presence: true, unless: -> { photo_url.present? }
   validates :email, presence: true, uniqueness: true
   validates :age, numericality: {
     only_integer: true,

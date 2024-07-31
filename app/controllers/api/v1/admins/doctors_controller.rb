@@ -1,6 +1,6 @@
 class Api::V1::Admins::DoctorsController < Api::BaseApi
   before_action :validate_admin_otp
-  before_action :set_doctor, only: %i[show edit]
+  before_action :set_doctor, only: %i[show update]
 
   def index
     q = Doctor.ransack_query(sort: params[:sort], query: params[:q])
@@ -11,7 +11,7 @@ class Api::V1::Admins::DoctorsController < Api::BaseApi
     render json: DoctorSerializer.new(@doctor, param_options).serializable_hash
   end
 
-  def edit
+  def update
     doctor = Admin::EditDoctorService.new(
       doctor_id: @doctor.id,
       degree: params[:degree],
@@ -30,6 +30,6 @@ class Api::V1::Admins::DoctorsController < Api::BaseApi
   private
 
   def set_doctor
-    @doctor = Doctor.find(params[:id])
+    @doctor = Doctor.find(params[:id] || params[:doctor_id])
   end
 end

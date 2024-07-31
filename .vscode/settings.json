@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": true,
+  "diffEditor.experimental.showMoves": true,
+  "diffEditor.maxFileSize": 30,
+  "editor.fontSize": 15,
+  "editor.fontWeight": "normal",
+  "editor.cursorBlinking": "blink",
+  "editor.cursorStyle": "underline",
+  "editor.cursorSmoothCaretAnimation": "off",
+  "chat.editor.fontSize": 15
+}

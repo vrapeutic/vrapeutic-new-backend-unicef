@@ -35,8 +35,6 @@ Rails.application.routes.draw do
         collection do
           post :send_otp
           post :assign_center_module
-          put :edit_headset
-          delete '/delete_headset/:headset_id' => 'admins#delete_headset'
           post '/assign_center_headset/:center_id' => 'admins#assign_center_headset'
         end
       end
@@ -114,16 +112,18 @@ Rails.application.routes.draw do
       end
 
       get 'admins/kids', to: 'admins/children#index'
-      put 'admins/edit_child', to: 'admins/children#edit'
-      put 'admins/edit_doctor', to: 'admins/doctors#edit'
+      put 'admins/edit_child', to: 'admins/children#update'
+      put 'admins/edit_doctor', to: 'admins/doctors#update'
+      put 'admins/edit_headset', to: 'admins/headsets#update'
+      delete 'admins/delete_headset/:headset_id', to: 'admins/headsets#destroy'
 
       namespace :admins do
-        resources :doctors, only: %i[index show edit]
-        resources :children, only: %i[index show edit]
+        resources :doctors, only: %i[index show update]
+        resources :children, only: %i[index show update]
         resources :software_modules, only: %i[index show]
         resources :centers, only: %i[index show]
         resources :specialties, only: %i[index show]
-        resources :headsets, only: %i[index show]
+        resources :headsets, only: %i[index show update destroy]
       end
     end
   end

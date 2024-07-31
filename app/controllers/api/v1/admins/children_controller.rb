@@ -1,6 +1,6 @@
 class Api::V1::Admins::ChildrenController < Api::BaseApi
   before_action :validate_admin_otp
-  before_action :set_child, only: %i[show edit]
+  before_action :set_child, only: %i[show update]
 
   def index
     q = Child.ransack_query(sort: params[:sort], query: params[:q])
@@ -11,7 +11,7 @@ class Api::V1::Admins::ChildrenController < Api::BaseApi
     render json: ChildSerializer.new(@child, param_options).serializable_hash
   end
 
-  def edit
+  def update
     child = Admin::EditChildService.new(
       child_id: @child.id,
       edit_params: child_params.except(:diagnosis_ids),
@@ -27,5 +27,9 @@ class Api::V1::Admins::ChildrenController < Api::BaseApi
 
   def set_child
     @child = Child.find(params[:id] || params[:child_id])
+  end
+
+  def child_params
+    params.require(:child).permit(:name, :age, :photo, :diagnosis_ids)
   end
 end
