@@ -17,7 +17,7 @@ class Otp::ValidateService
   end
 
   def validate_otp
-    return false if @otp_record.nil? || @otp_record.expires_at < Time.now
+    return false if @otp_record.nil? || @otp_record.expires_at? && @otp_record.expires_at < Time.now
 
     @otp_record.code == @entered_otp && @otp_record.update!(expires_at: 30.seconds)
   end
