@@ -1,13 +1,13 @@
-class Session::AddCommentService
-  def initialize(session:, comment_name:)
+class Session::AddEvaluationFileService
+  def initialize(session:, evaluation_file:)
     @session = session
-    @comment_name = comment_name
+    @evaluation_file = evaluation_file
   end
 
   def call
     Session.transaction do
       check_session_is_ended?
-      add_session_comment
+      add_session_evaluation_file
     end
   end
 
@@ -19,7 +19,9 @@ class Session::AddCommentService
     raise 'session is already running and not ended yet'
   end
 
-  def add_session_comment
-    SessionComment.create!(session: @session, name: @comment_name)
+  def add_session_evaluation_file
+    @session.update(
+      evaluation_file: @evaluation_file
+    )
   end
 end

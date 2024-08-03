@@ -46,6 +46,10 @@ class SessionAbility
       can :add_attention_performance_modules, Session if Authorization::Session::CanAddAttentionPerformanceModulesService.new(
         current_doctor: doctor, session_id: params[:id]
       ).call
+    when 'add_attachment'
+      can :add_attachment, Session if Authorization::Session::CanAddAttachmentService.new(
+        current_doctor: doctor, session_id: params[:id]
+      ).call
 
     else
       false

@@ -14,8 +14,6 @@ Rails.application.routes.draw do
 
       resources :sessions, only: %i[create] do
         member do
-          # post :resend_otp
-          # put :validate_otp
           put :add_module
           put :add_doctor
           put :end_session
@@ -23,7 +21,7 @@ Rails.application.routes.draw do
           put :add_evaluation
           put :add_note_and_evaluation
           post :add_attention_performance
-          # post :add_attention_performance_modules
+          post :add_evaluation_file
         end
       end
 

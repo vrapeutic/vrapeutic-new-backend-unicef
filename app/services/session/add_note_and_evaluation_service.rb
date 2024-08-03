@@ -18,7 +18,7 @@ class Session::AddNoteAndEvaluationService
   private
 
   def check_session_is_ended?
-    return unless @session.ended_at?
+    return if @session.ended_at?
 
     raise 'session is already running and not ended yet'
   end
@@ -30,6 +30,9 @@ class Session::AddNoteAndEvaluationService
   end
 
   def add_note_and_evaluation
-    @session.update!(evaluation: @evaluation, note: @note)
+    @session.update!(
+      evaluation: @evaluation,
+      note: @note
+    )
   end
 end

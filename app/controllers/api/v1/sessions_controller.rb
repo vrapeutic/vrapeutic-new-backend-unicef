@@ -1,9 +1,15 @@
 class Api::V1::SessionsController < Api::BaseApi
   before_action :set_session,
-                only: %i[show update destroy resend_otp validate_otp end_session add_comment add_evaluation
+                only: %i[show update destroy
+                         resend_otp
+                         validate_otp
+                         end_session
+                         add_comment
+                         add_evaluation
                          add_note_and_evaluation
                          add_attention_performance
-                         add_attention_performance_modules]
+                         add_attention_performance_modules
+                         add_evaluation_file]
 
   before_action :authorized
 
@@ -133,6 +139,13 @@ class Api::V1::SessionsController < Api::BaseApi
       vr_duration: params[:vr_duration]
     ).call
     render json: 'all attention performance data is saved'
+  rescue StandardError => e
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
+  def add_evaluation_file
+    Session::AddEvaluationFileService.new(session: @session, evaluation_file: params[:evaluation_file]).call
+    render json: SessionSerializer.new(@session, param_options).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end

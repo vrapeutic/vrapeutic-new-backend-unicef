@@ -8,6 +8,7 @@ class Session < ApplicationRecord
   belongs_to :child
 
   validates :session_id, presence: true, uniqueness: true, unless: :new_record?
+  mount_uploader :evaluation_file, FileUploader
 
   enum evaluation: { very_bad: 0, bad: 1, fair: 2, good: 3, very_good: 4, excellent: 5 }
 

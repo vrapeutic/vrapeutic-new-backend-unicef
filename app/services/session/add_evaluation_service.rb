@@ -16,7 +16,7 @@ class Session::AddEvaluationService
   private
 
   def check_session_is_ended?
-    return unless @session.ended_at.nil?
+    return if @session.ended_at?
 
     raise 'session is already running and not ended yet'
   end

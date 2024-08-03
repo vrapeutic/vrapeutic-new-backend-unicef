@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_18_212021) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_03_164147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -294,6 +294,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_18_212021) do
     t.float "vr_duration"
     t.string "session_id"
     t.text "note"
+    t.string "evaluation_file"
     t.index ["center_id"], name: "index_sessions_on_center_id"
     t.index ["child_id"], name: "index_sessions_on_child_id"
     t.index ["headset_id"], name: "index_sessions_on_headset_id"
