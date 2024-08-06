@@ -26,6 +26,8 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   # POST /doctors
   def create
+    Sentry.capture_message("Register Doctor with the following params #{params}", level: :info)
+
     @doctor = Doctor::CreateService.new(
       name: params[:name],
       email: params[:email],
