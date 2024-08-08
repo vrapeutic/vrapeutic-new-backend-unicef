@@ -1,6 +1,6 @@
 class CenterSerializer < BaseSerializer
   attributes :name, :longitude, :latitude, :logo, :website, :email, :phone_number,
-             :tax_id, :certificate
+             :tax_id, :certificate, :registration_number
 
   attribute :logo_url do |center|
     center.logo_url
