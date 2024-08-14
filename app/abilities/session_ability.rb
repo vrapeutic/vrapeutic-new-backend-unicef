@@ -50,7 +50,8 @@ class SessionAbility
       can :add_attachment, Session if Authorization::Session::CanAddAttachmentService.new(
         current_doctor: doctor, session_id: params[:id]
       ).call
-
+    when 'evaluations'
+      can :evaluations, Session if Authorization::Session::CanGetSessionsService.new(current_doctor: doctor, center_id: params[:center_id]).call
     else
       false
     end

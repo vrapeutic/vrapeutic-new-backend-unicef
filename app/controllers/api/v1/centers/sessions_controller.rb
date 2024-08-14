@@ -17,6 +17,10 @@ class Api::V1::Centers::SessionsController < Api::BaseApi
     render json: SessionSerializer.new(@session, param_options).serializable_hash
   end
 
+  def evaluations
+    render json: @center.evaluation_stats
+  end
+
   private
 
   def set_center

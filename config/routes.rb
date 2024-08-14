@@ -76,7 +76,11 @@ Rails.application.routes.draw do
               put :unassign_doctor_child
             end
           end
-          resources :sessions, only: %i[index show]
+          resources :sessions, only: %i[index show] do
+            collection do
+              get :evaluations
+            end
+          end
           resources :kids, controller: 'children', only: %i[index show]
           resources :modules, controller: 'software_modules', only: %i[index show] do
             collection do
@@ -112,6 +116,9 @@ Rails.application.routes.draw do
         resources :children, only: %i[index show update]
         resources :software_modules, only: %i[index show create update]
         resources :centers, only: %i[index show] do
+          member do
+            get :session_evaluations
+          end
           collection do
             post :assign_center_module
             post 'assign_center_headset/:center_id', to: 'centers#assign_center_headset'
