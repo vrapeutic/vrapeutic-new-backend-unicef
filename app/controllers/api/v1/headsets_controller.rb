@@ -9,6 +9,6 @@ class Api::V1::HeadsetsController < Api::BaseApi
   private
 
   def set_headset
-    @headset = Headset.find(params[:id])
+    @headset = Headset.find_by(key: params[:id]) || Headset.find(params[:id])
   end
 end
