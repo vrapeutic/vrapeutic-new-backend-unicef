@@ -10,11 +10,8 @@ class Admin::ValidateOtpService
   private
 
   def validate_otp
-    admin = Admin.first
+    admin = Admin.find_by(otp: @entered_otp)
 
-    return false unless admin.otp.present?
-    return false if admin.expires_at < Time.now
-
-    admin.otp == @entered_otp
+    admin.present? && admin.expires_at >= Time.now
   end
 end
