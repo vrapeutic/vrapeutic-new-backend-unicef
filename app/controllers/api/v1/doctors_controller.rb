@@ -113,7 +113,7 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def center_headsets
     headsets = Doctor::GetCenterHeadsetsService.new(center_id: params[:center_id], scope: params[:scope]).call
-    render json: MiniHeadsetSerializer.new(headsets, param_options).serializable_hash
+    render json: HeadsetSerializer.new(headsets, param_options).serializable_hash
   end
 
   def center_child_modules

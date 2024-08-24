@@ -2,7 +2,7 @@
 
 ## Routes
 
-- (Routes)[https://github.com/vrapeutic/vrapeutic-new-backend-unicef/blob/main/docs/routes.md]
+- (Routes)(https://github.com/vrapeutic/vrapeutic-new-backend-unicef/blob/main/docs/routes.md)
 
 ## Controller
 
@@ -34,10 +34,12 @@
 
 ### Existed Serializers:
 
-| Serializer Name                | Attributes                                                                                                                                                                                                      | Included                                                          |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| **CenterSerializer**           | name, longitude, latitude, logo, website, email, phone_number, tax_id, certificate, registration_number, created_at, updated_at, logo_url, certificate_url, specialties_number, doctors_number, children_number | `children,doctors,sessions,software_modules,specialties,headsets` |
-| **CenterSocialLinkSerializer** | link, link_type, center_id, created_at, updated_at                                                                                                                                                              | `center`                                                          |
-| **HeadsetSerializer**          | model, key, center, center_id, created_at, updated_at                                                                                                                                                           | `center,sessions`                                                 |
-| **SpecialtySerializer**        | name, created_at, updated_at                                                                                                                                                                                    | `centers,doctors`                                                 |
-| **DiagnosisSerializer**        | name, created_at, updated_at                                                                                                                                                                                    | `children`                                                        |
+| Serializer Name                | Attributes                                                                                                                                                                                                      | Included                                                               | Filters         |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------- |
+| **CenterSerializer**           | name, longitude, latitude, logo, website, email, phone_number, tax_id, certificate, registration_number, created_at, updated_at, logo_url, certificate_url, specialties_number, doctors_number, children_number | `children,doctors,sessions,software_modules,specialties,headsets`      | ``              |
+| **CenterSocialLinkSerializer** | link, link_type, center_id, created_at, updated_at                                                                                                                                                              | `center`                                                               | `center_id_eq`  |
+| **ChildSerializer**            | name, email, age, created_at, updated_at, photo_url                                                                                                                                                             | `diagnoses,centers,software_modules,software_modules,sessions,doctors` | `centers_id_eq` |
+| **DiagnosisSerializer**        | name, created_at, updated_at                                                                                                                                                                                    | `children`                                                             | `centers_id_eq` |
+| **ChildDiagnosisSerializer**   | child_id, diagnosis_id, created_at, updated_at                                                                                                                                                                  | `child,diagnosis`                                                      | `child_id_eq`   |
+| **HeadsetSerializer**          | model, key, center, center_id, created_at, updated_at                                                                                                                                                           | `center,sessions`                                                      | `center_id_eq`  |
+| **SpecialtySerializer**        | name, created_at, updated_at                                                                                                                                                                                    | `centers,doctors`                                                      | `centers_id_eq` |

@@ -1,5 +1,4 @@
-class HomeKidSerializer
-  include JSONAPI::Serializer
+class HomeKidSerializer < BaseSerializer
   attributes :name, :age, :join_date, :number_of_sessions
 
   attribute :severity do |child|
@@ -15,4 +14,10 @@ class HomeKidSerializer
       Session.evaluations.key(rounded_value)
     end
   end
+
+  has_many :diagnoses, if: proc { |_record, params| BaseSerializer.params_include?(params, 'diagnoses') }
+  has_many :centers, if: proc { |_record, params| BaseSerializer.params_include?(params, 'centers') }
+  has_many :software_modules, if: proc { |_record, params| BaseSerializer.params_include?(params, 'software_modules') }
+  has_many :sessions, if: proc { |_record, params| BaseSerializer.params_include?(params, 'sessions') }
+  has_many :doctors, if: proc { |_record, params| BaseSerializer.params_include?(params, 'doctors') }
 end
