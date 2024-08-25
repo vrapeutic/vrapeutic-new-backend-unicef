@@ -6,7 +6,7 @@ class Api::V1::AuthController < Api::BaseApi
   def sign_in
     result = Doctor::HandleLoginService.new(email: params[:email], password: params[:password]).call
     if result[:is_admin]
-      otp = Admin::GenerateOtpService(email: params[:email]).new.call
+      otp = Admin::GenerateOtpService.new(email: params[:email]).call
       AdminOtpMailer.send_otp(params[:email]&.downcase, otp).deliver_later
       render json: result
     else
