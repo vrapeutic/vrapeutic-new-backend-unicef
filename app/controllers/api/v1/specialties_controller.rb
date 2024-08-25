@@ -1,5 +1,5 @@
 class Api::V1::SpecialtiesController < Api::BaseApi
-  before_action :authorized
+  # before_action :authorized
   before_action :set_specialty, only: :show
 
   # GET /specialties

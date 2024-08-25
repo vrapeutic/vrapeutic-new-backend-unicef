@@ -1,5 +1,5 @@
-class Api::V1::TargetedSkillsController < Api::BaseApi
-  # before_action :authorized
+class Api::V1::Admins::TargetedSkillsController < Api::BaseApi
+  before_action :validate_admin_otp
   before_action :set_targeted_skill, only: :show
 
   # GET /targeted_skills
@@ -12,6 +12,17 @@ class Api::V1::TargetedSkillsController < Api::BaseApi
   # GET /targeted_skills/1
   def show
     render json: @targeted_skill
+  end
+
+  # POST /targeted_skills
+  def create
+    @targeted_skill = TargetedSkill.new(targeted_skill_params)
+
+    if @targeted_skill.save
+      render json: @targeted_skill, status: :created, location: @targeted_skill
+    else
+      render json: @targeted_skill.errors, status: :unprocessable_entity
+    end
   end
 
   private

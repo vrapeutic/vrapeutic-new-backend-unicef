@@ -161,6 +161,8 @@ Rails.application.routes.draw do
             post :send_otp
           end
         end
+        resources :targeted_skills, only: %i[index show]
+        resources :diagnoses, only: %i[index show]
       end
 
       resources :headsets, only: %i[index show] do
