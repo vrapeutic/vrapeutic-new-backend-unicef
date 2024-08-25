@@ -1,5 +1,7 @@
 # Core Tables
 
+![ERD](https://raw.githubusercontent.com/vrapeutic/vrapeutic-new-backend-unicef/main/docs/vrapeutic_api_production%20-%20public.png?token=GHSAT0AAAAAACEYARQ244OIY4RCCHBJSQREZWLNVJA)
+
 ## Tables
 
 ### User Tables
