@@ -1,8 +1,6 @@
 class Api::V1::SessionsController < Api::BaseApi
   before_action :set_session,
                 only: %i[show
-                         resend_otp
-                         validate_otp
                          end_session
                          add_comment
                          add_evaluation
@@ -48,27 +46,6 @@ class Api::V1::SessionsController < Api::BaseApi
     render json: SessionSerializer.new(session, param_options).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
-  end
-
-  def resend_otp
-    return render json: { error: 'session is already verified' }, status: :unprocessable_entity if @session.is_verified
-
-    # generate otp
-    otp_code = Otp::GenerateService.new(doctor: current_doctor, code_type: Otp::SESSION_VERIFICATION).call
-    # send email
-    SessionOtpMailer.send_otp(current_doctor.email, otp_code).deliver_later
-    render json: 'otp is sent again'
-  end
-
-  def validate_otp
-    return render json: { error: 'session is already verified' }, status: :unprocessable_entity if @session.is_verified
-
-    result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp], code_type: Otp::SESSION_VERIFICATION).call
-    if result
-      @session.update(is_verified: true)
-      return render json: SessionSerializer.new(@session, param_options).serializable_hash
-    end
-    render json: { error: 'otp is not valid or expired' }, status: :unprocessable_entity
   end
 
   def add_module

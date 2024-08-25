@@ -67,7 +67,8 @@ class Api::V1::CentersController < Api::BaseApi
   end
 
   def edit_center_params
-    params.permit(:id, :name, :longitude, :latitude, :website, :logo, :certificate, :registration_number, :tax_id, :email, :phone_number,
+    params.permit(:name, :longitude, :latitude, :website, :logo, :certificate,
+                  :registration_number, :tax_id, :email, :phone_number,
                   :social_links, specialty_ids: [])
   end
 end
