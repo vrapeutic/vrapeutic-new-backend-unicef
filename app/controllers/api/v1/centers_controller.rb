@@ -2,7 +2,7 @@ class Api::V1::CentersController < Api::BaseApi
   before_action :authorized
   before_action :set_center, only: %i[show update]
 
-  authorize_resource
+  authorize_resource except: %i[index show]
 
   def current_ability
     @current_ability ||= CenterAbility.new(current_doctor, params)
