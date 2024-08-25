@@ -7,22 +7,33 @@
 ### User Tables
 
 - **doctors** : Doctor users [ email, password ]
+  > name, email, password, degree, university, photo, certificate, is_email_verified
 - **otps** : Doctors' Otps for [ email_verification , password_reset ]
+  > doctor_id, code, expires_at, code_type
 - **admins** : Super Admins [ emaill ]
+  > otp, expires_at, email
 - **children** : System Kids
+  > name, email, age, photo
 
 ### System Tables
 
 - **centers** : System's Centers
+  > name, website, logo, certificate, registration_number, tax_id, email, phone_number
 - **sessions** : Center's Sessions
+  > center_id, headset_id, child_id, evaluation, duration, is_verified, ended_at, vr_duration, session_id, note, evaluation_file
 
 ### System's support Tables
 
 - **headsets** : headsets
+  > name, brand, model, version, key, center_id, discarded_at
 - **software_modules** : software modules
+  > name, version, technology, min_age, max_age, image, package_name
 - **target_skills** : children's skills
+  > name
 - **specialties** : doctor's specialties
+  > name
 - **diagnoses** : diagnoses
+  > name
 
 ## Table Relations
 
