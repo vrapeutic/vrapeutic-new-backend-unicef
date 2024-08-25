@@ -1,11 +1,12 @@
 class Api::V1::AuthController < Api::BaseApi
-  before_action :set_doctor, only: %i[forget_password validate_otp]
-  before_action :set_otp_code_type, only: :validate_otp
+  before_action :set_doctor, only: %i[forget_password validate_reset_password_otp]
+  before_action :set_otp_code_type, only: :validate_reset_password_otp
+  before_action :set_doctor_by_id, only: %i[validate_email_otp resend_email_otp]
 
   def sign_in
     result = Doctor::HandleLoginService.new(email: params[:email], password: params[:password]).call
     if result[:is_admin]
-      otp = Admin::GenerateOtpService.new.call
+      otp = Admin::GenerateOtpService(email: params[:email]).new.call
       AdminOtpMailer.send_otp(params[:email]&.downcase, otp).deliver_later
       render json: result
     else
@@ -28,7 +29,7 @@ class Api::V1::AuthController < Api::BaseApi
     render json: DoctorSerializer.new(@doctor, param_options).serializable_hash, status: :ok
   end
 
-  def validate_otp
+  def validate_reset_password_otp
     if Otp::ValidateService.new(doctor: @doctor, entered_otp: user_otp_param, code_type: Otp::OTP_CODE_TYPES[@otp_code_type]).call
       render json: { token: JsonWebToken.encode({ id: @doctor.id }, Time.zone.now + 5.minutes) }
     else
@@ -52,10 +53,39 @@ class Api::V1::AuthController < Api::BaseApi
     end
   end
 
+  def validate_email_otp
+    if @doctor.is_email_verified
+      render json: { error: 'doctor is already verified' }, status: :unprocessable_entity
+    else
+      result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp]).call
+      if result
+        @doctor.update_column(:is_email_verified, true)
+        render json: Doctor::GenerateJwtTokenService.new(doctor_id: @doctor.id).call, status: :ok
+      else
+        render json: { error: 'otp is not valid or expired' }, status: :unprocessable_entity
+      end
+    end
+  end
+
+  def resend_email_otp
+    if @doctor.is_email_verified
+      render json: { error: 'doctor is already verified' }, status: :unprocessable_entity
+    else
+      otp_code = Otp::GenerateService.new(doctor: @doctor).call
+      # send email
+      OtpMailer.send_otp(@doctor, otp_code).deliver_later
+      render json: 'otp is sent again'
+    end
+  end
+
   private
 
   def set_doctor
     @doctor = Doctor.find_by_email!(user_email_param)
+  end
+
+  def set_doctor_by_id
+    @doctor = Doctor.find(params[:id])
   end
 
   def set_otp_code_type

@@ -1,6 +1,6 @@
 class Api::V1::Centers::SessionsController < Api::BaseApi
   before_action :set_center
-  before_action :set_sessions, only: %i[index show]
+  before_action :set_sessions, only: :index
   before_action :set_session, only: :show
   before_action :authorized
 
@@ -32,6 +32,7 @@ class Api::V1::Centers::SessionsController < Api::BaseApi
   end
 
   def set_session
+    set_sessions
     @session = @sessions.find(params[:id])
   end
 end

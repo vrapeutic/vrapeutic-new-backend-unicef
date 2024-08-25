@@ -3,10 +3,27 @@ module Api
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
     rescue_from ActiveRecord::RecordNotUnique, with: :record_is_existed_before
     rescue_from CanCan::AccessDenied do |exception|
+      Sentry.capture_message("CanCan::AccessDenie::#{exception} - #{exception.message}", level: :info)
       render json: exception.message, status: :forbidden
     end
 
-    # implement token auth logic
+    def current_doctor
+      return unless decoded_token
+
+      Doctor.find_by(id: decoded_token['id'], is_email_verified: true) || false
+    end
+
+    def authorized
+      render json: 'unauthenticated doctor', status: :unauthorized unless logged_in?
+    end
+
+    def param_options
+      include_param = params[:include]&.split(',') || []
+      { params: { include: include_param }, include: include_param }
+    end
+
+    private
+
     def auth_header
       request.headers['Authorization']
     end
@@ -21,28 +38,9 @@ module Api
       JsonWebToken.decode(token)
     end
 
-    def current_doctor
-      return unless decoded_token
-
-      doctor_id = decoded_token['id']
-      @doctor = Doctor.find_by(id: doctor_id, is_email_verified: true)
-      @doctor.present? ? @doctor : false
-    end
-
     def logged_in?
       !!current_doctor
     end
-
-    def authorized
-      render json: 'unauthenticated doctor', status: :unauthorized unless logged_in?
-    end
-
-    def param_options
-      include_param = params[:include]&.split(',') || []
-      { params: { include: include_param }, include: include_param }
-    end
-
-    private
 
     def record_not_found
       render json: { error: 'data not found' }, status: :not_found

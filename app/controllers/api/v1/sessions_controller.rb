@@ -1,6 +1,6 @@
 class Api::V1::SessionsController < Api::BaseApi
   before_action :set_session,
-                only: %i[show update destroy
+                only: %i[show
                          resend_otp
                          validate_otp
                          end_session
@@ -148,20 +148,6 @@ class Api::V1::SessionsController < Api::BaseApi
     render json: SessionSerializer.new(@session, param_options).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
-  end
-
-  # PATCH/PUT /sessions/1
-  def update
-    if @session.update(session_params)
-      render json: @session
-    else
-      render json: @session.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /sessions/1
-  def destroy
-    @session.destroy
   end
 
   private

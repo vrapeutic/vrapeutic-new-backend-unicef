@@ -1,5 +1,4 @@
-class SpecialtySerializer
-  include JSONAPI::Serializer
+class SpecialtySerializer < BaseSerializer
   attributes :name, :created_at, :updated_at
 
   has_many :centers, if: proc { |_record, params| BaseSerializer.params_include?(params, 'centers') }

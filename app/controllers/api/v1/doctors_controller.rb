@@ -1,5 +1,5 @@
 class Api::V1::DoctorsController < Api::BaseApi
-  before_action :set_doctor, only: %i[show destroy validate_otp resend_otp]
+  before_action :set_doctor, only: :show
   before_action :authorized,
                 only: %i[update centers center_assigned_children center_headsets
                          center_child_modules center_child_doctors home_centers home_doctors
@@ -26,8 +26,6 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   # POST /doctors
   def create
-    Sentry.capture_message("Register Doctor with the following params #{params}", level: :info)
-
     @doctor = Doctor::CreateService.new(
       name: params[:name],
       email: params[:email],
@@ -43,31 +41,6 @@ class Api::V1::DoctorsController < Api::BaseApi
     render json: DoctorSerializer.new(@doctor, param_options).serializable_hash
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
-  end
-
-  def validate_otp
-    if @doctor.is_email_verified
-      render json: { error: 'doctor is already verified' }, status: :unprocessable_entity
-    else
-      result = Otp::ValidateService.new(doctor: @doctor, entered_otp: params[:otp]).call
-      if result
-        @doctor.update_column(:is_email_verified, true)
-        render json: Doctor::GenerateJwtTokenService.new(doctor_id: @doctor.id).call, status: :ok
-      else
-        render json: { error: 'otp is not valid or expired' }, status: :unprocessable_entity
-      end
-    end
-  end
-
-  def resend_otp
-    if @doctor.is_email_verified
-      render json: { error: 'doctor is already verified' }, status: :unprocessable_entity
-    else
-      otp_code = Otp::GenerateService.new(doctor: @doctor).call
-      # send email
-      OtpMailer.send_otp(@doctor, otp_code).deliver_later
-      render json: 'otp is sent again'
-    end
   end
 
   def complete_profile
@@ -185,11 +158,6 @@ class Api::V1::DoctorsController < Api::BaseApi
   def kids_percentage
     result = Doctor::CenterKidsPercentageService.new(doctor: current_doctor, center_id: params[:center_id]).call
     render json: result
-  end
-
-  # DELETE /doctors/1
-  def destroy
-    @doctor.destroy
   end
 
   private

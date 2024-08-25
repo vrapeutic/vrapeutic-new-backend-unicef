@@ -16,20 +16,6 @@ class CenterAbility
     when 'edit_doctor'
       can :edit_doctor, Center if Authorization::Center::CanEditDoctorService.new(current_doctor: doctor, center_id: params[:id],
                                                                                   doctor_id: params[:doctor_id]).call
-    when 'make_doctor_admin'
-      can :make_doctor_admin, Center if Authorization::Center::CanMakeDoctorAdminService.new(current_doctor: doctor, center_id: params[:id],
-                                                                                             worker_doctor_id: params[:doctor_id]).call
-    when 'add_child'
-      can :add_child, Center if Authorization::Center::CanAddChildService.new(current_doctor: doctor, center_id: params[:id]).call
-    when 'edit_child'
-      can :edit_child, Center if Authorization::Center::CanEditChildService.new(current_doctor: doctor, center_id: params[:id],
-                                                                                child_id: params[:child_id]).call
-
-    when 'add_headset'
-      can :add_headset, Center if Authorization::Center::CanAddHeadsetService.new(current_doctor: doctor, center_id: params[:id]).call
-    when 'edit_headset'
-      can :edit_headset, Center if Authorization::Center::CanEditHeadsetService.new(current_doctor: doctor, center_id: params[:id],
-                                                                                    headset_id: params[:headset_id]).call
     when 'all_doctors'
       can :all_doctors, Center if Authorization::Center::CanGetAllDoctorsService.new(current_doctor: doctor, center_id: params[:id]).call
     else
