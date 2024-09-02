@@ -7,7 +7,7 @@ class Authorization::Doctor::CanGetCenterChildDoctorsService
   end
 
   def call
-    doctor_work_in_center? && is_doctor_assigned_to_child?
+    doctor_work_in_center? && (is_doctor_center_manager? || is_doctor_assigned_to_child?)
   end
 
   private
@@ -18,5 +18,9 @@ class Authorization::Doctor::CanGetCenterChildDoctorsService
 
   def is_doctor_assigned_to_child?
     Child::HasDoctorInCenterService.new(doctor_id: @current_doctor.id, child_id: @child_id, center_id: @center_id).call
+  end
+
+  def is_doctor_center_manager?
+    Center::IsDoctorAdminService.new(current_doctor_id: @current_doctor.id, center_id: @center_id).call
   end
 end
