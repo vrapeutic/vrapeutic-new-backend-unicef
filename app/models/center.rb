@@ -32,9 +32,8 @@ class Center < ApplicationRecord
   def evaluation_stats
     total_sessions = sessions.empty? ? 1.0 : sessions.count.to_f
     total_unevaluated = sessions.where(evaluation: nil).count
-    total_very_bad_evaluation = sessions.where(evaluation: :very_bad).count
-    total_bad_evaluation = sessions.where(evaluation: :bad).count
-    total_fair_evaluation = sessions.where(evaluation: :fair).count
+    total_poor_evaluation = sessions.where(evaluation: :poor).count
+    total_average_evaluation = sessions.where(evaluation: :average).count
     total_good_evaluation = sessions.where(evaluation: :good).count
     total_very_good_evaluation = sessions.where(evaluation: :very_good).count
     total_excellent_evaluation = sessions.where(evaluation: :excellent).count
@@ -42,9 +41,8 @@ class Center < ApplicationRecord
     {
       total_sessions: sessions.count,
       total_unevaluated: ((total_unevaluated / total_sessions) * 100).round(2),
-      total_very_bad_evaluation: ((total_very_bad_evaluation / total_sessions) * 100).round(2),
-      total_bad_evaluation: ((total_bad_evaluation / total_sessions) * 100).round(2),
-      total_fair_evaluation: ((total_fair_evaluation / total_sessions) * 100).round(2),
+      total_poor_evaluation: ((total_poor_evaluation / total_sessions) * 100).round(2),
+      total_average_evaluation: ((total_average_evaluation / total_sessions) * 100).round(2),
       total_good_evaluation: ((total_good_evaluation / total_sessions) * 100).round(2),
       total_very_good_evaluation: ((total_very_good_evaluation / total_sessions) * 100).round(2),
       total_excellent_evaluation: ((total_excellent_evaluation / total_sessions) * 100).round(2)

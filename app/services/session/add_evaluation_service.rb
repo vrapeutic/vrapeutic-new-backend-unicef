@@ -7,7 +7,7 @@ class Session::AddEvaluationService
   def call
     Session.transaction do
       check_session_is_ended?
-      check_session_has_evaluation?
+      # check_session_has_evaluation?
       check_evlaution_existed?
       add_evaluation
     end

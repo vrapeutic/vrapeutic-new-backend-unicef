@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::BaseApi
-  before_action :authorized
+  # before_action :authorized
   before_action :set_session,
                 only: %i[show
                          end_session
@@ -10,11 +10,11 @@ class Api::V1::SessionsController < Api::BaseApi
                          add_attention_performance_modules
                          add_evaluation_file]
 
-  authorize_resource except: %i[index show]
+  # authorize_resource except: %i[index show]
 
-  def current_ability
-    @current_ability ||= SessionAbility.new(current_doctor, params)
-  end
+  # def current_ability
+  #   @current_ability ||= SessionAbility.new(current_doctor, params)
+  # end
 
   # GET /sessions
   def index
