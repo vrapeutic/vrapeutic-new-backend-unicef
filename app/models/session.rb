@@ -10,7 +10,7 @@ class Session < ApplicationRecord
   validates :session_id, presence: true, uniqueness: true, unless: :new_record?
   mount_uploader :evaluation_file, FileUploader
 
-  enum evaluation: { poor: 0, average: 1, good: 2, very_good: 4, excellent: 5 }
+  enum evaluation: { poor: 0, average: 1, good: 2, very_good: 4, excellent: 5 }, _prefix: true
 
   validates_numericality_of :duration, allow_nil: true, greater_than_or_equal_to: 0
   validates_numericality_of :vr_duration, allow_nil: true, greater_than_or_equal_to: 0
