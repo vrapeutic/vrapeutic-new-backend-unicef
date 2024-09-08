@@ -8,7 +8,6 @@ module Api
     end
 
     def current_doctor
-      return Doctor.find(36)
       return unless decoded_token
 
       Doctor.find_by(id: decoded_token['id'], is_email_verified: true) || false

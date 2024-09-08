@@ -60,6 +60,7 @@ class Api::V1::Centers::DoctorsController < Api::BaseApi
 
   def edit_doctor
     new_doctor = Doctor::UpdateService.new(
+      name: params[:name],
       doctor_id: @doctor.id,
       degree: params[:degree],
       certificate: params[:certificate],
