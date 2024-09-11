@@ -14,6 +14,7 @@ module Api
     end
 
     def authorized
+      Sentry.capture_message("Log Requests: #{params}", level: :info) if logged_in?
       render json: 'unauthenticated doctor', status: :unauthorized unless logged_in?
     end
 
