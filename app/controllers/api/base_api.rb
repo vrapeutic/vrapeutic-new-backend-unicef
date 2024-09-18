@@ -13,14 +13,21 @@ module Api
       Doctor.find_by(id: decoded_token['id'], is_email_verified: true) || false
     end
 
+    def current_center
+      params[:center_id] && @center
+    end
+
     def authorized
-      Sentry.capture_message("Log Requests: #{params}", level: :info) if logged_in?
+      Sentry.capture_message('Doctor Request', level: :info) if logged_in?
       render json: 'unauthenticated doctor', status: :unauthorized unless logged_in?
     end
 
     def param_options
       include_param = params[:include]&.split(',') || []
-      { params: { include: include_param }, include: include_param }
+      hash_params = { include: include_param }
+      hash_params[:center_id] = current_center&.id if current_center.present?
+
+      { params: hash_params, include: include_param }
     end
 
     private
@@ -61,6 +68,8 @@ module Api
       return render json: 'unauthenticated admin', status: :unauthorized unless admin_auth_header
 
       render json: 'otp is not valid or expired', status: :unauthorized unless Admin::ValidateOtpService.new(entered_otp: admin_auth_header).call
+
+      Sentry.capture_message('Admin Request', level: :info)
     end
   end
 end

@@ -10,7 +10,8 @@ class Api::V1::Centers::ChildrenController < Api::BaseApi
   authorize_resource
 
   def index
-    render json: ChildSerializer.new(@children, param_options).serializable_hash
+    q = @children.ransack_query(sort: params[:sort], query: params[:q])
+    render json: ChildSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 
   def show

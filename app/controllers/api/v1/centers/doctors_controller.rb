@@ -10,7 +10,8 @@ class Api::V1::Centers::DoctorsController < Api::BaseApi
   authorize_resource
 
   def index
-    render json: DoctorSerializer.new(@doctors, param_options).serializable_hash
+    q = @doctors.ransack_query(sort: params[:sort], query: params[:q])
+    render json: DoctorSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 
   def show

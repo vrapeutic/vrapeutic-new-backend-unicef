@@ -10,7 +10,8 @@ class Api::V1::Centers::SessionsController < Api::BaseApi
   authorize_resource
 
   def index
-    render json: SessionSerializer.new(@sessions, param_options).serializable_hash
+    q = @sessions.ransack_query(sort: params[:sort], query: params[:q])
+    render json: SessionSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 
   def show

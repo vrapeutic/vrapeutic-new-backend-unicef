@@ -79,6 +79,7 @@ Rails.application.routes.draw do
 
       namespace :centers do
         scope ':center_id' do
+          resources :doctor_centers, only: %i[index show]
           resources :doctors, only: %i[index show] do
             collection do
               post :invite_doctor

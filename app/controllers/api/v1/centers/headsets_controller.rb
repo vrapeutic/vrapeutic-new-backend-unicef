@@ -10,7 +10,8 @@ class Api::V1::Centers::HeadsetsController < Api::BaseApi
   authorize_resource
 
   def index
-    render json: HeadsetSerializer.new(@headsets, param_options).serializable_hash
+    q = @headsets.ransack_query(sort: params[:sort], query: params[:q])
+    render json: HeadsetSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 
   def show
