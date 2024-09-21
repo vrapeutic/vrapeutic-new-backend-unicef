@@ -5,7 +5,7 @@ class Api::V1::Centers::DoctorCentersController < Api::BaseApi
   before_action :authorized
 
   def current_ability
-    @current_ability ||= DoctorAbility.new(current_doctor, params)
+    @current_ability ||= DoctorCenterAbility.new(current_doctor, params)
   end
   authorize_resource
 
