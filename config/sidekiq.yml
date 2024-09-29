@@ -1,0 +1,7 @@
+# config/sidekiq.yml
+
+:scheduler:
+  :schedule:
+    free_sessions_headset:
+      cron: '0 * * * *'   # Runs at minute 0.
+      class: FreeSessionsHeadsetWorker
