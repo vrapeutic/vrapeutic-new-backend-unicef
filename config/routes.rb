@@ -1,4 +1,15 @@
+require 'sidekiq/web'
+require 'sidekiq-scheduler/web'
+
 Rails.application.routes.draw do
+  Sidekiq::Web.use(Rack::Auth::Basic) do |username, password|
+    ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(username),
+                                                ::Digest::SHA256.hexdigest(Rails.application.credentials.dig(Rails.env.to_sym, :sidekiq_username))) &
+      ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(password),
+                                                  ::Digest::SHA256.hexdigest(Rails.application.credentials.dig(Rails.env.to_sym, :sidekiq_password)))
+  end
+  mount Sidekiq::Web => '/sidekiq'
+
   get '/', to: 'application#health_check'
 
   namespace :api, defaults: { format: :json } do
