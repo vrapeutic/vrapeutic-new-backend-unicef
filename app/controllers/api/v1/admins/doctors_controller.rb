@@ -1,5 +1,5 @@
 class Api::V1::Admins::DoctorsController < Api::BaseApi
-  before_action :validate_admin_otp
+  before_action :authorized_admin?
   before_action :set_doctor, only: %i[show update]
 
   def index

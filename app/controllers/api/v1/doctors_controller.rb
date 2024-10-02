@@ -1,5 +1,5 @@
 class Api::V1::DoctorsController < Api::BaseApi
-  before_action :authorized
+  before_action :authorized_doctor?
   before_action :set_doctor, only: :show
 
   authorize_resource only: %i[update center_assigned_children center_headsets center_child_modules

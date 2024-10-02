@@ -1,5 +1,5 @@
 class Api::V1::DiagnosesController < Api::BaseApi
-  # before_action :authorized
+  # before_action :authorized_doctor?
   before_action :set_diagnosis, only: :show
 
   # GET /diagnoses

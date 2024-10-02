@@ -1,5 +1,5 @@
 class Api::V1::CentersController < Api::BaseApi
-  before_action :authorized
+  before_action :authorized_doctor?
   before_action :set_center, only: %i[show update]
 
   authorize_resource except: %i[index show]

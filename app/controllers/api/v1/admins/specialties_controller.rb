@@ -1,5 +1,5 @@
 class Api::V1::Admins::SpecialtiesController < Api::BaseApi
-  before_action :validate_admin_otp
+  before_action :authorized_admin?
   before_action :set_specialty, only: :show
 
   def index

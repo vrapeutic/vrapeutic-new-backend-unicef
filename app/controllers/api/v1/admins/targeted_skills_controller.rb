@@ -1,5 +1,5 @@
 class Api::V1::Admins::TargetedSkillsController < Api::BaseApi
-  before_action :validate_admin_otp
+  before_action :authorized_admin?
   before_action :set_targeted_skill, only: :show
 
   # GET /targeted_skills

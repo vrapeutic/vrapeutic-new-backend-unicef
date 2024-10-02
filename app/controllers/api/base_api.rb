@@ -7,19 +7,18 @@ module Api
       render json: exception.message, status: :forbidden
     end
 
-    def current_doctor
-      return unless decoded_token
+    def current_admin
+      admin_auth_header = request.headers['otp']
 
-      Doctor.find_by(id: decoded_token['id'], is_email_verified: true) || false
+      Admin.find_by(otp: admin_auth_header) if admin_auth_header
+    end
+
+    def current_doctor
+      doctor_decoded_token && Doctor.find_by(id: doctor_decoded_token['id'], is_email_verified: true) || nil
     end
 
     def current_center
       params[:center_id] && @center
-    end
-
-    def authorized
-      Sentry.capture_message('Doctor Request', level: :info) if logged_in?
-      render json: 'unauthenticated doctor', status: :unauthorized unless logged_in?
     end
 
     def param_options
@@ -32,22 +31,10 @@ module Api
 
     private
 
-    def auth_header
-      request.headers['Authorization']
-    end
+    def doctor_decoded_token
+      doctor_auth_header = request.headers['Authorization']
 
-    def token
-      auth_header.split(' ')[1]
-    end
-
-    def decoded_token
-      return unless auth_header
-
-      JsonWebToken.decode(token)
-    end
-
-    def logged_in?
-      !!current_doctor
+      JsonWebToken.decode(doctor_auth_header.split(' ')[1]) if doctor_auth_header
     end
 
     def record_not_found
@@ -58,18 +45,22 @@ module Api
       render json: { error: 'data is aleady existed' }, status: :conflict
     end
 
-    # implement admin authentication
-
-    def admin_auth_header
-      request.headers['otp']
+    def authorized_doctor?
+      if !!current_doctor
+        Sentry.capture_message('Doctor Request', level: :info)
+      else
+        render json: 'unauthenticated doctor', status: :unauthorized
+      end
     end
 
-    def validate_admin_otp
-      return render json: 'unauthenticated admin', status: :unauthorized unless admin_auth_header
-
-      render json: 'otp is not valid or expired', status: :unauthorized unless Admin::ValidateOtpService.new(entered_otp: admin_auth_header).call
-
-      Sentry.capture_message('Admin Request', level: :info)
+    def authorized_admin?
+      if !current_admin
+        render json: 'unauthenticated admin', status: :unauthorized
+      elsif !Admin::ValidateOtpService.new(entered_otp: current_admin&.otp).call
+        render json: 'otp is not valid or expired', status: :unauthorized
+      else
+        Sentry.capture_message('Admin Request', level: :info)
+      end
     end
   end
 end

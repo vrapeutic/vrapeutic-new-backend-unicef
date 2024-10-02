@@ -2,7 +2,7 @@ class Api::V1::Centers::SessionsController < Api::BaseApi
   before_action :set_center
   before_action :set_sessions, only: :index
   before_action :set_session, only: :show
-  before_action :authorized
+  before_action :authorized_doctor?
 
   def current_ability
     @current_ability ||= SessionAbility.new(current_doctor, params)

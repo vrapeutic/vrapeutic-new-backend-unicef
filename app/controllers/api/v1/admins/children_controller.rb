@@ -1,5 +1,5 @@
 class Api::V1::Admins::ChildrenController < Api::BaseApi
-  before_action :validate_admin_otp
+  before_action :authorized_admin?
   before_action :set_child, only: %i[show update]
 
   def index

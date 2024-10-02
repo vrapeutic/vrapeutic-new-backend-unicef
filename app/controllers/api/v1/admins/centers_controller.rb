@@ -1,5 +1,5 @@
 class Api::V1::Admins::CentersController < Api::BaseApi
-  before_action :validate_admin_otp
+  before_action :authorized_admin?
   before_action :set_center, only: %i[show assign_center_headset assign_center_module session_evaluations]
 
   def index

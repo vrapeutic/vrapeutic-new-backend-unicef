@@ -2,7 +2,7 @@ class Api::V1::Centers::SoftwareModulesController < Api::BaseApi
   before_action :set_center
   before_action :set_center_software_modules, only: :index
   before_action :set_center_software_module, only: %i[show assign_module_child unassign_module_child]
-  before_action :authorized
+  before_action :authorized_doctor?
 
   def current_ability
     @current_ability ||= SoftwareModuleAbility.new(current_doctor, params)

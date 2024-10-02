@@ -1,40 +1,37 @@
 class Admin::GenerateOtpService
   def initialize(email:, expires_at: Time.now + (Rails.env.production? ? 60.minutes : 180.minutes))
     @email = email
+    @admin = Admin.find_by(email: email)
     @expires_at = expires_at
   end
 
   def call
-    Admin.transaction do
-      generate_otp
-    end
+    Admin.transaction { generate_otp }
   end
 
   private
 
   def generate_otp
-    admin = Admin.find_by(email: @email)
+    return @admin.otp if valid_admin?
 
-    if admin.nil? || admin.expires_at < Time.now
-      otp = Rails.env.production? ? generate_uniq_otp_code : admin&.otp || generate_uniq_otp_code
-
-      if admin.nil?
-        options = { email: @email, otp: otp, expires_at: @expires_at }
-        Admin.create!(options)
-      else
-        options = { otp: otp, expires_at: @expires_at }
-        admin.update!(options)
-      end
-    end
-
+    otp = generate_unique_otp_code
+    create_or_update_admin(otp)
     otp
   end
 
-  def generate_uniq_otp_code
-    otp = SecureRandom.hex(3)
+  def valid_admin?
+    @admin.present? && @admin.expires_at >= Time.now
+  end
 
-    otp = SecureRandom.hex(3) until Admin.find_by(otp: otp).nil?
+  def create_or_update_admin(otp)
+    options = { otp: otp, expires_at: @expires_at }
+    @admin.nil? ? Admin.create!(email: @email, **options) : @admin.update!(options)
+  end
 
-    otp
+  def generate_unique_otp_code
+    loop do
+      otp = SecureRandom.hex(4)
+      return otp if Admin.find_by(otp: otp).nil?
+    end
   end
 end

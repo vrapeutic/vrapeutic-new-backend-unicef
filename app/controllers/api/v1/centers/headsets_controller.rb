@@ -2,7 +2,7 @@ class Api::V1::Centers::HeadsetsController < Api::BaseApi
   before_action :set_center
   before_action :set_headsets, only: :index
   before_action :set_headset, only: %i[show edit_headset]
-  before_action :authorized
+  before_action :authorized_doctor?
 
   def current_ability
     @current_ability ||= HeadsetAbility.new(current_doctor, params)

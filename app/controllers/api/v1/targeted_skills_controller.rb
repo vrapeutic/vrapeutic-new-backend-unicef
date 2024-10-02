@@ -1,5 +1,5 @@
 class Api::V1::TargetedSkillsController < Api::BaseApi
-  # before_action :authorized
+  # before_action :authorized_doctor?
   before_action :set_targeted_skill, only: :show
 
   # GET /targeted_skills
