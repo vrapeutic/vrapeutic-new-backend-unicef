@@ -7,7 +7,7 @@ class FreeSessionsHeadsetWorker
       now_time = Time.zone.now
       duration = ((now_time - session.created_at) / 60.0).round(1)
 
-      next if duration < 1805
+      next if duration < 90
 
       session.update!(ended_at: now_time, duration: duration)
 
