@@ -4,7 +4,7 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   authorize_resource only: %i[update center_assigned_children center_headsets center_child_modules
                               center_child_doctors home_doctors home_kids center_statistics center_vr_minutes
-                              child_session_performance_data sessions_percentage kids_percentage]
+                              sessions_percentage kids_percentage]
 
   def current_ability
     @current_ability ||= DoctorAbility.new(current_doctor, params)
@@ -134,17 +134,6 @@ class Api::V1::DoctorsController < Api::BaseApi
 
   def center_vr_minutes
     result = Doctor::CenterVrMinutesService.new(doctor: current_doctor, center_id: params[:center_id], year: params[:year]).call
-    render json: result
-  end
-
-  def child_session_performance_data
-    result = Doctor::ChildCenterSessionsDataService.new(
-      doctor: current_doctor,
-      center_id: params[:center_id],
-      child_id: params[:child_id],
-      start_date: params[:start_date],
-      end_date: params[:end_date]
-    ).call
     render json: result
   end
 

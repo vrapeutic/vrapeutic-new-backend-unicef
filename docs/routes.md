@@ -15,7 +15,6 @@
 | **POST**   | /api/v1/sessions/:id/add_comment                             | Add comment to session               |
 | **PUT**    | /api/v1/sessions/:id/add_evaluation                          | Add evaluation to session            |
 | **PUT**    | /api/v1/sessions/:id/add_note_and_evaluation                 | Add note and evaluation to session   |
-| **POST**   | /api/v1/sessions/:id/add_attention_performance               | Add attention performance to session |
 | **POST**   | /api/v1/sessions/:id/add_evaluation_file                     | Add evaluation file to session       |
 | **POST**   | /api/v1/doctors                                              | Create doctor                        |
 | **PUT**    | /api/v1/doctors/:id                                          | Update doctor                        |
@@ -33,7 +32,6 @@
 | **GET**    | /api/v1/doctors/home_kids                                    | List home kids                       |
 | **GET**    | /api/v1/doctors/center_statistics                            | Get center statistics                |
 | **GET**    | /api/v1/doctors/center_vr_minutes                            | Get center VR minutes                |
-| **GET**    | /api/v1/doctors/child_session_performance_data               | Get child session performance data   |
 | **GET**    | /api/v1/doctors/sessions_percentage                          | Get sessions percentage              |
 | **GET**    | /api/v1/doctors/kids_percentage                              | Get kids percentage                  |
 | **POST**   | /api/v1/centers                                              | Create center                        |

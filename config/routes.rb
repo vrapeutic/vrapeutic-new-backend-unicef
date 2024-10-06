@@ -34,7 +34,6 @@ Rails.application.routes.draw do
           post :add_comment
           put :add_evaluation
           put :add_note_and_evaluation
-          post :add_attention_performance
           post :add_evaluation_file
         end
       end
@@ -53,7 +52,6 @@ Rails.application.routes.draw do
           get :home_kids
           get :center_statistics
           get :center_vr_minutes
-          get :child_session_performance_data
           get :sessions_percentage
           get :kids_percentage
         end

@@ -6,8 +6,6 @@ class Api::V1::SessionsController < Api::BaseApi
                          add_comment
                          add_evaluation
                          add_note_and_evaluation
-                         add_attention_performance
-                         add_attention_performance_modules
                          add_evaluation_file]
 
   # authorize_resource except: %i[index show]
@@ -92,32 +90,6 @@ class Api::V1::SessionsController < Api::BaseApi
   rescue StandardError => e
     result = Response::HandleErrorService.new(error: e).call
     render json: result[:data], status: result[:status]
-  end
-
-  def add_attention_performance
-    Session::AddAttentionPerformanceService.new(
-      session: @session,
-      software_module_id: params[:software_module_id],
-      targets: params[:targets],
-      interruptions: params[:interruptions],
-      distractors: params[:distractors],
-      level: params[:level]
-    ).call
-    render json: 'performance data is added to session'
-  rescue StandardError => e
-    render json: { error: e.message }, status: :unprocessable_entity
-  end
-
-  def add_attention_performance_modules
-    Session::AddAttentionPerformanceModulesService.new(
-      session: @session,
-      modules_data: params[:data],
-      duration: params[:duration],
-      vr_duration: params[:vr_duration]
-    ).call
-    render json: 'all attention performance data is saved'
-  rescue StandardError => e
-    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def add_evaluation_file
