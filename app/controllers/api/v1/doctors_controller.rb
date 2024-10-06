@@ -3,7 +3,7 @@ class Api::V1::DoctorsController < Api::BaseApi
   before_action :set_doctor, only: :show
 
   authorize_resource only: %i[update center_assigned_children center_headsets center_child_modules
-                              center_child_doctors home_doctors home_kids center_statistics center_vr_minutes
+                              center_child_doctors home_doctors home_kids
                               sessions_percentage kids_percentage]
 
   def current_ability
@@ -73,10 +73,6 @@ class Api::V1::DoctorsController < Api::BaseApi
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
-  def centers
-    render json: CenterSerializer.new(current_doctor.centers, param_options).serializable_hash
-  end
-
   def center_assigned_children
     children = Doctor::GetAssignedCenterChildrenService.new(doctor: current_doctor, center_id: params[:center_id]).call
     render json: ChildSerializer.new(children, param_options).serializable_hash
@@ -106,17 +102,6 @@ class Api::V1::DoctorsController < Api::BaseApi
     render json: SessionSerializer.new(sessions, param_options).serializable_hash
   end
 
-  def home_centers
-    current_doctor_centers = current_doctor.centers
-                                           .select("centers.*, COUNT(DISTINCT doctors.id)
-                                           AS doctors_count, COUNT(DISTINCT children.id)
-                                           AS children_count")
-                                           .left_joins(:doctors, :children)
-                                           .group('centers.id')
-                                           .includes(:specialties, :center_social_links)
-    render json: CenterSerializer.new(current_doctor_centers, param_options).serializable_hash
-  end
-
   def home_doctors
     doctors = Doctor::GetCenterDoctorsService.new(current_doctor: current_doctor, center_id: params[:center_id]).call
     render json: HomeDoctorSerializer.new(doctors, param_options).serializable_hash
@@ -125,16 +110,6 @@ class Api::V1::DoctorsController < Api::BaseApi
   def home_kids
     kids = Doctor::GetHomeCenterKidsService.new(current_doctor: current_doctor, center_id: params[:center_id]).call
     render json: HomeKidSerializer.new(kids, param_options).serializable_hash
-  end
-
-  def center_statistics
-    result = Doctor::CenterStatisticsService.new(doctor: current_doctor, center_id: params[:center_id]).call
-    render json: result
-  end
-
-  def center_vr_minutes
-    result = Doctor::CenterVrMinutesService.new(doctor: current_doctor, center_id: params[:center_id], year: params[:year]).call
-    render json: result
   end
 
   def sessions_percentage

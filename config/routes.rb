@@ -38,25 +38,13 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :doctors, only: %i[index show create update] do
-        collection do
-          post :complete_profile
-          get :centers
-          get :center_assigned_children
-          get :center_headsets
-          get :center_child_modules
-          get :center_child_doctors
-          get :center_child_sessions
-          get :home_centers
-          get :home_doctors
-          get :home_kids
-          get :center_statistics
-          get :center_vr_minutes
-          get :sessions_percentage
-          get :kids_percentage
+      resources :headsets, only: %i[index show] do
+        member do
+          get :free_headset unless Rails.env.production?
         end
       end
 
+      # CENTER ENDPOINTS
       resources :centers, only: %i[index show create update] do
         member do
           post :add_child
@@ -135,6 +123,7 @@ Rails.application.routes.draw do
         end
       end
 
+      # ADMIN ENDPOINTS
       get 'admins/kids', to: 'admins/children#index'
       put 'admins/edit_child', to: 'admins/children#update'
 
@@ -175,9 +164,35 @@ Rails.application.routes.draw do
         resources :diagnoses, only: %i[index show]
       end
 
-      resources :headsets, only: %i[index show] do
-        member do
-          get :free_headset unless Rails.env.production?
+      # DOCTOR ENDPOINTS
+      get 'doctors/home_centers', to: 'doctors/centers#home_centers'
+      get 'doctors/center_statistics', to: 'doctors/centers#center_statistics'
+      get 'doctors/center_vr_minutes', to: 'doctors/centers#center_vr_minutes'
+
+      namespace :doctors do
+        resources :centers, only: %i[index show] do
+          collection do
+            get :home_centers
+          end
+          member do
+            get :center_statistics
+            get :center_vr_minutes
+          end
+        end
+      end
+
+      resources :doctors, only: %i[index show create update] do
+        collection do
+          post :complete_profile
+          get :center_assigned_children
+          get :center_headsets
+          get :center_child_modules
+          get :center_child_doctors
+          get :center_child_sessions
+          get :home_doctors
+          get :home_kids
+          get :sessions_percentage
+          get :kids_percentage
         end
       end
     end

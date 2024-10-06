@@ -1,8 +1,8 @@
 class Api::V1::Centers::DoctorsController < Api::BaseApi
+  before_action :authorized_doctor?
   before_action :set_center
   before_action :set_center_doctors, only: :index
   before_action :set_center_doctor, only: %i[show assign_doctor_child unassign_doctor_child edit_doctor]
-  before_action :authorized_doctor?
 
   def current_ability
     @current_ability ||= DoctorAbility.new(current_doctor, params)

@@ -1,8 +1,8 @@
 class Api::V1::Centers::ChildrenController < Api::BaseApi
+  before_action :authorized_doctor?
   before_action :set_center
   before_action :set_children, only: :index
   before_action :set_child, only: %i[show edit_child]
-  before_action :authorized_doctor?
 
   def current_ability
     @current_ability ||= ChildAbility.new(current_doctor, params)

@@ -4,6 +4,9 @@ class CenterAbility
   def initialize(doctor, params)
     case params[:action]
 
+    when 'show'
+      can :show, Center if Authorization::Center::CanGetCentersService.new(current_doctor: doctor,
+                                                                           center_id: params[:id] || params[:center_id] || params[:id]).call
     when 'update'
       can :update, Center if Authorization::Center::CanUpdateService.new(current_doctor: doctor, center_id: params[:id]).call
     when 'create'
@@ -17,7 +20,17 @@ class CenterAbility
       can :edit_doctor, Center if Authorization::Center::CanEditDoctorService.new(current_doctor: doctor, center_id: params[:id],
                                                                                   doctor_id: params[:doctor_id]).call
     when 'all_doctors'
-      can :all_doctors, Center if Authorization::Center::CanGetAllDoctorsService.new(current_doctor: doctor, center_id: params[:id]).call
+      can :all_doctors, Center if Authorization::Center::CanGetAllDoctorsService
+                                  .new(current_doctor: doctor,
+                                       center_id: params[:id] || params[:center_id]).call
+    when 'center_statistics'
+      can :center_statistics, Center if Authorization::Doctor::CanGetCenterStatisticsService
+                                        .new(current_doctor: doctor,
+                                             center_id: params[:id] || params[:center_id]).call
+    when 'center_vr_minutes'
+      can :center_vr_minutes, Center if Authorization::Doctor::CanGetCenterVrMinutesService
+                                        .new(current_doctor: doctor,
+                                             center_id: params[:id] || params[:center_id]).call
     else
       false
     end
