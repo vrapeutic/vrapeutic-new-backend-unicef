@@ -30,7 +30,7 @@ class Admin::GenerateOtpService
 
   def generate_unique_otp_code
     loop do
-      otp = SecureRandom.hex(4)
+      otp = SecureRandom.hex(3)
       return otp if Admin.find_by(otp: otp).nil?
     end
   end
