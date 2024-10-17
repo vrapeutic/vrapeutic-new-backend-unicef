@@ -1,8 +1,8 @@
 class Api::V1::Centers::SessionsController < Api::BaseApi
+  before_action :authorized_doctor?
   before_action :set_center
-  before_action :set_sessions, only: %i[index show]
+  before_action :set_sessions, only: :index
   before_action :set_session, only: :show
-  before_action :authorized
 
   def current_ability
     @current_ability ||= SessionAbility.new(current_doctor, params)
@@ -10,11 +10,16 @@ class Api::V1::Centers::SessionsController < Api::BaseApi
   authorize_resource
 
   def index
-    render json: SessionSerializer.new(@sessions, param_options).serializable_hash
+    q = @sessions.ransack_query(sort: params[:sort], query: params[:q])
+    render json: SessionSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 
   def show
     render json: SessionSerializer.new(@session, param_options).serializable_hash
+  end
+
+  def evaluations
+    render json: @center.evaluation_stats
   end
 
   private
@@ -28,6 +33,7 @@ class Api::V1::Centers::SessionsController < Api::BaseApi
   end
 
   def set_session
+    set_sessions
     @session = @sessions.find(params[:id])
   end
 end

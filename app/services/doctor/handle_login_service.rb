@@ -13,9 +13,7 @@ class Doctor::HandleLoginService
   def handle_login
     raise 'Invalid credentials' unless @email.present? || @password.present?
 
-    superadmins = (ENV['ADMIN_EMAILS'].present? ? ENV['ADMIN_EMAILS'].split(',') : []) + [ENV['ADMIN_EMAIL']]
-
-    return { is_admin: true } if superadmins.include?(@email.downcase)
+    return { is_admin: true } if Admin::PERMITTED_EMAILS.include?(@email.downcase)
 
     doctor = Doctor.find_by(email: @email.downcase)
 

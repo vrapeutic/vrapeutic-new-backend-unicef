@@ -75,8 +75,8 @@ gem 'jwt'
 gem 'mini_magick'
 gem 'rack-cors'
 gem 'ransack'
-gem "sentry-rails"
-gem "sentry-ruby"
+gem 'sentry-rails'
+gem 'sentry-ruby'
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
-gem "stackprof"
+gem 'stackprof'

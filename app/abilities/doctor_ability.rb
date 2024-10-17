@@ -38,18 +38,6 @@ class DoctorAbility
       can :home_doctors, Doctor if Authorization::Doctor::CanGetHomeDoctorsService.new(current_doctor: doctor, center_id: params[:center_id]).call
     when 'home_kids'
       can :home_kids, Doctor if Authorization::Doctor::CanGetHomeKidsService.new(current_doctor: doctor, center_id: params[:center_id]).call
-    when 'center_statistics'
-      can :center_statistics, Doctor if Authorization::Doctor::CanGetCenterStatisticsService.new(current_doctor: doctor,
-                                                                                                 center_id: params[:center_id]).call
-    when 'center_vr_minutes'
-      can :center_vr_minutes, Doctor if Authorization::Doctor::CanGetCenterVrMinutesService.new(current_doctor: doctor,
-                                                                                                center_id: params[:center_id]).call
-    when 'child_session_performance_data'
-      can :child_session_performance_data, Doctor if Authorization::Doctor::CanGetChildSessionsDataService.new(
-        current_doctor: doctor,
-        center_id: params[:center_id],
-        child_id: params[:child_id]
-      ).call
     when 'sessions_percentage'
       can :sessions_percentage, Doctor if Authorization::Doctor::CanGetCenterSessionsPercentageService.new(current_doctor: doctor,
                                                                                                            center_id: params[:center_id]).call
@@ -61,22 +49,35 @@ class DoctorAbility
       if Authorization::Center::CanAssignDoctorToChildService.new(
         current_doctor: doctor,
         center_id: params[:center_id],
-        assignee_doctor_id: params[:id],
+        assignee_doctor_id: params[:id] || params[:doctor_id],
         child_id: params[:child_id]
       ).call
         can :assign_doctor_child,
-            Center
+            Doctor
       end
-
     when 'unassign_doctor_child'
       if Authorization::Center::CanUnassignDoctorFromChildService.new(
         current_doctor: doctor,
         center_id: params[:center_id],
-        assignee_doctor_id: params[:id],
+        assignee_doctor_id: params[:id] || params[:doctor_id],
         child_id: params[:child_id]
       ).call
         can :unassign_doctor_child,
-            Center
+            Doctor
+      end
+    when 'invite_doctor'
+      can :invite_doctor, Doctor if Authorization::Center::CanInviteDoctorService.new(current_doctor: doctor, center_id: params[:center_id]).call
+    when 'assign_doctor'
+      can :assign_doctor, Doctor if Authorization::Center::CanAssignDoctorService.new(current_doctor: doctor, center_id: params[:center_id],
+                                                                                      assignee_doctor_id: params[:id] || params[:doctor_id]).call
+    when 'edit_doctor'
+      can :edit_doctor, Doctor if Authorization::Center::CanEditDoctorService.new(current_doctor: doctor, center_id: params[:center_id],
+                                                                                  doctor_id: params[:id] || params[:doctor_id]).call
+    when 'make_doctor_admin'
+      if Authorization::Center::CanMakeDoctorAdminService.new(current_doctor: doctor, center_id: params[:center_id],
+                                                              worker_doctor_id: params[:id] || params[:doctor_id]).call
+        can :make_doctor_admin,
+            Doctor
       end
     else
       false

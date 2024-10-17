@@ -1,0 +1,7 @@
+# config/sidekiq.yml
+
+:scheduler:
+  :schedule:
+    free_sessions_headset:
+      cron: '*/30 * * * *'   # At every 30th minute.
+      class: FreeSessionsHeadsetWorker

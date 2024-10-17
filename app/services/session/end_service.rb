@@ -26,7 +26,7 @@ class Session::EndService
   end
 
   def end_session
-    ended_at = Time.now
+    ended_at = Time.zone.now
     duration = ((ended_at - @session.created_at) / 60.0).round(1)
     raise 'vr duration cannot be greater than session duration' if @vr_duration.to_f > duration
 

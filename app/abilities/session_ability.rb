@@ -36,21 +36,12 @@ class SessionAbility
     when 'add_note_and_evaluation'
       can :add_note_and_evaluation, Session if Authorization::Session::CanAddNoteAndEvaluationService.new(current_doctor: doctor,
                                                                                                           session_id: params[:id]).call
-    when 'add_attention_performance'
-      can :add_attention_performance, Session if Authorization::Session::CanAddAttentionPerformanceService.new(
-        current_doctor: doctor,
-        session_id: params[:id],
-        software_module_id: params[:software_module_id]
-      ).call
-    when 'add_attention_performance_modules'
-      can :add_attention_performance_modules, Session if Authorization::Session::CanAddAttentionPerformanceModulesService.new(
-        current_doctor: doctor, session_id: params[:id]
-      ).call
     when 'add_attachment'
       can :add_attachment, Session if Authorization::Session::CanAddAttachmentService.new(
         current_doctor: doctor, session_id: params[:id]
       ).call
-
+    when 'evaluations'
+      can :evaluations, Session if Authorization::Session::CanGetSessionsService.new(current_doctor: doctor, center_id: params[:center_id]).call
     else
       false
     end

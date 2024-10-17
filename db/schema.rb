@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_03_164147) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_06_124049) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_03_164147) do
     t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
   end
 
   create_table "assigned_center_modules", force: :cascade do |t|
@@ -30,37 +31,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_03_164147) do
     t.index ["center_id", "software_module_id"], name: "assigned_center_modules_index", unique: true
     t.index ["center_id"], name: "index_assigned_center_modules_on_center_id"
     t.index ["software_module_id"], name: "index_assigned_center_modules_on_software_module_id"
-  end
-
-  create_table "attention_distractors", force: :cascade do |t|
-    t.string "name"
-    t.float "time_following_it_seconds"
-    t.bigint "attention_performance_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["attention_performance_id"], name: "index_attention_distractors_on_attention_performance_id"
-  end
-
-  create_table "attention_interruptions", force: :cascade do |t|
-    t.float "duration_seconds"
-    t.bigint "attention_performance_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["attention_performance_id"], name: "index_attention_interruptions_on_attention_performance_id"
-  end
-
-  create_table "attention_performances", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "attention_targets", force: :cascade do |t|
-    t.datetime "start_time"
-    t.datetime "hit_time"
-    t.bigint "attention_performance_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["attention_performance_id"], name: "index_attention_targets_on_attention_performance_id"
   end
 
   create_table "center_social_links", force: :cascade do |t|
@@ -158,21 +128,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_03_164147) do
     t.index ["email"], name: "index_children_on_email", unique: true
   end
 
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer "priority", default: 0, null: false
-    t.integer "attempts", default: 0, null: false
-    t.text "handler", null: false
-    t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string "locked_by"
-    t.string "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
-  end
-
   create_table "diagnoses", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -239,17 +194,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_03_164147) do
     t.integer "code_type", default: 0
     t.index ["doctor_id", "code_type"], name: "index_otps_on_doctor_id_and_code_type", unique: true
     t.index ["doctor_id"], name: "index_otps_on_doctor_id"
-  end
-
-  create_table "performances", force: :cascade do |t|
-    t.bigint "session_module_id", null: false
-    t.integer "level"
-    t.string "performanceable_type", null: false
-    t.bigint "performanceable_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["performanceable_type", "performanceable_id"], name: "index_performances_on_performanceable"
-    t.index ["session_module_id"], name: "index_performances_on_session_module_id"
   end
 
   create_table "session_comments", force: :cascade do |t|
@@ -337,9 +281,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_03_164147) do
 
   add_foreign_key "assigned_center_modules", "centers"
   add_foreign_key "assigned_center_modules", "software_modules"
-  add_foreign_key "attention_distractors", "attention_performances"
-  add_foreign_key "attention_interruptions", "attention_performances"
-  add_foreign_key "attention_targets", "attention_performances"
   add_foreign_key "center_social_links", "centers"
   add_foreign_key "center_specialties", "centers"
   add_foreign_key "center_specialties", "specialties"
@@ -359,7 +300,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_03_164147) do
   add_foreign_key "doctor_specialties", "specialties"
   add_foreign_key "headsets", "centers"
   add_foreign_key "otps", "doctors"
-  add_foreign_key "performances", "session_modules"
   add_foreign_key "session_comments", "sessions"
   add_foreign_key "session_doctors", "doctors"
   add_foreign_key "session_doctors", "sessions"
