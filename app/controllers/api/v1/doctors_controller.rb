@@ -1,5 +1,7 @@
 class Api::V1::DoctorsController < Api::BaseApi
-  before_action :authorized_doctor?
+  before_action :authorized_doctor?, only: %i[update center_assigned_children center_headsets
+                                              center_child_modules center_child_doctors home_doctors
+                                              home_kids sessions_percentage kids_percentage]
   before_action :set_doctor, only: :show
 
   authorize_resource only: %i[update center_assigned_children center_headsets center_child_modules
