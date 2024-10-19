@@ -44,6 +44,9 @@ Rails.application.routes.draw do
         end
       end
 
+      # CENTER ENDPOINTS
+      resources :centers, only: %i[index show create update]
+
       # software module redirect
       post 'centers/:center_id/add_modules', to: 'centers/software_modules#add_modules'
       put 'centers/:center_id/assign_module_child', to: 'centers/software_modules#assign_module_child'
