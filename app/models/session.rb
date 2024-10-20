@@ -1,6 +1,4 @@
 class Session < ApplicationRecord
-  default_scope { order(session_id: :asc) }
-
   # constant variables
   RANSACKABLE_ATTRIBUTES = %w[id duration evaluation is_verified ended_at session_id note center_id headset_id child_id created_at updated_at].freeze
   RANSACKABLE_ASSOCIATIONS = %w[center headset child].freeze
