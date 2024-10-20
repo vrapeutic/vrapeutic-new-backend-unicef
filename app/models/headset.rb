@@ -1,4 +1,6 @@
 class Headset < ApplicationRecord
+  default_scope { order(model: :asc) }
+
   include Discard::Model
 
   # constant variables

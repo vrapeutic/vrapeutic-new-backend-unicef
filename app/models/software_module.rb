@@ -1,4 +1,6 @@
 class SoftwareModule < ApplicationRecord
+  default_scope { order(name: :asc) }
+
   # constant variables
   RANSACKABLE_ATTRIBUTES = %w[id name package_name version technology min_age max_age created_at updated_at].freeze
   RANSACKABLE_ASSOCIATIONS = %w[targeted_skills centers children sessions].freeze

@@ -1,4 +1,6 @@
 class Otp < ApplicationRecord
+  default_scope { order(code: :asc) }
+
   # define constants
   EMAIL_VERIFICATION = 'email_verification'.freeze
   SESSION_VERIFICATION = 'session_verification'.freeze

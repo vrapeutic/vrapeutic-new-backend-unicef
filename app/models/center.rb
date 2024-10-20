@@ -1,4 +1,6 @@
 class Center < ApplicationRecord
+  default_scope { order(name: :asc) }
+
   # constant variables
   RANSACKABLE_ATTRIBUTES = %w[id name website tax_id registration_number email phone_number created_at updated_at].freeze
   RANSACKABLE_ASSOCIATIONS = %w[doctors specialties children headsets sessions software_modules].freeze

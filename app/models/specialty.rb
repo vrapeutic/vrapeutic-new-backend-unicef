@@ -1,4 +1,6 @@
 class Specialty < ApplicationRecord
+  default_scope { order(name: :asc) }
+
   validates :name, presence: true
 
   has_many :doctor_specialties, dependent: :destroy

@@ -1,4 +1,6 @@
 class Diagnosis < ApplicationRecord
+  default_scope { order(name: :asc) }
+
   validates :name, presence: true, uniqueness: true
 
   # diagnoses names
