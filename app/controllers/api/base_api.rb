@@ -46,11 +46,11 @@ module Api
     end
 
     def authorized_doctor?
-      if !!current_doctor
-        Sentry.capture_message('Doctor Request', level: :info)
-      else
-        render json: 'unauthenticated doctor', status: :unauthorized
-      end
+      # if !!current_doctor
+      #   Sentry.capture_message('Doctor Request', level: :info)
+      # else
+      #   render json: 'unauthenticated doctor', status: :unauthorized
+      # end
     end
 
     def authorized_admin?

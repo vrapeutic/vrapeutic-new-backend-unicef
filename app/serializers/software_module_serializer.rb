@@ -1,4 +1,4 @@
-class SoftwareModuleSerializer < JSONAPI::Serializer
+class SoftwareModuleSerializer < BaseSerializer
   attributes :name, :version, :technology, :package_name, :min_age, :max_age,
              :image, :targeted_skills, :created_at, :updated_at
 
