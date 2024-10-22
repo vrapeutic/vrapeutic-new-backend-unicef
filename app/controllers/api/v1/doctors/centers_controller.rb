@@ -25,7 +25,7 @@ class Api::V1::Doctors::CentersController < Api::BaseApi
                                      .left_joins(:doctors, :children)
                                      .group('centers.id')
                                      .includes(:specialties, :center_social_links)
-    render json: CenterSerializer.new(current_doctor_centers, param_options).serializable_hash
+    render json: HomeCenterSerializer.new(current_doctor_centers, param_options).serializable_hash
   end
 
   def center_statistics
