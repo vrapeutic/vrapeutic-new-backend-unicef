@@ -23,14 +23,19 @@ class Session < ApplicationRecord
   has_many :session_comments, dependent: :destroy
 
   after_create :set_session_id
-
-  def generated_session_id
-    "#{id}-#{center&.id}-#{child&.id}"
-  end
+  after_create :free_blocked_headset_job
 
   private
 
   def set_session_id
     update(session_id: generated_session_id)
+  end
+
+  def generated_session_id
+    "#{id}-#{center&.id}-#{child&.id}"
+  end
+
+  def free_blocked_headset_job
+    FreeBlockedHeadsetWorker.perform_at(90.minutes.from_now, self.id)
   end
 end
