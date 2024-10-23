@@ -2,6 +2,7 @@ class Api::V1::Doctors::CentersController < Api::BaseApi
   before_action :authorized_doctor?
   before_action :set_doctor
   before_action :set_doctor_centers, only: %i[index home_centers]
+
   before_action :set_doctor_center,  only: %i[show center_statistics center_vr_minutes]
 
   def current_ability

@@ -47,12 +47,12 @@ Rails.application.routes.draw do
       # CENTER ENDPOINTS
       resources :centers, only: %i[index show create update]
 
-      # software module redirect
+      # centers:software module redirect
       post 'centers/:center_id/add_modules', to: 'centers/software_modules#add_modules'
       put 'centers/:center_id/assign_module_child', to: 'centers/software_modules#assign_module_child'
       put 'centers/:center_id/unassign_module_child', to: 'centers/software_modules#unassign_module_child'
 
-      # doctors redirect
+      # centers:doctors redirect
       put 'centers/:center_id/assign_doctor_child', to: 'centers/doctors#assign_doctor_child'
       put 'centers/:center_id/unassign_doctor_child', to: 'centers/doctors#unassign_doctor_child'
       get 'centers/:center_id/all_doctors', to: 'centers/doctors#index'
@@ -61,11 +61,11 @@ Rails.application.routes.draw do
       post 'centers/:center_id/edit_doctor', to: 'centers/doctors#edit_doctor'
       post 'centers/:center_id/make_doctor_admin', to: 'centers/doctors#make_doctor_admin'
 
-      # headsets redirect
+      # centers:headsets redirect
       post 'centers/:center_id/add_headset', to: 'centers/headsets#add_headset'
       put 'centers/:center_id/edit_headset', to: 'centers/headsets#edit_headset'
 
-      # children redirect
+      # centers:children redirect
       post 'centers/:center_id/add_child', to: 'centers/children#add_child'
       put 'centers/:center_id/edit_child', to: 'centers/children#edit_child'
 
@@ -174,6 +174,10 @@ Rails.application.routes.draw do
             get :center_vr_minutes
           end
         end
+
+        resources :sessions, only: %i[index show]
+        resources :children, only: %i[index show]
+        resources :specialties, only: %i[index show]
       end
 
       resources :doctors, only: %i[index show create update] do

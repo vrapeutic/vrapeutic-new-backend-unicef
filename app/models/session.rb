@@ -36,6 +36,6 @@ class Session < ApplicationRecord
   end
 
   def free_blocked_headset_job
-    FreeBlockedHeadsetWorker.perform_at(90.minutes.from_now, self.id)
+    FreeBlockedHeadsetWorker.perform_at(90.minutes.from_now, id)
   end
 end

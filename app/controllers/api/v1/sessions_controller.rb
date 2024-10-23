@@ -8,11 +8,11 @@ class Api::V1::SessionsController < Api::BaseApi
                          add_note_and_evaluation
                          add_evaluation_file]
 
-  # authorize_resource except: %i[index show]
+  authorize_resource except: %i[index show]
 
-  # def current_ability
-  #   @current_ability ||= SessionAbility.new(current_doctor, params)
-  # end
+  def current_ability
+    @current_ability ||= SessionAbility.new(current_doctor, params)
+  end
 
   # GET /sessions
   def index
