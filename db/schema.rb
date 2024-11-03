@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_06_124049) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_03_063633) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -89,6 +89,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_06_124049) do
     t.bigint "diagnosis_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "center_id"
+    t.index ["center_id"], name: "index_child_diagnoses_on_center_id"
     t.index ["child_id", "diagnosis_id"], name: "index_child_diagnoses_on_child_id_and_diagnosis_id", unique: true
     t.index ["child_id"], name: "index_child_diagnoses_on_child_id"
     t.index ["diagnosis_id"], name: "index_child_diagnoses_on_diagnosis_id"
@@ -286,6 +288,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_06_124049) do
   add_foreign_key "center_specialties", "specialties"
   add_foreign_key "child_centers", "centers"
   add_foreign_key "child_centers", "children"
+  add_foreign_key "child_diagnoses", "centers"
   add_foreign_key "child_diagnoses", "children"
   add_foreign_key "child_diagnoses", "diagnoses"
   add_foreign_key "child_doctors", "centers"

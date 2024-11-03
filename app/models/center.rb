@@ -31,6 +31,9 @@ class Center < ApplicationRecord
   has_many :assigned_center_modules, -> { where('end_date > ?', AssignedCenterModule::END_DATE) }, dependent: :destroy
   has_many :software_modules, through: :assigned_center_modules
 
+  has_many :child_diagnoses, -> { distinct }, dependent: :destroy
+  has_many :diagnoses, through: :child_diagnoses
+
   def evaluation_stats
     total_sessions = sessions.empty? ? 1.0 : sessions.count.to_f
     total_unevaluated = sessions.where(evaluation: nil).count

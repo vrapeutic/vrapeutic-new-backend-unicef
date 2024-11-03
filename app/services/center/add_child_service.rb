@@ -37,7 +37,9 @@ class Center::AddChildService
   end
 
   def create_chid_diagnoses
-    @new_child.diagnoses << @diagnoses_records
+    @diagnoses_records.each do |diagnoses_record|
+      ChildDiagnosis.create!(diagnosis: diagnoses_record, center_id: @center_id, child: @new_child)
+    end
   end
 
   def create_child_center

@@ -1,5 +1,5 @@
 class Api::V1::Centers::ChildrenController < Api::BaseApi
-  before_action :authorized_doctor?
+  # before_action :authorized_doctor?
   before_action :set_center
   before_action :set_children, only: :index
   before_action :set_child, only: %i[show edit_child]
@@ -35,6 +35,7 @@ class Api::V1::Centers::ChildrenController < Api::BaseApi
   def edit_child
     child = Center::EditChildService.new(
       child_id: @child.id,
+      center_id: @center.id,
       edit_params: edit_child_params.except(:diagnosis_ids),
       diagnosis_ids: params[:child][:diagnosis_ids]
     ).call

@@ -1,6 +1,7 @@
 class Center::EditChildService
-  def initialize(child_id:, edit_params:, diagnosis_ids:)
+  def initialize(child_id:, center_id:, edit_params:, diagnosis_ids:)
     @child_id = child_id
+    @center_id = center_id
     @edit_params = edit_params
     @diagnosis_ids = diagnosis_ids
     @diagnoses_records = nil
@@ -41,6 +42,8 @@ class Center::EditChildService
     @child.diagnoses.destroy_all
 
     # create new diagnoses
-    @child.diagnoses << @diagnoses_records
+    @diagnoses_records.each do |diagnoses_record|
+      ChildDiagnosis.create!(diagnosis: diagnoses_record, center_id: @center_id, child: @new_child)
+    end
   end
 end
