@@ -1,5 +1,5 @@
 class Child < ApplicationRecord
-  default_scope { order(name: :asc) }
+  # default_scope { order(name: :asc) }
 
   # constant variables
   RANSACKABLE_ATTRIBUTES = %w[id name email ago created_at updated_at].freeze

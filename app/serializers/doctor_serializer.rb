@@ -11,7 +11,7 @@ class DoctorSerializer < BaseSerializer
   attribute :is_center_admin, if: proc { |_doctor, params|
     params && params[:center_id]
   } do |doctor, params|
-    doctor.doctor_centers.find_by(center_id: params[:center_id]).admin?
+    doctor.doctor_centers.find_by(center_id: params[:center_id])&.admin?
   end
 
   has_many :specialties, if: proc { |_record, params| BaseSerializer.params_include?(params, 'specialties') }
