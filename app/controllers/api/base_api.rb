@@ -18,7 +18,11 @@ module Api
     end
 
     def current_center
-      @center.nil? && params[:center_id] ? Center.find_by(id: params[:center_id]) : @center
+      @center.nil? && request_center_params.present? ? Center.find_by(id: request_center_params) : @center
+    end
+
+    def request_center_params
+      params[:center_id] || params[:centers_id_eq] || params[:center_id_eq]
     end
 
     def param_options
