@@ -22,7 +22,7 @@ module Api
     end
 
     def request_center_params
-      params[:center_id] || params[:centers_id_eq] || params[:center_id_eq]
+      params[:center_id] || params[:q] && (params[:q][:centers_id_eq] || params[:q][:center_id_eq])
     end
 
     def param_options
