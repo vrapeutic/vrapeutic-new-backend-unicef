@@ -1,5 +1,5 @@
 class Api::V1::Doctors::ChildrenController < Api::BaseApi
-  # before_action :authorized_doctor?
+  before_action :authorized_doctor?
   before_action :set_doctor
   before_action :set_doctor_children, only: %i[index]
 
@@ -17,7 +17,7 @@ class Api::V1::Doctors::ChildrenController < Api::BaseApi
   private
 
   def set_doctor
-    @doctor = Doctor.find(36)
+    @doctor = current_doctor
   end
 
   def set_doctor_children
