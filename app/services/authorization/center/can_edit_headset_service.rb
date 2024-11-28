@@ -1,4 +1,4 @@
-class Authorization::Center::CanEditHeadsetService
+class Authorization::Center::CanEditHeadsetService < Authorization::Base
   def initialize(current_doctor:, center_id:, headset_id:)
     @current_doctor = current_doctor
     @center_id = center_id
@@ -6,14 +6,10 @@ class Authorization::Center::CanEditHeadsetService
   end
 
   def call
-    is_current_doctor_admin && center_has_headset?
+    is_doctor_admin_for_center?(@current_doctor.id, @center_id) && center_has_headset?
   end
 
   private
-
-  def is_current_doctor_admin
-    Center::IsDoctorAdminService.new(current_doctor_id: @current_doctor.id, center_id: @center_id).call
-  end
 
   def center_has_headset?
     Center::HasHeadsetService.new(center_id: @center_id, headset_id: @headset_id).call

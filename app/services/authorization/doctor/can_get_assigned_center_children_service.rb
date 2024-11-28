@@ -1,4 +1,4 @@
-class Authorization::Doctor::CanGetAssignedCenterChildrenService
+class Authorization::Doctor::CanGetAssignedCenterChildrenService < Authorization::Base
   def initialize(current_doctor:, center_id:)
     @current_doctor = current_doctor
     @center_id = center_id

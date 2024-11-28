@@ -1,4 +1,4 @@
-class Authorization::Doctor::CanEditProfileService
+class Authorization::Doctor::CanEditProfileService < Authorization::Base
   def initialize(current_doctor:, updated_doctor_id:)
     @current_doctor = current_doctor
     @updated_doctor_id = updated_doctor_id

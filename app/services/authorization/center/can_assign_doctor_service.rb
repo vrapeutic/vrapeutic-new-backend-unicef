@@ -1,4 +1,4 @@
-class Authorization::Center::CanAssignDoctorService
+class Authorization::Center::CanAssignDoctorService < Authorization::Base
   def initialize(current_doctor:, center_id:, assignee_doctor_id:)
     @current_doctor = current_doctor
     @center_id = center_id
@@ -6,14 +6,10 @@ class Authorization::Center::CanAssignDoctorService
   end
 
   def call
-    is_current_doctor_admin && is_manager_different_from_assignee
+    is_doctor_admin_for_center?(@current_doctor.id, @center_id) && is_manager_different_from_assignee
   end
 
   private
-
-  def is_current_doctor_admin
-    Center::IsDoctorAdminService.new(current_doctor_id: @current_doctor.id, center_id: @center_id).call
-  end
 
   def is_manager_different_from_assignee
     @current_doctor.id.to_s != @assignee_doctor_id.to_s

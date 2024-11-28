@@ -1,4 +1,4 @@
-class Authorization::Session::CanAddNoteAndEvaluationService
+class Authorization::Session::CanAddNoteAndEvaluationService < Authorization::Base
   def initialize(current_doctor:, session_id:)
     @current_doctor = current_doctor
     @session_id = session_id

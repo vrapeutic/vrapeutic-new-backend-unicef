@@ -79,3 +79,5 @@ Style/StringConcatenation:
     Enabled: false
 Style/RedundantRegexpEscape:
     Enabled: false
+Lint/MissingSuper:
+    Enabled: false

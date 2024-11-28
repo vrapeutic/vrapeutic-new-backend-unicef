@@ -1,4 +1,4 @@
-class Authorization::Doctor::CanGetCenterKidsPercentageService
+class Authorization::Doctor::CanGetCenterKidsPercentageService < Authorization::Base
   def initialize(current_doctor:, center_id:)
     @current_doctor = current_doctor
     @center_id = center_id

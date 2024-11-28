@@ -1,4 +1,4 @@
-class Authorization::Session::CanGetSessionsService
+class Authorization::Session::CanGetSessionsService < Authorization::Base
   def initialize(current_doctor:, center_id:)
     @current_doctor = current_doctor
     @center_id = center_id
