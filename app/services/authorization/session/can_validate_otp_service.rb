@@ -5,12 +5,6 @@ class Authorization::Session::CanValidateOtpService < Authorization::Base
   end
 
   def call
-    session_has_doctor?
-  end
-
-  private
-
-  def session_has_doctor?
-    Session::HasDoctorService.new(session_id: @session_id, doctor_id: @current_doctor.id).call
+    is_doctor_in_session?(@current_doctor.id, @session_id)
   end
 end

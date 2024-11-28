@@ -7,7 +7,8 @@ class Authorization::Session::CanAddSoftwareModuleService < Authorization::Base
 
   def call
     set_session_center_and_child
-    session_has_doctor? && child_has_module?
+
+    is_doctor_in_session?(@current_doctor.id, @session_id) && child_has_module?
   end
 
   private
@@ -16,15 +17,6 @@ class Authorization::Session::CanAddSoftwareModuleService < Authorization::Base
     @session = Session.find(@session_id)
     @center_id = @session.center_id
     @child_id = @session.child_id
-  end
-
-  def session_is_verified?
-    @session.is_verified
-  end
-
-  # check if this doctor in session
-  def session_has_doctor?
-    Session::HasDoctorService.new(session_id: @session_id, doctor_id: @current_doctor.id).call
   end
 
   # check if this module is assigned to this child in this center

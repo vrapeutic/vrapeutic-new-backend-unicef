@@ -7,7 +7,9 @@ class Authorization::Session::CanAddDoctorService < Authorization::Base
 
   def call
     set_session_center_and_child
-    current_doctor_is_not_added_doctor? && session_has_doctor? && child_assigned_to_doctor_in_center?
+
+    current_doctor_is_not_added_doctor? && is_doctor_in_session?(@current_doctor.id, @session_id) &&
+      is_doctor_has_child_in_center?(@added_doctor_id, @child_id, @center_id)
   end
 
   private
@@ -20,19 +22,5 @@ class Authorization::Session::CanAddDoctorService < Authorization::Base
 
   def current_doctor_is_not_added_doctor?
     @current_doctor.id.to_s != @added_doctor_id.to_s
-  end
-
-  def session_is_verified?
-    @session.is_verified
-  end
-
-  # check if this doctor in session
-  def session_has_doctor?
-    Session::HasDoctorService.new(session_id: @session_id, doctor_id: @current_doctor.id).call
-  end
-
-  # check if child is assigned before to this added doctor in this center
-  def child_assigned_to_doctor_in_center?
-    Child::HasDoctorInCenterService.new(doctor_id: @added_doctor_id, child_id: @child_id, center_id: @center_id).call
   end
 end
