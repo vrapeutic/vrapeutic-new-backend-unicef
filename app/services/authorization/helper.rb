@@ -15,7 +15,7 @@ module Authorization::Helper
     Center::HasChildService.new(child_id: child_id, center_id: center_id).call
   end
 
-  def doctor_works_in_center?(doctor_id, center_id, roles = %w[admin worker])
+  def is_doctor_role_in_center?(doctor_id, center_id, roles = %w[admin worker])
     Center::FindDoctorByRoleService.new(current_doctor_id: doctor_id, center_id: center_id, role: roles).call
   end
 end

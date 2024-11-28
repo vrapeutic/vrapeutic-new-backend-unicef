@@ -6,12 +6,6 @@ class Authorization::Doctor::CanGetCenterHeadsetsService < Authorization::Base
   end
 
   def call
-    doctor_work_in_center?
-  end
-
-  private
-
-  def doctor_work_in_center?
-    Center::FindDoctorByRoleService.new(current_doctor_id: @current_doctor.id, center_id: @center_id, role: @roles).call
+    is_doctor_role_in_center?(@current_doctor.id, @center_id, @roles)
   end
 end
