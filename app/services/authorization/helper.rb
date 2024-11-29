@@ -1,10 +1,14 @@
 module Authorization::Helper
   def is_doctor_is_worker?(doctor_id)
-    DoctorCenter.find_by(doctor_id: doctor_id, role: 'worker').present? ? true : false
+    is_doctor_role?(doctor_id, 'worker')
   end
 
   def is_doctor_is_admin?(doctor_id)
-    DoctorCenter.find_by(doctor_id: doctor_id, role: 'admin').present? ? true : false
+    is_doctor_role?(doctor_id, 'admin')
+  end
+
+  def is_doctor_role?(doctor_id, role)
+    DoctorCenter.find_by(doctor_id: doctor_id, role: role).present? ? true : false
   end
 
   def is_doctor_admin_for_center?(doctor_id, center_id)
