@@ -1,6 +1,6 @@
 class OtpMailer < ApplicationMailer
   def send_otp(doctor, otp)
-    @otp = otp
-    mail(to: doctor.email, subject: 'Your OTP Code')
+    @otp_code = otp
+    mail(to: doctor.email, subject: 'Email OTP Code')
   end
 end

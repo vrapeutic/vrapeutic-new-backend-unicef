@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::BaseApi
-  # before_action :authorized_doctor?
+  before_action :authorized_doctor?
   before_action :set_session,
                 only: %i[show
                          end_session
@@ -16,7 +16,7 @@ class Api::V1::SessionsController < Api::BaseApi
 
   # GET /sessions
   def index
-    @sessions = Session.all
+    @sessions = current_doctor.sessions
 
     render json: SessionSerializer.new(@sessions, param_options).serializable_hash
   end

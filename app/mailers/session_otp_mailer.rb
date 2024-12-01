@@ -1,6 +1,6 @@
 class SessionOtpMailer < ApplicationMailer
   def send_otp(email, otp)
-    @otp = otp
-    mail(to: email, subject: 'Your OTP Code')
+    @otp_code = otp
+    mail(to: email, subject: 'Session OTP Code')
   end
 end

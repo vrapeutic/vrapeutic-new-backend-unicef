@@ -3,47 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VRapeutic - Password Reset</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
             margin: 0;
             padding: 20px;
         }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+
         h1 {
-            color: #333;
-        }
-        h2 {
+            font-size: 2.5em;
             color: #007BFF;
-            font-size: 24px;
+            margin-bottom: 10px;
         }
-        p {
+
+        h2 {
+            font-size: 1.8em;
             color: #555;
-            line-height: 1.6;
+            margin-bottom: 5px;
         }
-        .footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #777;
+
+        h3 {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            font-size: 1.2em;
+            background-color: #e7f3fe;
+            border: 1px solid #007BFF;
+            padding: 10px;
+            border-radius: 5px;
+            color: #007BFF;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            h2, h3, h4 {
+                font-size: 1.2em;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Your One-Time Password (OTP)</h1>
-        <p>Dear User,</p>
-        <p>Thank you for your request. Here is your OTP code:</p>
-        <h2><%= @otp %></h2>
-        <p>Please use this code to complete your process. Remember, this code is valid for a limited time only.</p>
-        <p class="footer">Best regards,<br>unicef</p>
-    </div>
+    <h1>Welcome to VRapeutic</h1>
+    <h2>You have asked to validate admin</h2>
+    <h3>Use the following OTP to validate admin:</h3>
+    <h4>OTP: <%= @otp_code %></h4>
 </body>
 </html>
