@@ -69,8 +69,7 @@
 </head>
 <body>
     <h1>Welcome to VRapeutic</h1>
-    <h2>You are invited to join center: <%= @center.name %></h2>
-    <h3>Click on this link to complete your profile:</h3>
-    <a href="">Complete Your Profile</a>
+    <h3>Click on this link to install the desktop app:</h3>
+    <a href="<%= ENV['DESKTOP_APP_LINK'] %>">Installation link</a>
 </body>
 </html>
