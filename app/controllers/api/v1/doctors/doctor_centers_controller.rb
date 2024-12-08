@@ -1,5 +1,5 @@
 class Api::V1::Doctors::DoctorCentersController < Api::BaseApi
-  # before_action :authorized_doctor?
+  before_action :authorized_doctor?
   before_action :set_doctor
   before_action :set_doctor_doctor_centers, only: :index
   before_action :set_doctor_doctor_center, only: %i[show update destroy]
@@ -33,7 +33,7 @@ class Api::V1::Doctors::DoctorCentersController < Api::BaseApi
   private
 
   def set_doctor
-    @doctor = Doctor.find(17)
+    @doctor = current_doctor
   end
 
   def set_doctor_doctor_centers
