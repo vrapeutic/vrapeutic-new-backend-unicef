@@ -11,6 +11,6 @@ class Center::AssignDoctorService
   private
 
   def create_doctor_center_role
-    DoctorCenter.create!(center_id: @center_id, doctor_id: @doctor_id)
+    DoctorCenter.create!(center_id: @center_id, doctor_id: @doctor_id, status: :invited)
   end
 end

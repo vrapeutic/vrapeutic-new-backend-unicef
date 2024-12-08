@@ -175,6 +175,7 @@ Rails.application.routes.draw do
           end
         end
 
+        resources :doctor_centers, only: %i[index show update destroy]
         resources :sessions, only: %i[index show]
         resources :children, only: %i[index show]
         resources :specialties, only: %i[index show]

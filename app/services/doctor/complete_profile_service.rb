@@ -49,6 +49,6 @@ class Doctor::CompleteProfileService
   end
 
   def create_doctor_center_role
-    DoctorCenter.create!(center_id: @center_id, doctor: @new_doctor)
+    DoctorCenter.create!(center_id: @center_id, doctor: @new_doctor, status: :approved)
   end
 end

@@ -49,7 +49,7 @@ class Center::CreateService
   end
 
   def create_doctor_center
-    DoctorCenter.create!(center: @new_center, doctor: @current_doctor, role: 'admin')
+    DoctorCenter.create!(center: @new_center, doctor: @current_doctor, role: 'admin', status: :approved)
   end
 
   def check_specialties_existed

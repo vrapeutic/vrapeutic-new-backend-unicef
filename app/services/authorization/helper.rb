@@ -8,7 +8,7 @@ module Authorization::Helper
   end
 
   def is_doctor_role?(doctor_id, role)
-    DoctorCenter.find_by(doctor_id: doctor_id, role: role).present? ? true : false
+    DoctorCenter.approved.find_by(doctor_id: doctor_id, role: role).present? ? true : false
   end
 
   def is_doctor_admin_for_center?(doctor_id, center_id)

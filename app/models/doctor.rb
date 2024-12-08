@@ -20,7 +20,7 @@ class Doctor < ApplicationRecord
   has_many :doctor_specialties, dependent: :destroy
   has_many :specialties, through: :doctor_specialties
   has_many :otps, dependent: :destroy
-  has_many :doctor_centers, dependent: :destroy
+  has_many :doctor_centers, -> { where(status: :approved).distinct }, dependent: :destroy
   has_many :centers, through: :doctor_centers
   has_many :child_doctors, dependent: :destroy
   has_many :children, through: :child_doctors

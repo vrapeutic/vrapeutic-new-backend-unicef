@@ -14,6 +14,6 @@ class Center::FindDoctorByRoleService
   private
 
   def check_doctor_has_role_in_center
-    DoctorCenter.find_by(doctor_id: @current_doctor_id, center_id: @center_id, role: @role).present? ? true : false
+    DoctorCenter.approved.find_by(doctor_id: @current_doctor_id, center_id: @center_id, role: @role).present? ? true : false
   end
 end

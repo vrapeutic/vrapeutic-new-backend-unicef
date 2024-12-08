@@ -19,7 +19,7 @@ class Center < ApplicationRecord
   mount_uploader :logo, PhotoUploader
   mount_uploader :certificate, CertificateUploader
 
-  has_many :doctor_centers, -> { distinct }, dependent: :destroy
+  has_many :doctor_centers, -> { where(status: :approved).distinct }, dependent: :destroy
   has_many :doctors, through: :doctor_centers
   has_many :center_specialties, -> { distinct }, dependent: :destroy
   has_many :specialties, through: :center_specialties
