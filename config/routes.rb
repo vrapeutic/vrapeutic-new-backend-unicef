@@ -57,7 +57,7 @@ Rails.application.routes.draw do
       put 'centers/:center_id/unassign_doctor_child', to: 'centers/doctors#unassign_doctor_child'
       get 'centers/:center_id/all_doctors', to: 'centers/doctors#index'
       post 'centers/:center_id/invite_doctor', to: 'centers/doctors#invite_doctor'
-      post 'centers/:center_id/assign_doctor', to: 'centers/doctors#assign_doctor'
+      # post 'centers/:center_id/assign_doctor', to: 'centers/doctors#assign_doctor'
       post 'centers/:center_id/edit_doctor', to: 'centers/doctors#edit_doctor'
       post 'centers/:center_id/make_doctor_admin', to: 'centers/doctors#make_doctor_admin'
 
@@ -76,7 +76,7 @@ Rails.application.routes.draw do
             collection do
               post :invite_doctor
               put :make_doctor_admin
-              post :assign_doctor
+              # post :assign_doctor
             end
             member do
               put :edit_doctor

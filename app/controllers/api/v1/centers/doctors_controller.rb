@@ -45,19 +45,28 @@ class Api::V1::Centers::DoctorsController < Api::BaseApi
   end
 
   def invite_doctor
-    invitaion_token_data = Center::GenerateInvitationTokenService.new(email: params[:email], center_id: @center.id).call
-    InviteDoctorMailer.send_invitation_link(params[:email], @center, invitaion_token_data).deliver_later
-    render json: 'invitation is sent'
+    doctor = Doctor.find_by(email: params[:email]&.downcase)
+    if doctor.present?
+      Center::AssignDoctorService.new(doctor_id: doctor.id, center_id: @center.id).call
+      render json: 'we have sent notification invitation to the existed doctor'
+    else
+      InviteDoctorMailer.send_invitation_link(
+        params[:email],
+        @center,
+        Center::GenerateInvitationTokenService.new(email: params[:email], center_id: @center.id).call
+      ).deliver_later
+      render json: 'we have sent email invitation to the new doctor'
+    end
   rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
-  def assign_doctor
-    Center::AssignDoctorService.new(doctor_id: params[:id] || params[:doctor_id], center_id: @center.id).call
-    render json: 'assigned successfully'
-  rescue StandardError => e
-    render json: { error: e.message }, status: :unprocessable_entity
-  end
+  # def assign_doctor
+  #   Center::AssignDoctorService.new(doctor_id: params[:id] || params[:doctor_id], center_id: @center.id).call
+  #   render json: 'assigned successfully'
+  # rescue StandardError => e
+  #   render json: { error: e.message }, status: :unprocessable_entity
+  # end
 
   def edit_doctor
     new_doctor = Doctor::UpdateService.new(
