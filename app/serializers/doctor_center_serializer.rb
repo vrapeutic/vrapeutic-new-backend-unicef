@@ -1,5 +1,5 @@
 class DoctorCenterSerializer < BaseSerializer
-  attributes :doctor_id, :center_id, :status, :role, :created_at, :updated_at
+  attributes :doctor_id, :center_id, :status, :role, :center, :created_at, :updated_at
 
   attribute :sessions_number do |doctor_center|
     doctor_center.approved? && doctor_center.doctor.sessions&.any? ? doctor_center.doctor.sessions.where(center_id: doctor_center.center_id).count : 0
