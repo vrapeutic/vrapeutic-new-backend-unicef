@@ -47,7 +47,7 @@ class Api::V1::Centers::DoctorsController < Api::BaseApi
   def invite_doctor
     doctor = Doctor.find_by(email: params[:email]&.downcase)
     if doctor.present?
-      Center::AssignDoctorService.new(doctor_id: doctor.id, center_id: @center.id).call
+      Center::AssignDoctorService.new(doctor_id: doctor.id, center_id: @center.id, current_doctor: current_doctor).call
       render json: 'we have sent notification invitation to the existed doctor'
     else
       InviteDoctorMailer.send_invitation_link(
