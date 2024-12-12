@@ -12,11 +12,20 @@ class Center::AssignDoctorService
   private
 
   def create_doctor_center_role
-    DoctorCenter.create!(
-      center_id: @center_id,
-      doctor_id: @doctor_id,
-      status: :invited,
-      invite_by: @current_doctor
-    )
+    doctor_center = DoctorCenter.find_by(center_id: @center_id, doctor_id: @doctor_id)
+
+    if doctor_center.present?
+      raise 'doctor already been invited' if doctor_center.invited?
+      raise 'doctor approved the invitation' if doctor_center.approved?
+
+      doctor_center.update!(status: :invited, invited_by: @current_doctor)
+    else
+      DoctorCenter.create!(
+        center_id: @center_id,
+        doctor_id: @doctor_id,
+        status: :invited,
+        invited_by: @current_doctor
+      )
+    end
   end
 end
