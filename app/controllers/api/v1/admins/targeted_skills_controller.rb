@@ -32,7 +32,6 @@ class Api::V1::Admins::TargetedSkillsController < Api::BaseApi
     @targeted_skill = TargetedSkill.find(params[:id])
   end
 
-
   def targeted_skill_params
     params.require(:targeted_skill).permit(:name)
   end
