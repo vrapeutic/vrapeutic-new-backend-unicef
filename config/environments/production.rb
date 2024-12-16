@@ -55,7 +55,18 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "vrapeutic_api_production"
 
-  config.action_mailer.perform_caching = false
+  config.action_controller.perform_caching = true
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_URL'],
+    expires_in: 60.minutes,
+    timeout: 5.0,
+    connect_timeout: 2.0,
+    read_timeout: 2.0,
+    write_timeout: 2.0,
+    reconnect_attempts: 3,
+    compress: true,
+    compress_threshold: 64.kilobytes
+  }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

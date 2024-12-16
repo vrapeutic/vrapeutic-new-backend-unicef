@@ -20,16 +20,18 @@ Rails.application.configure do
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if Rails.root.join("tmp/caching-dev.txt").exist?
-    config.cache_store = :memory_store
-    config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=#{2.days.to_i}",
-    }
-  else
-    config.action_controller.perform_caching = false
-
-    config.cache_store = :null_store
-  end
+  config.action_controller.perform_caching = true
+  config.cache_store = :redis_cache_store, {
+    url: 'redis://localhost:6379',
+    expires_in: 60.minutes,
+    timeout: 5.0,
+    connect_timeout: 2.0,
+    read_timeout: 2.0,
+    write_timeout: 2.0,
+    reconnect_attempts: 3,
+    compress: true,
+    compress_threshold: 64.kilobytes
+  }
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
