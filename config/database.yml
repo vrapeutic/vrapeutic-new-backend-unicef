@@ -24,7 +24,7 @@ default: &default
 
 development:
   <<: *default
-  database: vrapeutic_api_development
+  database: vrapeutic_api_dev
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -83,17 +83,9 @@ test:
 staging:
   <<: *default
   adapter: postgresql
-  database: <%= ENV['RDS_DB_NAME'] %>
-  username: <%= ENV['RDS_USERNAME'] %>
-  password: <%= ENV['RDS_PASSWORD'] %>
-  host: <%= ENV['RDS_HOSTNAME'] %>
-  port: <%= ENV['RDS_PORT'] %>
+  url: <%= ENV['DATABASE_URL'] %>
 
 production:
   <<: *default
   adapter: postgresql
-  database: <%= ENV['RDS_DB_NAME'] %>
-  username: <%= ENV['RDS_USERNAME'] %>
-  password: <%= ENV['RDS_PASSWORD'] %>
-  host: <%= ENV['RDS_HOSTNAME'] %>
-  port: <%= ENV['RDS_PORT'] %>
+  url: <%= ENV['DATABASE_URL'] %>
