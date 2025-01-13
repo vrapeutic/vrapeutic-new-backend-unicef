@@ -12,8 +12,13 @@ class Center::AddHeadsetService
   private
 
   def create_headset
-    @headset = Headset.new(@headset_params)
-    @headset[:center_id] = @center_id
-    @headset.save!
+    @headset = Headset.discarded.find_by(key: @headset_params[:key], center_id: @center_id) || Headset.new(@headset_params)
+
+    if @headset.persisted?
+      @headset.undiscard
+    else
+      @headset[:center_id] = @center_id
+      @headset.save!
+    end
   end
 end

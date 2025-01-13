@@ -107,13 +107,13 @@ Rails.application.routes.draw do
             end
           end
           get :assigned_modules, controller: 'software_modules'
-        end
-        resources :headsets, only: %i[index show] do
-          collection do
-            post :add_headset
-          end
-          member do
-            put :edit_headset
+          resources :headsets, only: %i[index show] do
+            collection do
+              post :add_headset
+            end
+            member do
+              put :edit_headset
+            end
           end
         end
       end
