@@ -1,6 +1,6 @@
 class Api::V1::Admins::HeadsetsController < Api::BaseApi
   before_action :authorized_admin?
-  before_action :set_headset, only: %i[show update destroy]
+  before_action :set_headset, only: %i[show update destroy restore]
 
   def index
     q = Headset.ransack_query(sort: params[:sort], query: params[:q])
@@ -20,7 +20,12 @@ class Api::V1::Admins::HeadsetsController < Api::BaseApi
 
   def destroy
     @headset.discard
-    head :no_content
+    render json: 'headset archived successfully', status: :ok
+  end
+
+  def restore
+    @headset.undiscard
+    render json: 'headset restored successfully', status: :ok
   end
 
   private

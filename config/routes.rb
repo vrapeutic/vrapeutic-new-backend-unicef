@@ -149,7 +149,11 @@ Rails.application.routes.draw do
           end
         end
         resources :specialties, only: %i[index show]
-        resources :headsets, only: %i[index show update destroy]
+        resources :headsets, only: %i[index show update destroy] do
+          member do
+            put :restore
+          end
+        end
         resources :otps, only: %i[] do
           collection do
             post :send_otp
