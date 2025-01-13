@@ -3,7 +3,7 @@ class Api::V1::Admins::HeadsetsController < Api::BaseApi
   before_action :set_headset, only: %i[show update destroy]
 
   def index
-    q = Headset.kept.ransack_query(sort: params[:sort], query: params[:q])
+    q = Headset.ransack_query(sort: params[:sort], query: params[:q])
     render json: HeadsetSerializer.new(q.result(distinct: true), param_options).serializable_hash
   end
 
