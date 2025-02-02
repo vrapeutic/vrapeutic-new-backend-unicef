@@ -1,13 +1,13 @@
 class Api::V1::Centers::DoctorsController < Api::BaseApi
-  before_action :authorized_doctor?
+  # before_action :authorized_doctor?
   before_action :set_center
   before_action :set_center_doctors, only: :index
   before_action :set_center_doctor, only: %i[show assign_doctor_child unassign_doctor_child edit_doctor]
 
-  def current_ability
-    @current_ability ||= DoctorAbility.new(current_doctor, params)
-  end
-  authorize_resource
+  # def current_ability
+  #   @current_ability ||= DoctorAbility.new(current_doctor, params)
+  # end
+  # authorize_resource
 
   def index
     q = @doctors.ransack_query(sort: params[:sort], query: params[:q])
@@ -53,7 +53,7 @@ class Api::V1::Centers::DoctorsController < Api::BaseApi
       InviteDoctorMailer.send_invitation_link(
         params[:email],
         @center,
-        Center::GenerateInvitationTokenService.new(email: params[:email], center_id: @center.id).call
+        Center::GenerateInvitationTokenService.new(email: params[:email]).call
       ).deliver_later
       render json: 'we have sent email invitation to the new doctor'
     end
