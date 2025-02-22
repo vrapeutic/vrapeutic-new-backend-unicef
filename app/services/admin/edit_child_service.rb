@@ -1,6 +1,7 @@
 class Admin::EditChildService
-  def initialize(child_id:, edit_params:, diagnosis_ids:)
+  def initialize(child_id:, center_ids:, edit_params:, diagnosis_ids:)
     @child_id = child_id
+    @center_ids = center_ids
     @edit_params = edit_params
     @diagnosis_ids = diagnosis_ids
   end
@@ -14,6 +15,7 @@ class Admin::EditChildService
   def edit_child_with_diagnoses
     Center::EditChildService.new(
       child_id: @child_id,
+      center_id: @center_ids,
       edit_params: @edit_params,
       diagnosis_ids: @diagnosis_ids
     ).call

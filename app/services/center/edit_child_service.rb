@@ -43,7 +43,7 @@ class Center::EditChildService
 
     # create new diagnoses
     @diagnoses_records.each do |diagnoses_record|
-      ChildDiagnosis.create!(diagnosis: diagnoses_record, center_id: @center_id, child: @new_child)
+      ChildDiagnosis.create!(diagnosis: diagnoses_record, center_id: @center_id, child: @child)
     end
   end
 end
