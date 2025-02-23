@@ -1,7 +1,7 @@
 class HomeCenterSerializer
   include JSONAPI::Serializer
   attributes :name, :longitude, :latitude, :logo, :website, :email, :phone_number, :doctors_count,
-             :children_count, :specialties, :tax_id, :center_social_links, :certificate
+             :children_count, :specialties, :registration_number, :tax_id, :center_social_links, :certificate
 
   has_many :headsets, if: proc { |_record, params| BaseSerializer.params_include?(params, 'headsets') }
   has_many :specialties, if: proc { |_record, params| BaseSerializer.params_include?(params, 'specialties') }
