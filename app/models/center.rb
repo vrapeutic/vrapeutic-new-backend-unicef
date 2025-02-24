@@ -11,8 +11,8 @@ class Center < ApplicationRecord
   validates :website, uniqueness: true
   validates :registration_number, presence: true, uniqueness: true
   validates :tax_id, presence: true, uniqueness: true
-  validates :email, presence: true, uniqueness: true
-  validates :phone_number, presence: true, uniqueness: true
+  validates :email, presence: true
+  validates :phone_number, presence: true
   validates :logo, presence: true, unless: -> { logo_url.present? }
   validates :certificate, presence: true, unless: -> { certificate_url.present? }
 
