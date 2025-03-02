@@ -14,8 +14,7 @@ module Api
     end
 
     def current_doctor
-      Doctor.find(17)
-      # doctor_decoded_token && Doctor.find_by(id: doctor_decoded_token['id'], is_email_verified: true) || nil
+      doctor_decoded_token && Doctor.find_by(id: doctor_decoded_token['id'], is_email_verified: true) || nil
     end
 
     def current_center
