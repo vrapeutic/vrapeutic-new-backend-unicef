@@ -22,7 +22,7 @@ Rails.application.configure do
   # Run rails dev:cache to toggle caching.
   config.action_controller.perform_caching = true
   config.cache_store = :redis_cache_store, {
-    url: 'redis://localhost:6379',
+    url: ENV['REDIS_URL'],
     expires_in: 60.minutes,
     timeout: 5.0,
     connect_timeout: 2.0,

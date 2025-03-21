@@ -163,6 +163,7 @@ GEM
     diff-lcs (1.6.0)
     discard (1.4.0)
       activerecord (>= 4.2, < 9.0)
+    dotenv (3.1.7)
     drb (2.2.1)
     erubi (1.13.1)
     et-orbi (1.2.11)
@@ -475,6 +476,7 @@ DEPENDENCIES
   debase
   debug
   discard (~> 1.2)
+  dotenv
   factory_bot_rails
   faker
   image_processing (~> 1.2)
