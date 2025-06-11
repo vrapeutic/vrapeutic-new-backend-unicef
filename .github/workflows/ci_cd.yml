@@ -10,9 +10,7 @@ on:
     branches: [main, master, staging]
 
 env:
-  RUBY_VERSION: "3.2.7"
-  RAILS_ENV: "test"
-  REDIS_URL: "redis://localhost:6379/0"
+  RUBY_VERSION: "3.4.2"
 
 jobs:
   setup:
@@ -63,5 +61,5 @@ jobs:
           EB_APP_NAME: ${{ secrets.EB_APP_NAME }}
           EB_ENV_NAME: ${{ secrets.EB_ENV_NAME }}
         run: |
-          eb init $EB_APP_NAME --region $AWS_REGION --platform "Ruby 3.2 running on 64bit Amazon Linux 2023"
+          eb init $EB_APP_NAME --region $AWS_REGION --platform "Ruby 3.4 running on 64bit Amazon Linux 2023"
           eb deploy $EB_ENV_NAME
